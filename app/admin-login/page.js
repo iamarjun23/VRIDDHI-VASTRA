@@ -2,6 +2,8 @@ import Navbar from "../components/Navbar"
 import dbConnect from "../../lib/mongodb"
 import SiteConfig from "../../models/SiteConfig"
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminLogin() {
   await dbConnect();
   const config = await SiteConfig.findOne({ configId: "main" }).lean() || {};

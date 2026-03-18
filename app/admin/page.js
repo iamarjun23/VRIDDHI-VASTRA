@@ -3,6 +3,8 @@ import { redirect } from "next/navigation"
 import { authOptions } from "../api/auth/[...nextauth]/route"
 import Link from "next/link"
 import dbConnect from "../../lib/mongodb"
+
+export const dynamic = 'force-dynamic';
 import Product from "../../models/Product"
 import SiteConfig from "../../models/SiteConfig"
 import ContactSubmission from "../../models/ContactSubmission"

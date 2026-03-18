@@ -2,6 +2,8 @@ import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { authOptions } from "../../api/auth/[...nextauth]/route"
 import dbConnect from "../../../lib/mongodb"
+
+export const dynamic = 'force-dynamic';
 import ContactSubmission from "../../../models/ContactSubmission"
 import Link from "next/link"
 
