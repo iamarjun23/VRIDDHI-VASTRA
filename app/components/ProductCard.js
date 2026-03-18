@@ -88,16 +88,16 @@ export default function ProductCard({ product }) {
       </div>
 
       <div className="p-5 flex flex-col items-center flex-1">
-        <h2 className="text-[25px] font-dm-sans font-bold text-[#1A3D1C] tracking-wide truncate w-full text-center mb-1.5 group-hover:text-brand-green transition-colors">
+        <h2 className="text-[clamp(18px,2.5vw,25px)] font-dm-sans font-bold text-[#1A3D1C] tracking-wide truncate w-full text-center mb-1.5 group-hover:text-brand-green transition-colors">
           {product.name}
         </h2>
 
         <div className="flex justify-center items-baseline gap-5 font-dm-sans mb-3">
-          <p className="text-[23px] font-bold text-[#b38b59]">
+          <p className="text-[clamp(16px,2vw,23px)] font-bold text-[#b38b59]">
             ₹{product.price.toLocaleString()}
           </p>
           {(product.originalPrice && product.originalPrice > product.price) && (
-            <p className="text-[17px] text-gray-400 line-through font-light">
+            <p className="text-[clamp(12px,1.5vw,17px)] text-gray-400 line-through font-light">
               ₹{product.originalPrice.toLocaleString()}
             </p>
           )}
@@ -113,10 +113,10 @@ export default function ProductCard({ product }) {
 
           <Link
             href={`/product/${product.serial}`}
-            className="flex items-center gap-1 text-[18px] font-bold tracking-[0.1em] dm-sans-h6 text-gray-800 hover:text-brand-green transition-all uppercase underline"
+            className="flex items-center gap-1 text-[clamp(10px,1.2vw,12px)] font-medium tracking-[0.1em] text-gray-800 hover:text-brand-green transition-all uppercase underline"
           >
             <span>View details</span>
-            <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[14px] h-[14px]"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+            <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-[14px] h-[14px]"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
           </Link>
         </div>
       </div>

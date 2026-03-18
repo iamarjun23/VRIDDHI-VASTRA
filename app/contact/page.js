@@ -32,7 +32,7 @@ export default async function Contact() {
       </div>
 
       {/* Hero Contact Section */}
-      <section className="relative w-full min-h-screen md:h-[800px] flex items-center mt-0 pt-32 pb-20 overflow-hidden">
+      <section className="relative w-full min-h-screen md:h-[800px] flex items-center mt-0 pt-56 pb-20 overflow-hidden">
         {/* Background Image with animated parallax effect (simulated via CSS) */}
         <div 
           className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transform scale-110 motion-safe:animate-[pulse_10s_ease-in-out_infinite]"

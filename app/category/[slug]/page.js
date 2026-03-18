@@ -143,7 +143,7 @@ export default async function CategoryPage({ params }) {
                 <p className="text-[14px] text-gray-300">Kindly explore other categories or return shortly for new arrivals.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-14 gap-y-24 mb-32">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-14 gap-y-24 mb-32">
                 {catProducts.map(product => (
                   <ProductCard key={product.serial} product={product} />
                 ))}

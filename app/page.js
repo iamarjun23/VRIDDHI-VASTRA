@@ -57,13 +57,13 @@ export default async function Home() {
       <section className="w-full bg-[#F1E8CD] pt-10 pb-24 px-10 md:px-32 relative">
         <header className="flex flex-col items-center mb-16 gap-2 text-center relative w-full">
           <div className="flex flex-col items-center text-center">
-            <p className="dm-sans-h4 text-[22px] tracking-[0.2em] text-brand-gold uppercase font-bold mb-2">
+            <p className="dm-sans-h4 tracking-[0.2em] text-brand-gold uppercase font-bold mb-2">
               Shop By Categories
             </p>
-            <h2 className="dm-sans-h1 text-[40px] text-black leading-tight mt-5">
+            <h2 className="dm-sans-h1 text-black leading-tight mt-5">
               Discover Our Signature Categories and Collection
             </h2>
-            <p className="dm-sans-h2 text-[25px] text-brand-green mt-8">
+            <p className="dm-sans-h2 text-brand-green mt-8">
               Explore the Collection of Finest Silk Sarees of South India
             </p>
           </div>
@@ -108,7 +108,7 @@ export default async function Home() {
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-500" />
                   </div>
 
-                  <h4 className="dm-sans-h3  md:text-[24px] text-center tracking-[0.2em] text-brand-green group-hover:text-brand-gold transition-colors duration-300 uppercase mt-5">
+                  <h4 className="dm-sans-h3 text-center tracking-[0.2em] text-brand-green group-hover:text-brand-gold transition-colors duration-300 uppercase mt-5">
                     {categoryName}
                   </h4>
                 </Link>
@@ -124,7 +124,7 @@ export default async function Home() {
             href="/collections"
             className="inline-flex items-center justify-center px-14 py-4 bg-[#D1A054]/15 rounded-[20px] shadow-lg shadow-black/20 border-[3px] border-white hover:bg-[#D1A054]/25 transition-all duration-300"
           >
-            <span className="dm-sans-h4 text-[23px] text-[#1A3D1C] uppercase tracking-widest">
+            <span className="dm-sans-h4 text-[#1A3D1C] uppercase tracking-widest">
               VIEW ALL
             </span>
           </Link>
@@ -135,7 +135,7 @@ export default async function Home() {
       <section className="w-full bg-[#FFFAEE] pt-10 pb-24 px-10 md:px-32 relative">
         <header className="flex flex-col items-center mb-16 gap-2 text-center relative w-full">
           <div className="flex flex-col items-center text-center">
-            <p className="dm-sans-h4 text-[18px] tracking-[0.2em] text-brand-gold uppercase font-medium mb-3">
+            <p className="dm-sans-h4 tracking-[0.2em] text-brand-gold uppercase font-medium mb-3">
               New Arrivals - Fresh From The Loom
             </p>
             <h3 className="dm-sans-h1 text-black leading-[1.5] max-w-[1100px] mt-5 ">
@@ -179,7 +179,7 @@ export default async function Home() {
           </p>
         </div>
 
-        <h3 className="dm-sans-h1 text-[30px] text-black text-center mb-16 md:mb-[72px] leading-tight max-w-4xl mx-auto">
+        <h3 className="dm-sans-h1 text-black text-center mb-16 md:mb-[72px] leading-tight max-w-4xl mx-auto">
           Find your perfect Style from our Look book and shop by occasion
         </h3>
 
@@ -255,10 +255,10 @@ export default async function Home() {
 
           <header className="flex flex-col items-center mb-16 gap-2 text-center relative w-full">
             <div className="flex flex-col items-center text-center">
-              <p className="font-dm-sans C4 text-[18px] tracking-[0.2em] text-brand-gold uppercase font-medium mb-2 text-center">
+              <p className="dm-sans-h4 tracking-[0.2em] text-brand-gold uppercase font-medium mb-2 text-center">
                 Signature Series: Exhibition Collection
               </p>
-              <h3 className="font-dm-sans C1 text-[30px] text-black text-center leading-tight max-w-4xl mx-auto">
+              <h3 className="dm-sans-h1 text-black text-center leading-tight max-w-4xl mx-auto">
                 Exclusive Masterpieces from our latest Exhibition Archive
               </h3>
             </div>
@@ -290,10 +290,10 @@ export default async function Home() {
       <section className="w-full bg-[#FFFAEE] pt-10 pb-24 px-10 md:px-32 relative">
         <header className="flex flex-col items-center mb-16 gap-2 text-center relative w-full">
           <div className="flex flex-col items-center text-center">
-            <p className="dm-sans-h4 text-[18px] tracking-[0.2em] text-brand-gold uppercase font-medium mb-5">
+            <p className="dm-sans-h4 tracking-[0.2em] text-brand-gold uppercase font-medium mb-5">
               Trending: Deal Of The Day 🔥
             </p>
-            <h3 className="dm-sans-h1 text-[42px] text-black leading-tight uppercase">
+            <h3 className="dm-sans-h1 text-black leading-tight uppercase">
               Vriddhi Vastra's Irresistible deals
             </h3>
           </div>

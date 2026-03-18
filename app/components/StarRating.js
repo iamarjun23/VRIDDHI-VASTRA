@@ -22,9 +22,9 @@ export default function StarRating({ rating = 0, numReviews = 0, onRate, interac
               onClick={() => interactive && onRate && onRate(star)}
             >
               <svg
-                className={`w-7 h-7 ${(hover || rating) >= star
-                    ? "text-yellow-400 fill-yellow-400"
-                    : "text-gray-300 fill-transparent"
+                className={`w-5 h-5 ${(hover || rating) >= star
+                  ? "text-yellow-400 fill-yellow-400"
+                  : "text-gray-300 fill-transparent"
                   } ${interactive && hover >= star ? "text-yellow-300 fill-yellow-300" : ""}`}
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"

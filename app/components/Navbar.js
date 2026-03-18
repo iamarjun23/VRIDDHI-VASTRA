@@ -6,8 +6,8 @@ import { useCart } from "../context/CartContext"
 export default function Navbar({ theme = "light", logo = "" }) {
   const isLight = theme === "light";
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const searchRef = useRef(null);
   const { setIsCartOpen, cartCount } = useCart();
+  const searchRef = useRef(null);
 
   // Close search when clicking outside
   useEffect(() => {
@@ -23,51 +23,55 @@ export default function Navbar({ theme = "light", logo = "" }) {
   }, []);
 
   return (
-
     <nav
-      className={`absolute top-0 left-0 w-full z-50 flex justify-between items-center px-6 md:px-14 py-8 ${isLight ? 'bg-white/20 text-brand-green border-b border-brand-green/10' : 'bg-gradient-to-b from-black/60 to-transparent text-white'}`}
+      className={`
+        absolute top-0 left-0 w-full z-50 flex justify-between items-center transition-all duration-500 ease-in-out
+        py-4 md:py-6 px-6 md:px-14
+        bg-white/20 backdrop-blur-md border-b border-white/10
+        ${isLight ? 'text-brand-green' : 'text-white'}
+      `}
     >
-
       <div className="flex items-center gap-4">
-        <Link href="/" className="flex items-center gap-5 group">
+        <Link href="/" className="flex items-center gap-3 md:gap-5 group">
           {logo ? (
-            <div className="w-32 h-32 rounded-full overflow-hidden border border-brand-gold/30 shadow-lg group-hover:scale-105 transition-transform duration-300">
+            <div className="rounded-full overflow-hidden border border-brand-gold/30 shadow-lg group-hover:scale-105 transition-all duration-500 w-12 h-12 md:w-20 md:h-20">
               <img src={logo} alt="Logo" className="w-full h-full object-cover" />
             </div>
           ) : (
-            /* Custom Logo Badge Fallback - Premium Version */
-            <div className="w-32 h-32 rounded-2xl border border-brand-gold/40 bg-brand-green flex flex-col items-center justify-center shadow-xl relative shrink-0 overflow-hidden transform group-hover:rotate-3 transition-transform duration-500">
+            <div className="rounded-2xl border border-brand-gold/40 bg-brand-green flex flex-col items-center justify-center shadow-xl relative shrink-0 overflow-hidden transform group-hover:rotate-3 transition-all duration-500 w-14 h-14 md:w-20 md:h-20">
               <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent"></div>
-              <span className="text-[7px] DM Serif Display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10 mb-1">
+              <span className="text-[4px] md:text-[5px] DM Serif Display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10 mb-0.5 md:mb-1">
                 VRIDDHI
               </span>
-              <div className="w-6 h-[1px] bg-brand-gold/30 relative z-10 mb-1"></div>
-              <span className="text-[7px] DM Serif Display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10">
+              <div className="w-3 h-[0.5px] md:w-6 h-[1px] bg-brand-gold/30 relative z-10 mb-0.5 md:mb-1"></div>
+              <span className="text-[4px] md:text-[5px] DM Serif Display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10">
                 VASTRA
               </span>
-              {/* Refined Decorative element */}
-              <div className="absolute w-1 h-1 bg-red-600 rounded-full top-2 right-2 shadow-sm shadow-red-900/50"></div>
             </div>
           )}
-          <h1 className={`text-[50px] pl-10 md:text-[60px] mt-1 font-display tracking-[0.35em] ${isLight ? 'text-brand-green' : 'text-white drop-shadow-lg'}`}>
+          <h1 className={`
+            font-display tracking-[0.1em] md:tracking-[0.25em] transition-all duration-500 mt-1 whitespace-nowrap
+            text-[clamp(18px,3vw,32px)] pl-3 md:pl-6
+            ${isLight ? 'text-brand-green' : 'text-white'}`
+          }>
             VRIDDHI VASTRA
           </h1>
         </Link>
       </div>
 
-      <div className={`hidden lg:flex gap-20 font-dm-sans tracking-[0.05em] text-[26px] mt-2 ${isLight ? 'text-brand-green/90' : 'text-white/90'}`}>
+      <div className={`hidden lg:flex gap-10 xl:gap-20 font-dm-sans tracking-[0.05em] transition-all duration-500 mt-2 text-[18px] md:text-[20px] ${isLight ? 'text-brand-green/90' : 'text-white/90'}`}>
         <Link href="/" className="hover:text-brand-gold transition duration-300">Home</Link>
         <Link href="/tags?category=HOT+OFFERS" className="hover:text-brand-gold transition duration-300">Hot Offers</Link>
         <Link href="/tags?category=BEST+SELLER" className="hover:text-brand-gold transition duration-300">Best Seller</Link>
         <Link href="/contact" className="hover:text-brand-gold transition duration-300">Contact us</Link>
       </div>
 
-      <div className={`flex gap-5 items-center flex-shrink-0 mt-2 ${isLight ? 'text-brand-green' : 'text-white'}`}>
+      <div className={`flex gap-3 md:gap-5 items-center flex-shrink-0 mt-2 ${isLight ? 'text-brand-green' : 'text-white'}`}>
         <div
           ref={searchRef}
           className={`hidden md:flex items-center rounded-full transition-all duration-500 overflow-hidden ${isSearchOpen
-            ? `px-4 py-[15px] w-[250px] border-[3px] ${isLight ? 'border-brand-green/30 bg-white/40 backdrop-blur-md' : 'border-white/40 bg-white/10 backdrop-blur-md'}`
-            : `w-[38px] h-[38px] border border-transparent justify-center cursor-pointer ${isLight ? 'hover:bg-brand-green/5' : 'hover:bg-white/10 group'}`
+            ? `px-4 py-[10px] md:py-[15px] w-[200px] md:w-[250px] border-[2px] md:border-[3px] ${isLight ? 'border-brand-green/30 bg-white/40 backdrop-blur-md' : 'border-white/40 bg-white/10 backdrop-blur-md'}`
+            : `w-[32px] h-[32px] md:w-[38px] md:h-[38px] border border-transparent justify-center cursor-pointer ${isLight ? 'hover:bg-brand-green/5' : 'hover:bg-white/10 group'}`
             }`}
           onClick={() => {
             if (!isSearchOpen) setIsSearchOpen(true);

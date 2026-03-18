@@ -52,12 +52,12 @@ export default async function CollectionsPage() {
 
       <main className="pt-0">
         {/* Header Section - Inspired by Landing Page Categories */}
-        <section className="w-full bg-[#F1E8CD] pt-45 md:pt-60 pb-24 px-10 md:px-32">
+        <section className="w-full bg-[#F1E8CD] pt-32 md:pt-48 pb-24 px-10 md:px-32">
           <div className="flex flex-col items-center text-center w-full mb-16 px-4">
-            <p className="dm-sans-h4 text-[18px] md:text-[22px] tracking-[0.3em] text-brand-gold uppercase mb-6">
+            <p className="dm-sans-h4 tracking-[0.3em] text-brand-gold uppercase mb-6">
               Shop By Categories
             </p>
-            <h1 className="dm-sans-h1 text-[32px] md:text-[45px] text-brand-green mb-4 leading-tight">
+            <h1 className="dm-sans-h1 text-brand-green mb-4 leading-tight">
               Discover Our Signature Categories and Collection
             </h1>
             <div className="w-24 h-[1px] bg-brand-gold/40 mt-4"></div>
@@ -112,7 +112,7 @@ export default async function CollectionsPage() {
                   </div>
                   <Link
                     href={`/tags?category=${encodeURIComponent(col.name)}`}
-                    className="flex items-center gap-2 text-[16px] DM Sans C4 tracking-widest uppercase text-brand-green hover:text-brand-gold transition-all group"
+                    className="flex items-center gap-2 text-[clamp(14px,1.2vw,16px)] DM Sans C4 tracking-widest uppercase text-brand-green hover:text-brand-gold transition-all group"
                   >
                     <span className="border-b border-brand-green/30 group-hover:border-brand-gold pb-1 whitespace-nowrap">View More</span>
                     <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-4 h-4 transition-transform group-hover:translate-x-1"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
