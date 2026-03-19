@@ -26,7 +26,7 @@ export default function Navbar({ theme = "light", logo = "" }) {
     <nav
       className={`
         absolute top-0 left-0 w-full z-50 flex justify-between items-center transition-all duration-500 ease-in-out
-        py-4 md:py-6 px-6 md:px-14
+        py-[clamp(0.8rem,1.5vw,1.2rem)] px-[clamp(1rem,4vw,5vw)]
         bg-white/20 backdrop-blur-md border-b border-white/10
         ${isLight ? 'text-brand-green' : 'text-white'}
       `}
@@ -34,24 +34,24 @@ export default function Navbar({ theme = "light", logo = "" }) {
       <div className="flex items-center gap-4">
         <Link href="/" className="flex items-center gap-3 md:gap-5 group">
           {logo ? (
-            <div className="rounded-full overflow-hidden border border-brand-gold/30 shadow-lg group-hover:scale-105 transition-all duration-500 w-12 h-12 md:w-20 md:h-20">
+            <div className="rounded-full overflow-hidden border border-brand-gold/30 shadow-lg group-hover:scale-105 transition-all duration-500 w-[clamp(45px,6vw,90px)] h-[clamp(45px,6vw,90px)]">
               <img src={logo} alt="Logo" className="w-full h-full object-cover" />
             </div>
           ) : (
-            <div className="rounded-2xl border border-brand-gold/40 bg-brand-green flex flex-col items-center justify-center shadow-xl relative shrink-0 overflow-hidden transform group-hover:rotate-3 transition-all duration-500 w-14 h-14 md:w-20 md:h-20">
+            <div className="rounded-2xl border border-brand-gold/40 bg-brand-green flex flex-col items-center justify-center shadow-xl relative shrink-0 overflow-hidden transform group-hover:rotate-3 transition-all duration-500 w-[clamp(45px,6vw,90px)] h-[clamp(45px,6vw,90px)] container-type-inline-size">
               <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent"></div>
-              <span className="text-[4px] md:text-[5px] DM Serif Display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10 mb-0.5 md:mb-1">
+              <span className="text-[clamp(3px,10cqi,14px)] font-display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10 mb-0.5">
                 VRIDDHI
               </span>
-              <div className="w-3 h-[0.5px] md:w-6 h-[1px] bg-brand-gold/30 relative z-10 mb-0.5 md:mb-1"></div>
-              <span className="text-[4px] md:text-[5px] DM Serif Display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10">
+              <div className="w-[40%] h-[1px] bg-brand-gold/30 relative z-10 mb-0.5"></div>
+              <span className="text-[clamp(3px,10cqi,14px)] font-display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10">
                 VASTRA
               </span>
             </div>
           )}
           <h1 className={`
             font-display tracking-[0.1em] md:tracking-[0.25em] transition-all duration-500 mt-1 whitespace-nowrap
-            text-[clamp(18px,3vw,32px)] pl-3 md:pl-6
+            text-[clamp(14px,2.5vw,55px)] pl-3 md:pl-6
             ${isLight ? 'text-brand-green' : 'text-white'}`
           }>
             VRIDDHI VASTRA
@@ -59,10 +59,10 @@ export default function Navbar({ theme = "light", logo = "" }) {
         </Link>
       </div>
 
-      <div className={`hidden lg:flex gap-10 xl:gap-20 font-dm-sans tracking-[0.05em] transition-all duration-500 mt-2 text-[18px] md:text-[20px] ${isLight ? 'text-brand-green/90' : 'text-white/90'}`}>
+      <div className={`hidden lg:flex gap-[clamp(1.5rem,4vw,5rem)] font-dm-sans tracking-[0.05em] transition-all duration-500 mt-2 text-[clamp(14px,1.2vw,30px)] ${isLight ? 'text-brand-green/90' : 'text-white/90'}`}>
         <Link href="/" className="hover:text-brand-gold transition duration-300">Home</Link>
-        <Link href="/tags?category=HOT+OFFERS" className="hover:text-brand-gold transition duration-300">Hot Offers</Link>
-        <Link href="/tags?category=BEST+SELLER" className="hover:text-brand-gold transition duration-300">Best Seller</Link>
+        <Link href="/tags?category=HOT+OFFERS#archive" className="hover:text-brand-gold transition duration-300">Hot Offers</Link>
+        <Link href="/tags?category=BEST+SELLER#archive" className="hover:text-brand-gold transition duration-300">Best Seller</Link>
         <Link href="/contact" className="hover:text-brand-gold transition duration-300">Contact us</Link>
       </div>
 

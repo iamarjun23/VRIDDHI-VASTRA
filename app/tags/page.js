@@ -65,12 +65,12 @@ export default async function TagsPage({ searchParams }) {
 
       <main className="flex flex-col flex-1">
         {/* Top Hero Banner */}
-        <div className="pt-32 md:pt-40">
+        <div className="pt-[clamp(70px,10vw,140px)]">
           <PromoBanner {...config.promoBanner} logo={config.logo} />
         </div>
 
         {/* Main Split Layout */}
-        <div className="flex flex-1 w-full flex-col md:flex-row">
+        <div id="archive" className="flex flex-1 w-full flex-col md:flex-row">
           {/* Sidebar - Search by Tags */}
           <aside className="w-full md:w-[320px] bg-[#FFFAEE] border-r border-black/5 flex-shrink-0">
             <div className="sticky top-32 pl-8 md:pl-12 pr-8 md:pr-10 py-10 space-y-12">
@@ -79,7 +79,7 @@ export default async function TagsPage({ searchParams }) {
                 <ul className="space-y-4">
                   <li>
                     <Link
-                      href="/tags"
+                      href="/tags#archive"
                       className={`text-[15px] font-medium tracking-[0.1em] uppercase transition-all block ${!selectedCategory ? 'text-brand-green' : 'text-brand-green/50 hover:text-brand-green'}`}
                     >
                       All Archive
@@ -92,7 +92,7 @@ export default async function TagsPage({ searchParams }) {
                   ])).map(cat => (
                     <li key={cat}>
                       <Link
-                        href={`/tags?category=${encodeURIComponent(cat)}`}
+                        href={`/tags?category=${encodeURIComponent(cat)}#archive`}
                         className={`text-[15px] font-medium tracking-[0.1em] uppercase transition-all block ${selectedCategory === cat ? 'text-brand-green' : 'text-brand-green/50 hover:text-brand-green'}`}
                       >
                         {cat}
@@ -105,7 +105,7 @@ export default async function TagsPage({ searchParams }) {
           </aside>
 
           {/* Product Grid Content */}
-          <div className="flex-1 bg-[#FFFAEE] pl-6 md:pl-10 pr-6 md:pr-14 py-16">
+          <div className="flex-1 bg-[#F1E8CD] pl-6 md:pl-10 pr-6 md:pr-14 py-16">
             <div className="w-full animate-in fade-in slide-in-from-bottom-8 duration-1000">
               <div className="mb-14">
                 <p className="font-dm-sans C4 text-[13px] md:text-[16px] font-bold tracking-[0.3em] text-brand-gold uppercase mb-4">
@@ -128,7 +128,7 @@ export default async function TagsPage({ searchParams }) {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16">
                   {filteredProducts.map(product => (
-                    <ProductCard key={product.serial} product={product} />
+                    <ProductCard key={product.serial} product={product} bgWhite={true} />
                   ))}
                 </div>
               )}
@@ -137,15 +137,21 @@ export default async function TagsPage({ searchParams }) {
         </div>
 
         {/* Trending Section - Styled to match Product Page */}
-        <section className="w-full bg-[#F1E8CD] py-24 px-6 md:px-14 border-t border-black/5">
+        <section className="w-full bg-[#F1E8CD] py-24 px-[clamp(1rem,4vw,5vw)] border-t border-black/5">
           <div className="w-full">
-            <h2 className="dm-sans-h1 text-[clamp(28px,4vw,36px)] leading-tight text-foreground mb-12">
-              Want to look through our <span className="font-display italic text-brand-green">Trending Collections</span>
-            </h2>
-            
+            <div className="mb-12">
+              <p className="dm-sans-h2 tracking-[0.2em] text-brand-green uppercase font-medium mb-4">
+                TRENDING COLLECTION
+              </p>
+              <h2 className="font-[var(--font-dm-sans)] text-[56px] leading-tight flex items-center gap-4 flex-wrap">
+                Want to look through our Trending Collections
+                <img src="/images/fire.png" alt="🔥" className="w-5 h-5 md:w-8 md:h-8 object-contain inline-block" />
+              </h2>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16">
               {displayTrending.map(product => (
-                <ProductCard key={`trending-tag-${product.serial}`} product={product} />
+                <ProductCard key={`trending-tag-${product.serial}`} product={product} bgWhite={true} />
               ))}
             </div>
 

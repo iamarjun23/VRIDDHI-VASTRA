@@ -99,7 +99,7 @@ export default async function CategoryPage({ params }) {
                   return (
                     <li key={cat}>
                       <Link 
-                        href={`/category/${catSlug}`} 
+                        href={`/tags?category=${encodeURIComponent(cat)}`} 
                         className={`text-[15px] font-medium tracking-[0.1em] uppercase transition-all block ${isActive ? 'text-brand-green' : 'text-brand-green/50 hover:text-brand-green'}`}
                       >
                         {cat}
@@ -145,7 +145,7 @@ export default async function CategoryPage({ params }) {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-14 gap-y-24 mb-32">
                 {catProducts.map(product => (
-                  <ProductCard key={product.serial} product={product} />
+                  <ProductCard key={product.serial} product={product} bgWhite={true} />
                 ))}
               </div>
             )}
@@ -163,7 +163,7 @@ export default async function CategoryPage({ params }) {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-14 gap-y-24">
                 {displayTrending.slice(0, 4).map(product => (
-                  <ProductCard key={`trend-${product.serial}`} product={product} />
+                  <ProductCard key={`trend-${product.serial}`} product={product} bgWhite={true} />
                 ))}
               </div>
             </div>

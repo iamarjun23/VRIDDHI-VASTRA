@@ -53,21 +53,25 @@ export default async function ProductDetailsPage({ params }) {
     <main className="bg-[#F1E8CD] min-h-screen selection:bg-black selection:text-white">
       <Navbar logo={config.logo} />
 
-      <section className="pt-68 pb-24 px-6 md:px-14 bg-[#F1E8CD] w-full">
+      <section className="pt-68 pb-24 px-[clamp(1rem,4vw,5vw)] bg-[#F1E8CD] w-full">
         <ProductDetailClient product={product} />
 
         {/* Trending Section */}
-        <div className="mt-32 w-full pt-16 border-t border-black/5">
-          <h2 className="dm-sans-h1 text-[36px] leading-tight text-foreground mb-12">
-            Want to look through our <span className="font-display italic text-brand-green">Trending Collections</span>
+        {/* Trending Section */}
+        <div className="mt-32 w-full pt-16 border-t border-black/5 text-left">
+          <p className="dm-sans-h2 tracking-[0.2em] text-brand-green uppercase font-medium mb-4">
+            TRENDING COLLECTION
+          </p>
+          <h2 className="font-[var(--font-dm-sans)] text-[clamp(28px,4vw,56px)] leading-tight flex items-center gap-4 flex-wrap mb-12">
+            Want to look through our Trending Collections
+            <img src="/images/fire.png" alt="🔥" className="w-5 h-5 md:w-8 md:h-8 object-contain inline-block" />
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-16">
             {products.slice(0, 4).map(p => (
-              <ProductCard key={`trend-${p.serial}`} product={p} />
+              <ProductCard key={`trend-${p.serial}`} product={p} bgWhite={true} />
             ))}
           </div>
         </div>
-
       </section>
 
       <Footer backgroundImage={config.footerImage} logo={config.logo} />

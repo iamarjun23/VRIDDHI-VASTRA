@@ -52,18 +52,18 @@ export default async function CollectionsPage() {
 
       <main className="pt-0">
         {/* Header Section - Inspired by Landing Page Categories */}
-        <section className="w-full bg-[#F1E8CD] pt-32 md:pt-48 pb-24 px-10 md:px-32">
+        <section className="w-full bg-[#F1E8CD] pt-[clamp(110px,15vw,180px)] pb-16 px-[clamp(1rem,4vw,5vw)]">
           <div className="flex flex-col items-center text-center w-full mb-16 px-4">
             <p className="dm-sans-h4 tracking-[0.3em] text-brand-gold uppercase mb-6">
               Shop By Categories
             </p>
-            <h1 className="dm-sans-h1 text-brand-green mb-4 leading-tight">
-              Discover Our Signature Categories and Collection
+            <h1 className="dm-sans-h1 text-brand-green leading-tight">
+              Discover Our Signature Collection
             </h1>
-            <div className="w-24 h-[1px] bg-brand-gold/40 mt-4"></div>
+            <div className="w-24 h-[1px] bg-brand-gold/40 mt-6"></div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-44 gap-y-24 mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-[clamp(20px,8vw,80px)] gap-y-16 mx-auto mt-20">
             {(config.featuredBlocks || []).slice(0, 4).map((block, i) => {
               const categoryName = block.title || `Category ${i + 1}`;
               const img = block.image || "";
@@ -71,11 +71,11 @@ export default async function CollectionsPage() {
 
               return (
                 <div key={i} className="flex flex-col items-center">
-                  <div className="mb-6 flex justify-center">
+                  <div className="mb-8 flex justify-center">
                     <img src="/images/Lotus.png" alt="Lotus" className="w-32 h-32 object-contain" />
                   </div>
-                  <Link href={`/category/${catSlug}`} className="flex flex-col items-center group w-full">
-                    <div className="overflow-hidden bg-[#e5e0d8] relative mb-6 shadow-md group-hover:shadow-xl transition-all duration-700 w-full aspect-[3/5.5] rounded-t-full">
+                  <Link href={`/tags?category=${encodeURIComponent(categoryName)}#archive`} className="flex flex-col items-center group w-full dynamic-title-container">
+                    <div className="overflow-hidden bg-[#e5e0d8] relative mb-6 shadow-md group-hover:shadow-xl transition-all duration-700 w-[95%] mx-auto aspect-[3/6.5] rounded-t-full">
                       {img ? (
                         <img src={img} alt={categoryName} className="w-full h-full object-cover transform transition-transform duration-1000 group-hover:scale-110" />
                       ) : (
@@ -83,7 +83,7 @@ export default async function CollectionsPage() {
                       )}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
                     </div>
-                    <h4 className="dm-sans-h2 text-center tracking-[0.2em] text-brand-green group-hover:text-brand-gold transition-colors duration-300 uppercase">
+                    <h4 className="dynamic-title tracking-[0.2em] text-brand-green group-hover:text-brand-gold transition-colors duration-300 uppercase px-2">
                       {categoryName}
                     </h4>
                   </Link>
@@ -99,11 +99,11 @@ export default async function CollectionsPage() {
           if (catProducts.length === 0) return null;
 
           return (
-            <section key={idx} className={`w-full ${col.bgColor} py-24 px-10 md:px-32`}>
+            <section key={idx} className={`w-full ${col.bgColor} py-16 px-[clamp(1rem,4vw,5vw)]`}>
               <div className="w-full">
                 <header className="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-6">
                   <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                    <p className="dm-sans-h2 tracking-[0.2em] text-brand-green uppercase font-medium mb-8">
+                    <p className="dm-sans-h2 tracking-[0.2em] text-brand-green uppercase mb-8">
                       {col.name}
                     </p>
                     <h3 className="dm-sans-h1 text-brand-black leading-tight">

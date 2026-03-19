@@ -9,30 +9,30 @@ export default function HeroContent({ logo = "" }) {
   const [stage, setStage] = useState(0)
 
   useEffect(() => {
-    // Stage 1: Heading fades in — 600ms
-    const t1 = setTimeout(() => setStage(1), 600)
-    // Stage 2: Subtext fades in — 1400ms
-    const t2 = setTimeout(() => setStage(2), 1400)
-    // Stage 3: Buttons fade in — 2100ms
-    const t3 = setTimeout(() => setStage(3), 2100)
-    // Stage 4: Navbar fades in LAST — 2800ms
-    const t4 = setTimeout(() => setStage(4), 2800)
+    // Stage 1: Overlay reveal starts — 400ms
+    const t1 = setTimeout(() => setStage(1), 400)
+    // Stage 2: Main Heading reveal — 1000ms
+    const t2 = setTimeout(() => setStage(2), 1000)
+    // Stage 3: Subtext and Buttons reveal — 1600ms
+    const t3 = setTimeout(() => setStage(3), 1600)
+    // Stage 4: Navbar reveal — 2200ms
+    const t4 = setTimeout(() => setStage(4), 2200)
 
     return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4) }
   }, [])
 
 
-  const vis = "opacity-100 translate-y-0"
-  const hid = "opacity-0 translate-y-8"
-  const tr = "transition-all duration-1000 ease-out"
+  const vis = "opacity-100 translate-y-0 blur-0 scale-100"
+  const hid = "opacity-0 translate-y-12 blur-sm scale-95"
+  const tr = "transition-all duration-[1200ms] cubic-bezier-[0.22,1,0.36,1]"
 
   return (
     <>
       {/* Staged grey tint overlay — starts dark, fades lighter once content reveals */}
       <div
         className={`absolute inset-0 z-0 transition-all duration-[2000ms] ease-out ${stage >= 1
-          ? "bg-gray-900/50 backdrop-blur-[1px]"
-          : "bg-gray-900/80 backdrop-blur-[1px]"
+          ? "bg-gray-900/50"
+          : "bg-gray-900/80"
           }`}
       />
 
@@ -42,18 +42,18 @@ export default function HeroContent({ logo = "" }) {
       </div>
 
       {/* Hero Text Content — pinned top-left, just below navbar */}
-      <div className="absolute inset-x-0 top-0 z-10 flex flex-col items-start text-left px-10 md:px-32 pt-[250px]">
+      <div className="absolute inset-x-0 top-0 z-10 flex flex-col items-start text-left px-10 md:px-32 pt-[clamp(150px,20vh,300px)]">
 
         {/* Main Heading */}
         <h2
-          className={`text-white display-h1 text-[clamp(30px,8vw,70px)] tracking-[0.15em] md:tracking-[0.25em] font-light mb-4 uppercase leading-[1.1] ${tr} ${stage >= 1 ? vis : hid}`}
+          className={`text-white font-display text-[clamp(28px,8vw,90px)] tracking-[0.15em] md:tracking-[0.25em] font-light mb-4 uppercase leading-[1.1] will-change-[transform,opacity] ${tr} ${stage >= 2 ? vis : hid}`}
         >
           TIMELESS &nbsp; ELEGANCE
         </h2>
 
         {/* Kannada Subtext */}
         <h3
-          className={`text-white Noto Serif Kannada text-[clamp(20px,4.5vw,48px)] tracking-[0.3em] font-light mb-14 mt-10 ${tr} ${stage >= 2 ? vis : hid}`}
+          className={`text-white Noto Serif Kannada text-[clamp(16px,4.5vw,60px)] tracking-[0.3em] font-light mb-14 mt-10 will-change-[transform,opacity] ${tr} ${stage >= 2 ? vis : hid}`}
         >
           ಭಾ ರ ತೀ ಯ &nbsp;ಪ ರ ೦ ಪ ರೆ
         </h3>

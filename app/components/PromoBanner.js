@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function PromoBanner({ image, heading, subtext, logo }) {
   return (
-    <section className="relative w-full h-[800px] flex items-center justify-center overflow-hidden bg-[#1c1a17]">
+    <section className="relative w-full min-h-[60vh] md:min-h-[80vh] flex items-center justify-center overflow-hidden bg-[#1c1a17]">
       {image && (
         <img
           src={image}
@@ -26,11 +26,11 @@ export default function PromoBanner({ image, heading, subtext, logo }) {
 
       <div className="relative z-20 flex flex-col items-center text-center px-4 w-full max-w-7xl">
 
-        <h2 className="text-white font-display text-[clamp(32px,7vw,65px)] font-medium mb-10 leading-[1.1] drop-shadow-lg whitespace-pre-line">
+        <h2 className="text-white font-display text-[clamp(24px,7vw,65px)] font-medium mb-10 leading-[1.1] drop-shadow-lg whitespace-pre-line">
           {heading ? heading.replace(/\\n/g, '\n') : "Unwrap and Unlock Timeless Elegance\nwith upto 50% Off"}
         </h2>
 
-        <p className="text-white/95 font-sans text-[clamp(16px,2.5vw,24px)] font-normal mb-12 max-w-4xl drop-shadow-md">
+        <p className="text-white/95 font-sans text-[clamp(12px,2.5vw,24px)] font-normal mb-12 max-w-4xl drop-shadow-md">
           {subtext || "Celebrate timeless beauty with handcrafted silk sarees at a price that feels good and looks stunning"}
         </p>
 
