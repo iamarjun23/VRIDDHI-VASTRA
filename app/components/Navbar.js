@@ -154,7 +154,8 @@ export default function Navbar({ theme = "light", logo = "" }) {
           <Link href="/" className="hover:text-brand-gold transition duration-300 border-b border-brand-green/10 pb-2" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
           <Link href="/tags?category=HOT+OFFERS#archive" className="hover:text-brand-gold transition duration-300 border-b border-brand-green/10 pb-2" onClick={() => setIsMobileMenuOpen(false)}>Hot Offers</Link>
           <Link href="/tags?category=BEST+SELLER#archive" className="hover:text-brand-gold transition duration-300 border-b border-brand-green/10 pb-2" onClick={() => setIsMobileMenuOpen(false)}>Best Seller</Link>
-          <Link href="/contact" className="hover:text-brand-gold transition duration-300 pb-2" onClick={() => setIsMobileMenuOpen(false)}>Contact us</Link>
+          <Link href="/contact" className="hover:text-brand-gold transition duration-300 border-b border-brand-green/10 pb-2" onClick={() => setIsMobileMenuOpen(false)}>Contact us</Link>
+          <Link href="/admin" className="hover:text-brand-gold transition duration-300 pb-2" onClick={() => setIsMobileMenuOpen(false)}>Admin Panel</Link>
         </div>
       </div>
 
