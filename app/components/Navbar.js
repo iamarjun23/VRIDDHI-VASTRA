@@ -6,6 +6,7 @@ import { useCart } from "../context/CartContext"
 export default function Navbar({ theme = "light", logo = "" }) {
   const isLight = theme === "light";
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { setIsCartOpen, cartCount } = useCart();
   const searchRef = useRef(null);
 
@@ -108,8 +109,15 @@ export default function Navbar({ theme = "light", logo = "" }) {
         </div>
 
         {/* Mobile Search Icon */}
-        <button className="md:hidden">
-          <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="w-5 h-5 hover:text-brand-gold cursor-pointer transition"><path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+        <button 
+          className="md:hidden hover:text-brand-gold"
+          onClick={(e) => {
+            e.preventDefault();
+            setIsSearchOpen(!isSearchOpen);
+            if (!isSearchOpen) setIsMobileMenuOpen(false);
+          }}
+        >
+          <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="w-5 h-5 cursor-pointer transition"><path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
         </button>
 
         <button
@@ -123,9 +131,33 @@ export default function Navbar({ theme = "light", logo = "" }) {
             </span>
           )}
         </button>
+        <button 
+          className="lg:hidden p-1 hover:text-brand-gold transition ml-1"
+          onClick={() => {
+            setIsMobileMenuOpen(!isMobileMenuOpen);
+            if (!isMobileMenuOpen) setIsSearchOpen(false);
+          }}
+        >
+          <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="w-6 h-6">
+            {isMobileMenuOpen ? (
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            ) : (
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+            )}
+          </svg>
+        </button>
+      </div>
+
+      {/* Mobile Menu Dropdown */}
+      <div className={`absolute top-full left-0 w-full bg-white/95 backdrop-blur-xl border-t border-brand-green/10 shadow-2xl transition-all duration-300 ease-in-out lg:hidden origin-top z-40 overflow-hidden ${isMobileMenuOpen ? 'max-h-[400px] opacity-100 py-4' : 'max-h-0 opacity-0 py-0 border-t-0'}`}>
+        <div className="flex flex-col px-6 gap-4 font-dm-sans text-[16px] tracking-wide text-brand-green">
+          <Link href="/" className="hover:text-brand-gold transition duration-300 border-b border-brand-green/10 pb-2" onClick={() => setIsMobileMenuOpen(false)}>Home</Link>
+          <Link href="/tags?category=HOT+OFFERS#archive" className="hover:text-brand-gold transition duration-300 border-b border-brand-green/10 pb-2" onClick={() => setIsMobileMenuOpen(false)}>Hot Offers</Link>
+          <Link href="/tags?category=BEST+SELLER#archive" className="hover:text-brand-gold transition duration-300 border-b border-brand-green/10 pb-2" onClick={() => setIsMobileMenuOpen(false)}>Best Seller</Link>
+          <Link href="/contact" className="hover:text-brand-gold transition duration-300 pb-2" onClick={() => setIsMobileMenuOpen(false)}>Contact us</Link>
+        </div>
       </div>
 
     </nav>
-
   )
 }

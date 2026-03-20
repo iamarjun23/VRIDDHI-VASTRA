@@ -45,12 +45,15 @@ export default async function Home() {
   return (
     <main className="bg-[#fafafa] min-h-screen selection:bg-black selection:text-white">
 
-      <section className="relative w-full h-screen flex items-center justify-center overflow-hidden">
+      <section className="relative w-full h-screen items-center justify-center overflow-hidden flex">
         {/* Dynamic Background Image */}
         <div
-          className={`absolute inset-0 bg-cover bg-center bg-no-repeat z-0 ${!config.heroImage ? 'bg-[#1c1410]' : ''}`}
+          className={`absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transition-colors duration-[2000ms] ease-out ${!config.heroImage ? 'bg-[#1c1410]' : ''}`}
           style={config.heroImage ? { backgroundImage: `url('${config.heroImage}')` } : {}}
-        ></div>
+        >
+          {/* Neutral grey tint overlay for full h-screen coverage */}
+          <div className="absolute inset-0 bg-gray-900/60 z-10" />
+        </div>
       </section>
       <HeroContent logo={config.logo} />
 
@@ -63,14 +66,14 @@ export default async function Home() {
             <h1 className="dm-sans-h1 text-brand-black leading-tight">
               Discover Our Signature Categories and Collection
             </h1>
-            <p className="dm-sans-h3 text-brand-green mt-6 max-w-3xl mx-auto font-medium">
+            <p className="dm-sans-h3 text-brand-green mt-6 max-w-2xl mx-auto font-medium text-[clamp(12px,2vw,22px)]">
               Explore the Collection of Finest Silk Sarees of South India
             </p>
             <div className="w-24 h-[1px] bg-brand-gold/40 mt-4"></div>
           </div>
         </header>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-[clamp(20px,8vw,80px)] gap-y-16">
+        <div className="grid grid-cols-4 gap-x-[clamp(10px,4vw,80px)] gap-y-[clamp(16px,4vw,64px)]">
 
           {(config.featuredBlocks || []).map((block, i) => {
             const categoryName = block.title || `Category ${i + 1}`;
@@ -92,7 +95,7 @@ export default async function Home() {
                 <Link href={`/tags?category=${encodeURIComponent(categoryName)}#archive`} className="flex flex-col items-center group w-full dynamic-title-container">
                   {/* Arch card */}
                   <div
-                    className="overflow-hidden bg-[#e5e0d8] relative mb-6 shadow-md group-hover:shadow-xl transition-all duration-700 w-[95%] mx-auto aspect-[3/6.5] rounded-t-full"
+                    className="overflow-hidden bg-[#e5e0d8] relative mb-4 shadow-md group-hover:shadow-xl transition-all duration-700 w-[95%] mx-auto aspect-[3/6] rounded-t-full"
                   >
                     {img ? (
                       <img
@@ -109,7 +112,7 @@ export default async function Home() {
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-500" />
                   </div>
 
-                  <h4 className="dynamic-title tracking-[0.2em] text-brand-green group-hover:text-brand-gold transition-colors duration-300 uppercase mt-5 px-2">
+                  <h4 className="dynamic-title tracking-[0.1em] text-brand-green group-hover:text-brand-gold transition-colors duration-300 uppercase mt-1 px-1">
                     {categoryName}
                   </h4>
                 </Link>
@@ -134,23 +137,23 @@ export default async function Home() {
       </section>
       <section className="w-full bg-[#FFFAEE] py-16 px-[clamp(1rem,4vw,5vw)] relative">
         <header className="relative flex flex-col items-center text-center mb-16 w-full">
-          <div className="flex flex-col items-center">
-            <p className="dm-sans-h4 tracking-[0.2em] text-brand-gold uppercase font-medium mb-8">
+          <div className="flex flex-col items-center pb-8 md:pb-0">
+            <p className="dm-sans-h4 tracking-[0.2em] text-brand-gold uppercase font-medium mb-6">
               New Arrivals - Fresh From The Loom
             </p>
-            <h3 className="dm-sans-h1 text-brand-green leading-tight max-w-[1100px]">
+            <h3 className="dm-sans-h1 text-brand-green leading-tight max-w-[900px]">
               Unveil Our Newest Collection of Sarees, blending Tradition with Modern Elegance
             </h3>
           </div>
-          <div className="md:absolute md:right-0 md:bottom-0 mt-8 md:mt-0">
-            <Link href="/tags?category=NEW+ARRIVALS#archive" className="flex items-center gap-2 text-brand-green group transition-all duration-300">
-              <span className="text-[19px] md:text-[19px] font-dm-sans tracking-[0.2em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-1">View More</span>
-              <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="w-5 h-5 transition-transform group-hover:translate-y-1"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          <div className="absolute right-0 bottom-0">
+            <Link href="/tags?category=NEW+ARRIVALS#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300">
+              <span className="text-[clamp(8px,1vw,14px)] font-dm-sans tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
+              <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.5vw,16px)] h-[clamp(10px,1.5vw,16px)] transition-transform group-hover:translate-y-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
             </Link>
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16">
+        <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
 
           {products.slice(0, 4).map((product, index) => (
 
@@ -177,70 +180,70 @@ export default async function Home() {
           <p className="dm-sans-h4 tracking-[0.3em] text-brand-gold uppercase mb-6">
             The Style Look book: SHOP BY OCCASION
           </p>
-          <h1 className="dm-sans-h1 text-brand-green leading-tight max-w-6xl mx-auto">
+          <h1 className="dm-sans-h1 text-brand-green leading-tight max-w-5xl mx-auto">
             Find your perfect Style from our Look book and shop by occasion
           </h1>
           <div className="w-24 h-[1px] bg-brand-gold/40 mt-4"></div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-20 w-full">
+        <div className="grid grid-cols-2 gap-x-[clamp(10px,3vw,48px)] gap-y-[clamp(16px,5vw,80px)] w-full">
 
           {/* Left Column */}
-          <div className="flex flex-col gap-10">
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[0]?.title || '')}`} className="relative h-[280px] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+          <div className="flex flex-col gap-[clamp(0.5rem,2vw,2.5rem)]">
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[0]?.title || '')}`} className="relative h-[clamp(140px,25vh,280px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[0]?.image && <img src={config.lookbookBlocks[0].image} alt="Lookbook 1" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
-              <div className="absolute bottom-10 left-10 right-10 flex justify-start">
-                <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-3 text-left">
+              <div className="absolute bottom-[clamp(1.5rem,4vw,2.5rem)] left-[clamp(1.5rem,4vw,2.5rem)] right-[clamp(1.5rem,4vw,2.5rem)] flex justify-start">
+                <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-2 text-left">
                   {config.lookbookBlocks?.[0]?.title ? config.lookbookBlocks[0].title.replace(/\\n/g, ' ') : 'BRIDAL COLLECTION'}
-                  <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-8 h-8 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
+                  <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-[clamp(18px,3vw,32px)] h-[clamp(18px,3vw,32px)] text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
                 </h4>
               </div>
             </Link>
 
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[1]?.title || '')}`} className="relative h-[280px] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[1]?.title || '')}`} className="relative h-[clamp(140px,25vh,280px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[1]?.image && <img src={config.lookbookBlocks[1].image} alt="Lookbook 2" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
-              <div className="absolute bottom-8 left-8 right-8 flex justify-start">
-                <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-3 text-left">
+              <div className="absolute bottom-[clamp(1rem,3vw,2rem)] left-[clamp(1rem,3vw,2rem)] right-[clamp(1rem,3vw,2rem)] flex justify-start">
+                <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-2 text-left">
                   {config.lookbookBlocks?.[1]?.title ? config.lookbookBlocks[1].title.replace(/\\n/g, ' ') : 'CEREMONY VIBE'}
-                  <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-6 h-6 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
+                  <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-[clamp(16px,2.5vw,24px)] h-[clamp(16px,2.5vw,24px)] text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
                 </h4>
               </div>
             </Link>
 
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[2]?.title || '')}`} className="relative h-[560px] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[2]?.title || '')}`} className="relative h-[clamp(280px,50vh,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[2]?.image && <img src={config.lookbookBlocks[2].image} alt="Lookbook 3" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
-              <div className="absolute bottom-8 left-8 right-8 flex justify-start">
-                <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-3 text-left">
+              <div className="absolute bottom-[clamp(1rem,3vw,2rem)] left-[clamp(1rem,3vw,2rem)] right-[clamp(1rem,3vw,2rem)] flex justify-start">
+                <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-2 text-left">
                   {config.lookbookBlocks?.[2]?.title ? config.lookbookBlocks[2].title.replace(/\\n/g, ' ') : 'VALUE FOR MONEY'}
-                  <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-6 h-6 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
+                  <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-[clamp(16px,2.5vw,24px)] h-[clamp(16px,2.5vw,24px)] text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
                 </h4>
               </div>
             </Link>
           </div>
 
           {/* Right Column */}
-          <div className="flex flex-col gap-10">
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[3]?.title || '')}`} className="relative h-[560px] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+          <div className="flex flex-col gap-[clamp(0.5rem,2vw,2.5rem)]">
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[3]?.title || '')}`} className="relative h-[clamp(280px,50vh,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[3]?.image && <img src={config.lookbookBlocks[3].image} alt="Lookbook 4" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
-              <div className="absolute bottom-10 left-10 right-10 flex justify-start">
-                <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-3 text-left">
+              <div className="absolute bottom-[clamp(1.5rem,4vw,2.5rem)] left-[clamp(1.5rem,4vw,2.5rem)] right-[clamp(1.5rem,4vw,2.5rem)] flex justify-start">
+                <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-2 text-left">
                   {config.lookbookBlocks?.[3]?.title ? config.lookbookBlocks[3].title.replace(/\\n/g, ' ') : 'FRESH FROM LOOMS'}
-                  <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-8 h-8 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
+                  <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-[clamp(18px,3vw,32px)] h-[clamp(18px,3vw,32px)] text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
                 </h4>
               </div>
             </Link>
 
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[4]?.title || '')}`} className="relative h-[560px] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[4]?.title || '')}`} className="relative h-[clamp(280px,50vh,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[4]?.image && <img src={config.lookbookBlocks[4].image} alt="Lookbook 5" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
-              <div className="absolute bottom-[3rem] left-[3rem] right-[3rem] flex justify-start">
-                <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-3 text-left">
+              <div className="absolute bottom-[clamp(2rem,6vw,3rem)] left-[clamp(2rem,6vw,3rem)] right-[clamp(2rem,6vw,3rem)] flex justify-start">
+                <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-2 text-left">
                   {config.lookbookBlocks?.[4]?.title ? config.lookbookBlocks[4].title.replace(/\\n/g, ' ') : 'FESTIVE VIBE'}
-                  <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-10 h-10 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
+                  <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-[clamp(20px,4vw,40px)] h-[clamp(20px,4vw,40px)] text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
                 </h4>
               </div>
             </Link>
@@ -254,23 +257,23 @@ export default async function Home() {
         <section className="w-full bg-[#FFFAEE] py-16 px-[clamp(1rem,4vw,5vw)] border-t border-brand-gold/10 relative">
 
           <header className="relative flex flex-col items-center text-center mb-16 w-full">
-            <div className="flex flex-col items-center">
-              <p className="dm-sans-h2 tracking-[0.2em] text-brand-green uppercase font-medium mb-8">
+            <div className="flex flex-col items-center pb-8 md:pb-0">
+              <p className="dm-sans-h2 tracking-[0.2em] text-brand-green uppercase font-medium mb-6">
                 Signature Series
               </p>
               <h3 className="dm-sans-h1 text-brand-black leading-tight">
                 The Exhibition Collection
               </h3>
             </div>
-            <div className="md:absolute md:right-0 md:bottom-2 mt-8 md:mt-0">
-              <Link href="/tags?category=EXHIBITION+CATEGORIES#archive" className="flex items-center gap-2 text-brand-green group transition-all duration-300">
-                <span className="text-[14px] md:text-[15px] font-medium tracking-[0.2em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-1">View More</span>
-                <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="w-5 h-5 transition-transform group-hover:translate-y-1"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+            <div className="absolute right-0 bottom-2">
+              <Link href="/tags?category=EXHIBITION+CATEGORIES#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300">
+                <span className="text-[clamp(8px,1vw,14px)] font-medium tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
+                <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.5vw,16px)] h-[clamp(10px,1.5vw,16px)] transition-transform group-hover:translate-y-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
               </Link>
             </div>
           </header>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16">
+          <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
             {products
               .filter(p => p.tags && p.tags.some(t => t.toUpperCase() === 'EXHIBITION CATEGORIES'))
               .slice(0, 4)
@@ -288,23 +291,23 @@ export default async function Home() {
       {/* Trending Deals Section */}
       <section className="w-full bg-[#FFFAEE] py-16 px-[clamp(1rem,4vw,5vw)] relative">
         <header className="relative flex flex-col items-center text-center mb-16 w-full">
-          <div className="flex flex-col items-center">
-            <p className="dm-sans-h4 tracking-[0.2em] text-brand-gold uppercase font-medium mb-8">
+          <div className="flex flex-col items-center pb-8 md:pb-0">
+            <p className="dm-sans-h4 tracking-[0.2em] text-brand-gold uppercase font-medium mb-6">
               Trending Deals Deal Of The Day
             </p>
             <h3 className="dm-sans-h1 text-brand-green leading-tight">
               VRIDDHI VASTRA’s Irresistible deals
             </h3>
           </div>
-          <div className="md:absolute md:right-0 md:bottom-2 mt-8 md:mt-0">
-            <Link href="/tags?category=TRENDING+DEALS#archive" className="flex items-center gap-2 text-brand-green group transition-all duration-300">
-              <span className="text-[19px] md:text-[19px] font-medium tracking-[0.2em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-1">View More</span>
-              <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="w-5 h-5 transition-transform group-hover:translate-y-1"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+          <div className="absolute right-0 bottom-2">
+            <Link href="/tags?category=TRENDING+DEALS#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300">
+              <span className="text-[clamp(8px,1vw,14px)] font-medium tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
+              <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.5vw,16px)] h-[clamp(10px,1.5vw,16px)] transition-transform group-hover:translate-y-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
             </Link>
           </div>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16">
+        <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
 
           {displayTrending.slice(0, 4).map((product, index) => (
             <ProductCard

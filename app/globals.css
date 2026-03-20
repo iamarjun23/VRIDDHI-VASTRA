@@ -31,28 +31,28 @@ html {
   /* DM Sans */
   .dm-sans-h1 {
     font-family: var(--font-dm-sans);
-    font-size: clamp(18px, 8vw, 44px);
+    font-size: clamp(8px, 2.2vw, 40px);
     line-height: 1.1;
     font-weight: 500;
   }
 
   .dm-sans-h2 {
     font-family: var(--font-dm-sans);
-    font-size: clamp(11px, 4vw, 32px);
+    font-size: clamp(10px, 3.5vw, 28px);
     line-height: 1.5;
     font-weight: 500;
   }
 
   .dm-sans-h3 {
     font-family: var(--font-dm-sans);
-    font-size: clamp(16px, 3.5vw, 28px);
+    font-size: clamp(14px, 3vw, 24px);
     line-height: 1.2;
     font-weight: 500;
   }
 
   .dm-sans-h4 {
     font-family: var(--font-dm-sans);
-    font-size: clamp(12px, 3vw, 24px);
+    font-size: clamp(6px, 1.8vw, 20px);
     line-height: 1.8;
   }
 
@@ -73,21 +73,21 @@ html {
 
   .display-h1 {
     font-family: var(--font-display);
-    font-size: clamp(24px, 10vw, 96px);
+    font-size: clamp(20px, 8vw, 80px);
     line-height: 1.1;
     font-weight: 400;
   }
 
   .display-h2 {
     font-family: var(--font-display);
-    font-size: clamp(20px, 8vw, 72px);
+    font-size: clamp(18px, 7vw, 60px);
     line-height: 1.2;
     font-weight: 400;
   }
 
   .display-h3 {
     font-family: var(--font-display);
-    font-size: clamp(16px, 6vw, 48px);
+    font-size: clamp(14px, 5vw, 40px);
     line-height: 1.2;
     font-weight: 400;
   }
@@ -121,9 +121,9 @@ html {
 
   .dynamic-title {
     font-family: var(--font-dm-sans);
-    /* 18 chars * ~0.55 aspect = ~10cqi to fit 100% width. Use 6cqi for sleeker look. */
-    font-size: clamp(10px, 6cqi, 28px);
-    line-height: 1.5;
+    /* Further reduced for tiny mobile 4-column grids */
+    font-size: clamp(6px, 4cqi, 24px);
+    line-height: 1.2;
     font-weight: 400;
     white-space: nowrap;
     text-align: center;

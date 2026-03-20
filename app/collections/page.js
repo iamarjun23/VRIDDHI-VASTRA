@@ -63,7 +63,7 @@ export default async function CollectionsPage() {
             <div className="w-24 h-[1px] bg-brand-gold/40 mt-6"></div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-[clamp(20px,8vw,80px)] gap-y-16 mx-auto mt-20">
+          <div className="grid grid-cols-4 gap-x-[clamp(10px,4vw,80px)] gap-y-16 mx-auto mt-20">
             {(config.featuredBlocks || []).slice(0, 4).map((block, i) => {
               const categoryName = block.title || `Category ${i + 1}`;
               const img = block.image || "";
@@ -75,15 +75,15 @@ export default async function CollectionsPage() {
                     <img src="/images/Lotus.png" alt="Lotus" className="w-32 h-32 object-contain" />
                   </div>
                   <Link href={`/tags?category=${encodeURIComponent(categoryName)}#archive`} className="flex flex-col items-center group w-full dynamic-title-container">
-                    <div className="overflow-hidden bg-[#e5e0d8] relative mb-6 shadow-md group-hover:shadow-xl transition-all duration-700 w-[95%] mx-auto aspect-[3/6.5] rounded-t-full">
+                    <div className="overflow-hidden bg-[#e5e0d8] relative mb-4 shadow-md group-hover:shadow-xl transition-all duration-700 w-[95%] mx-auto aspect-[3/6] rounded-t-full">
                       {img ? (
                         <img src={img} alt={categoryName} className="w-full h-full object-cover transform transition-transform duration-1000 group-hover:scale-110" />
                       ) : (
-                        <div className="w-full h-full bg-brand-green/5 flex items-center justify-center text-brand-green/20 uppercase tracking-widest text-xs">{categoryName}</div>
+                        <div className="w-full h-full bg-brand-green/5 flex items-center justify-center text-brand-green/20 uppercase tracking-widest text-[clamp(8px,1vw,12px)]">{categoryName}</div>
                       )}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-500" />
                     </div>
-                    <h4 className="dynamic-title tracking-[0.2em] text-brand-green group-hover:text-brand-gold transition-colors duration-300 uppercase px-2">
+                    <h4 className="dynamic-title tracking-[0.1em] text-brand-green group-hover:text-brand-gold transition-colors duration-300 uppercase px-1 mt-1">
                       {categoryName}
                     </h4>
                   </Link>
@@ -101,25 +101,25 @@ export default async function CollectionsPage() {
           return (
             <section key={idx} className={`w-full ${col.bgColor} py-16 px-[clamp(1rem,4vw,5vw)]`}>
               <div className="w-full">
-                <header className="flex flex-col md:flex-row justify-between items-center md:items-end mb-16 gap-6">
-                  <div className="flex flex-col items-center md:items-start text-center md:text-left">
-                    <p className="dm-sans-h2 tracking-[0.2em] text-brand-green uppercase mb-8">
+                <header className="flex flex-row justify-between items-end mb-16 gap-4 w-full">
+                  <div className="flex flex-col items-start text-left flex-1 min-w-0">
+                    <p className="dm-sans-h2 tracking-[0.2em] text-brand-green uppercase mb-4">
                       {col.name}
                     </p>
-                    <h3 className="dm-sans-h1 text-brand-black leading-tight">
+                    <h3 className="dm-sans-h1 text-brand-black leading-tight truncate w-full">
                       {col.subtext}
                     </h3>
                   </div>
                   <Link
                     href={`/tags?category=${encodeURIComponent(col.name)}`}
-                    className="flex items-center gap-2 text-[clamp(14px,1.2vw,16px)] DM Sans C4 tracking-widest uppercase text-brand-green hover:text-brand-gold transition-all group"
+                    className="flex items-center gap-1 text-[clamp(10px,1.2vw,16px)] tracking-widest uppercase text-brand-green hover:text-brand-gold transition-all group shrink-0"
                   >
                     <span className="border-b border-brand-green/30 group-hover:border-brand-gold pb-1 whitespace-nowrap">View More</span>
                     <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-4 h-4 transition-transform group-hover:translate-x-1"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
                   </Link>
                 </header>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16">
+                <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
                   {catProducts.map(product => (
                     <ProductCard key={product.serial} product={product} />
                   ))}

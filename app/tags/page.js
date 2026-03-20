@@ -70,17 +70,17 @@ export default async function TagsPage({ searchParams }) {
         </div>
 
         {/* Main Split Layout */}
-        <div id="archive" className="flex flex-1 w-full flex-col md:flex-row">
+        <div id="archive" className="flex flex-1 w-full flex-row">
           {/* Sidebar - Search by Tags */}
-          <aside className="w-full md:w-[320px] bg-[#FFFAEE] border-r border-black/5 flex-shrink-0">
-            <div className="sticky top-32 pl-8 md:pl-12 pr-8 md:pr-10 py-10 space-y-12">
+          <aside className="w-[clamp(100px,25vw,320px)] bg-[#FFFAEE] border-r border-black/5 flex-shrink-0">
+            <div className="sticky top-32 pl-[clamp(10px,2vw,48px)] md:pl-12 pr-[clamp(10px,2vw,40px)] md:pr-10 py-10 space-y-[clamp(1rem,2vw,3rem)]">
               <div>
-                <h3 className="font-dm-sans C4 text-[13px] font-bold tracking-[0.3em] text-brand-green uppercase mb-10">Search by Tags</h3>
+                <h3 className="font-dm-sans C4 text-[clamp(8px,1vw,13px)] font-bold tracking-[0.2em] text-brand-green uppercase mb-[clamp(1rem,2vw,2.5rem)]">Search by Tags</h3>
                 <ul className="space-y-4">
                   <li>
                     <Link
                       href="/tags#archive"
-                      className={`text-[15px] font-medium tracking-[0.1em] uppercase transition-all block ${!selectedCategory ? 'text-brand-green' : 'text-brand-green/50 hover:text-brand-green'}`}
+                      className={`text-[clamp(9px,1.1vw,15px)] font-medium tracking-[0.1em] uppercase transition-all block ${!selectedCategory ? 'text-brand-green' : 'text-brand-green/50 hover:text-brand-green'}`}
                     >
                       All Archive
                     </Link>
@@ -93,7 +93,7 @@ export default async function TagsPage({ searchParams }) {
                     <li key={cat}>
                       <Link
                         href={`/tags?category=${encodeURIComponent(cat)}#archive`}
-                        className={`text-[15px] font-medium tracking-[0.1em] uppercase transition-all block ${selectedCategory === cat ? 'text-brand-green' : 'text-brand-green/50 hover:text-brand-green'}`}
+                        className={`text-[clamp(9px,1.1vw,15px)] font-medium tracking-[0.1em] uppercase transition-all block ${selectedCategory === cat ? 'text-brand-green' : 'text-brand-green/50 hover:text-brand-green'}`}
                       >
                         {cat}
                       </Link>
@@ -105,10 +105,10 @@ export default async function TagsPage({ searchParams }) {
           </aside>
 
           {/* Product Grid Content */}
-          <div className="flex-1 bg-[#F1E8CD] pl-6 md:pl-10 pr-6 md:pr-14 py-16">
+          <div className="flex-1 bg-[#F1E8CD] pl-[clamp(10px,2vw,40px)] md:pl-10 pr-[clamp(10px,2vw,56px)] md:pr-14 py-16 min-w-0">
             <div className="w-full animate-in fade-in slide-in-from-bottom-8 duration-1000">
               <div className="mb-14">
-                <p className="font-dm-sans C4 text-[13px] md:text-[16px] font-bold tracking-[0.3em] text-brand-gold uppercase mb-4">
+                <p className="font-dm-sans C4 text-[clamp(10px,1.5vw,16px)] font-bold tracking-[0.3em] text-brand-gold uppercase mb-4">
                   {searchQuery ? `Search Results` : (selectedCategory || "All Archive")}
                 </p>
                 <h2 className="dm-sans-h1 text-brand-green leading-tight">
@@ -126,7 +126,7 @@ export default async function TagsPage({ searchParams }) {
                   <p className="text-gray-300 font-serif text-2xl italic uppercase tracking-widest">No pieces found in this archive.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16">
+                <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
                   {filteredProducts.map(product => (
                     <ProductCard key={product.serial} product={product} bgWhite={true} />
                   ))}
@@ -143,20 +143,20 @@ export default async function TagsPage({ searchParams }) {
               <p className="dm-sans-h2 tracking-[0.2em] text-brand-green uppercase font-medium mb-4">
                 TRENDING COLLECTION
               </p>
-              <h2 className="font-[var(--font-dm-sans)] text-[56px] leading-tight flex items-center gap-4 flex-wrap">
+              <h2 className="font-[var(--font-dm-sans)] text-[clamp(24px,4vw,56px)] leading-tight flex items-center gap-[clamp(8px,2vw,16px)] flex-wrap">
                 Want to look through our Trending Collections
                 <img src="/images/fire.png" alt="🔥" className="w-5 h-5 md:w-8 md:h-8 object-contain inline-block" />
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-16">
+            <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
               {displayTrending.map(product => (
                 <ProductCard key={`trending-tag-${product.serial}`} product={product} bgWhite={true} />
               ))}
             </div>
 
             <div className="flex justify-center mt-20">
-              <Link href="/collections" className="px-14 py-4 border-2 border-brand-green text-brand-green text-[clamp(14px,1.5vw,18px)] tracking-[0.2em] font-medium uppercase rounded-full hover:bg-brand-green hover:text-white transition-all duration-300">
+              <Link href="/collections" className="px-[clamp(1.5rem,5vw,3.5rem)] py-[clamp(0.75rem,1.5vw,1rem)] border-2 border-brand-green text-brand-green text-[clamp(10px,1.5vw,18px)] tracking-[0.2em] font-medium uppercase rounded-full hover:bg-brand-green hover:text-white transition-all duration-300">
                 View All Collections
               </Link>
             </div>

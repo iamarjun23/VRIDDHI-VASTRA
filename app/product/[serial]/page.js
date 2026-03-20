@@ -42,7 +42,7 @@ export default async function ProductDetailsPage({ params }) {
       <main className="bg-[#F1E8CD] min-h-screen">
         <Navbar logo={config.logo} />
         <div className="pt-40 text-center">
-          <h1 className="text-2xl">Product not found</h1>
+          <h1 className="text-[clamp(18px,3vw,28px)]">Product not found</h1>
         </div>
         <Footer backgroundImage={config.footerImage} logo={config.logo} />
       </main>
@@ -66,7 +66,7 @@ export default async function ProductDetailsPage({ params }) {
             Want to look through our Trending Collections
             <img src="/images/fire.png" alt="🔥" className="w-5 h-5 md:w-8 md:h-8 object-contain inline-block" />
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-10 gap-y-16">
+          <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
             {products.slice(0, 4).map(p => (
               <ProductCard key={`trend-${p.serial}`} product={p} bgWhite={true} />
             ))}
