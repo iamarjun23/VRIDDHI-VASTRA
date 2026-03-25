@@ -48,7 +48,7 @@ export default function AdminLayout({ children }) {
         />
       )}
 
-      <div className="flex-1 bg-[#F9F8F6] min-h-screen overflow-x-hidden pt-20 lg:pt-0">
+      <div className="flex-1 min-w-0 bg-[#F9F8F6] min-h-screen flex flex-col overflow-x-hidden pt-20 lg:pt-0">
         {children}
       </div>
     </div>

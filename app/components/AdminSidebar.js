@@ -11,7 +11,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
   return (
     <>
       <aside className={`
-        fixed inset-y-0 left-0 z-50 w-80 bg-white border-r border-gray-100/50 flex flex-col shrink-0 shadow-[20px_0_40px_rgba(0,0,0,0.01)]
+        fixed inset-y-0 left-0 z-50 w-80 max-w-[85vw] bg-white border-r border-gray-100/50 flex flex-col shrink-0 shadow-[20px_0_40px_rgba(0,0,0,0.01)]
         transition-transform duration-500 ease-in-out lg:translate-x-0 lg:sticky lg:top-0 lg:h-screen
         ${isOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>

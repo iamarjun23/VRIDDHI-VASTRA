@@ -34,7 +34,7 @@ export default function HeroContent({ logo = "" }) {
       </div>
 
       {/* Hero Text Content — pinned top-left, just below navbar */}
-      <div className="absolute inset-x-0 top-0 z-10 flex flex-col items-start text-left px-[clamp(1rem,4vw,5vw)] pt-[clamp(150px,20vh,300px)]">
+      <div className="absolute inset-x-0 top-0 z-10 flex flex-col items-start text-left px-[clamp(1rem,4vw,5vw)] pt-[clamp(100px,15vh,300px)]">
 
         {/* Main Heading */}
         <h2
@@ -45,7 +45,7 @@ export default function HeroContent({ logo = "" }) {
 
         {/* Kannada Subtext */}
         <h3
-          className={`text-white Noto Serif Kannada text-[clamp(14px,3vw,60px)] tracking-[0.3em] font-light mb-14 mt-10 will-change-[transform,opacity] whitespace-nowrap ${tr} ${stage >= 2 ? vis : hid}`}
+          className={`text-white font-kannada text-[clamp(14px,3vw,60px)] tracking-[0.3em] font-light mb-14 mt-10 will-change-[transform,opacity] whitespace-nowrap ${tr} ${stage >= 2 ? vis : hid}`}
         >
           ಭಾ ರ ತೀ ಯ &nbsp;ಪ ರ ೦ ಪ ರೆ
         </h3>

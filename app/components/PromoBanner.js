@@ -2,7 +2,7 @@ import Link from "next/link";
 
 export default function PromoBanner({ image, heading, subtext, logo }) {
   return (
-    <section className="relative w-full min-h-[60vh] md:min-h-[80vh] flex items-center justify-center overflow-hidden bg-[#1c1a17]">
+    <section className="relative w-full min-h-[40vh] md:min-h-[60vh] lg:min-h-[80vh] flex items-center justify-center overflow-hidden bg-[#1c1a17]">
       {image && (
         <img
           src={image}

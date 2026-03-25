@@ -124,20 +124,20 @@ export default function EditProduct({ params }) {
   return (
     <div className="min-h-screen bg-[#F9F8F6]">
       {/* Header Section */}
-      <header className="sticky top-0 z-30 bg-white/70 backdrop-blur-xl border-b border-gray-100/50 px-10 py-6">
-        <div className="flex items-center justify-between">
+      <header className="sticky top-0 z-30 bg-white/70 backdrop-blur-xl border-b border-gray-100/50 px-6 md:px-10 py-4 md:py-6">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-             <h1 className="text-3xl font-bold font-display text-gray-900 tracking-tight">Refine Masterpiece</h1>
-             <p className="text-[11px] text-brand-green/70 tracking-[0.4em] uppercase font-bold mt-1.5 ml-0.5">Editing Archive Entry #{unwrappedParams.serial}</p>
+             <h1 className="text-2xl md:text-3xl font-bold font-display text-gray-900 tracking-tight">Refine Masterpiece</h1>
+             <p className="text-[10px] md:text-[11px] text-brand-green/70 tracking-[0.4em] uppercase font-bold mt-1 md:mt-1.5 ml-0.5">Editing Archive Entry #{unwrappedParams.serial}</p>
           </div>
-          <div className="flex items-center gap-10">
-            <button type="button" onClick={() => router.back()} className="text-[11px] font-bold tracking-[0.4em] text-gray-400 uppercase hover:text-gray-900 transition-colors">
+          <div className="flex items-center gap-4 md:gap-10">
+            <button type="button" onClick={() => router.back()} className="hidden md:block text-[11px] font-bold tracking-[0.4em] text-gray-400 uppercase hover:text-gray-900 transition-colors">
               Abort Refinement
             </button>
             <button 
               onClick={handleSubmit}
               disabled={loading || uploadingImage !== null} 
-              className="bg-black hover:bg-brand-green text-white px-12 py-4 rounded-full text-[11px] font-bold tracking-[0.3em] uppercase transition-all shadow-2xl shadow-black/10 active:scale-95 disabled:opacity-50 min-w-[220px]"
+              className="bg-black hover:bg-brand-green text-white px-6 md:px-12 py-3 md:py-4 rounded-full text-[10px] md:text-[11px] font-bold tracking-[0.3em] uppercase transition-all shadow-2xl shadow-black/10 active:scale-95 disabled:opacity-50 w-full md:w-auto md:min-w-[220px]"
             >
               {loading ? "Synchronizing..." : uploadingImage ? "Uploading..." : "Synchronize Asset"}
             </button>
@@ -145,13 +145,13 @@ export default function EditProduct({ params }) {
         </div>
       </header>
 
-      <main className="max-w-5xl mx-auto px-10 py-16 space-y-16 pb-48 animate-in slide-in-from-bottom-8 duration-1000">
+      <main className="max-w-5xl mx-auto px-4 md:px-10 py-8 md:py-16 space-y-8 md:space-y-16 pb-24 md:pb-48 animate-in slide-in-from-bottom-8 duration-1000">
         
         {/* Core Attributes Card */}
-        <section className="bg-white rounded-[56px] p-14 border border-gray-100 shadow-sm space-y-14 group hover:shadow-2xl transition-all duration-1000">
-          <div className="flex items-center gap-8">
-            <div className="w-16 h-16 bg-zinc-50 rounded-[24px] flex items-center justify-center text-zinc-900 border border-gray-100 shadow-inner group-hover:bg-brand-green group-hover:text-white transition-all duration-700">
-               <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+        <section className="bg-white rounded-[32px] md:rounded-[56px] p-6 md:p-14 border border-gray-100 shadow-sm space-y-8 md:space-y-14 group hover:shadow-2xl transition-all duration-1000">
+          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
+            <div className="w-12 h-12 md:w-16 md:h-16 bg-zinc-50 rounded-[16px] md:rounded-[24px] flex items-center justify-center text-zinc-900 border border-gray-100 shadow-inner group-hover:bg-brand-green group-hover:text-white transition-all duration-700">
+               <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
             </div>
             <div>
                <h3 className="text-3xl font-bold font-display text-gray-900">Core Attributes</h3>
@@ -255,10 +255,10 @@ export default function EditProduct({ params }) {
         </section>
 
         {/* Commercial Parameters Card */}
-        <section className="bg-white rounded-[56px] p-14 border border-gray-100 shadow-sm space-y-14 group hover:shadow-xl transition-all duration-1000">
-          <div className="flex items-center gap-8">
-            <div className="w-16 h-16 bg-zinc-50 rounded-[24px] flex items-center justify-center text-zinc-900 border border-gray-100 shadow-inner group-hover:bg-brand-gold group-hover:text-white transition-all duration-700">
-               <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m.599-1c.51-.598.599-1.33.599-2s-.09-1.402-.599-1M12 16c-1.11 0-2.08-.402-2.599-1M12 16V15" /></svg>
+        <section className="bg-white rounded-[32px] md:rounded-[56px] p-6 md:p-14 border border-gray-100 shadow-sm space-y-8 md:space-y-14 group hover:shadow-xl transition-all duration-1000">
+          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
+            <div className="w-12 h-12 md:w-16 md:h-16 bg-zinc-50 rounded-[16px] md:rounded-[24px] flex items-center justify-center text-zinc-900 border border-gray-100 shadow-inner group-hover:bg-brand-gold group-hover:text-white transition-all duration-700">
+               <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m.599-1c.51-.598.599-1.33.599-2s-.09-1.402-.599-1M12 16c-1.11 0-2.08-.402-2.599-1M12 16V15" /></svg>
             </div>
             <div>
                <h3 className="text-3xl font-bold font-display text-gray-900">Commercial Parameters</h3>
@@ -335,11 +335,11 @@ export default function EditProduct({ params }) {
         </section>
 
         {/* Editorial Assets Card */}
-        <section className="bg-white rounded-[56px] p-14 border border-gray-100 shadow-sm space-y-14 group hover:shadow-xl transition-all duration-1000">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-8">
-              <div className="w-16 h-16 bg-zinc-50 rounded-[24px] flex items-center justify-center text-zinc-900 border border-gray-100 shadow-inner group-hover:bg-brand-green group-hover:text-white transition-all duration-700">
-                 <svg className="w-8 h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+        <section className="bg-white rounded-[32px] md:rounded-[56px] p-6 md:p-14 border border-gray-100 shadow-sm space-y-8 md:space-y-14 group hover:shadow-xl transition-all duration-1000">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
+              <div className="w-12 h-12 md:w-16 md:h-16 bg-zinc-50 rounded-[16px] md:rounded-[24px] flex items-center justify-center text-zinc-900 border border-gray-100 shadow-inner group-hover:bg-brand-green group-hover:text-white transition-all duration-700">
+                 <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
               </div>
               <div>
                  <h3 className="text-3xl font-bold font-display text-gray-900">Editorial Assets</h3>

@@ -5,7 +5,7 @@ export default function Footer({ backgroundImage, logo = "" }) {
   const finalBg = backgroundImage || defaultBg;
 
   return (
-    <footer className="relative w-full text-white overflow-hidden py-24 px-[clamp(1rem,4vw,5vw)]">
+    <footer className="relative w-full text-white overflow-hidden py-12 md:py-24 px-[clamp(1rem,4vw,5vw)]">
       {/* Background Image - Only background */}
       {finalBg && (
         <div
@@ -16,7 +16,7 @@ export default function Footer({ backgroundImage, logo = "" }) {
       {/* Dark tint overlay for readability */}
       <div className="absolute inset-0 bg-black/60 z-0" />
 
-      <div className="relative z-10 flex flex-row flex-nowrap gap-[clamp(0.25rem,1vw,5rem)] justify-between items-start w-full">
+      <div className="relative z-10 flex flex-col lg:flex-row lg:flex-nowrap gap-[clamp(2rem,5vw,5rem)] justify-between items-start w-full">
 
         {/* Brand & Contact Section */}
         <div className="flex flex-row gap-[clamp(0.5rem,1vw,3.5rem)] flex-[1.5] min-w-0 items-start">
@@ -69,7 +69,7 @@ export default function Footer({ backgroundImage, logo = "" }) {
         </div>
 
         {/* Links Columns */}
-        <div className="flex flex-row flex-nowrap justify-between gap-[clamp(0.25rem,1vw,3rem)] flex-[1.2] xl:max-w-xl xl:self-end pt-2 xl:pt-0 min-w-0">
+        <div className="flex flex-row flex-wrap sm:flex-nowrap justify-between gap-[clamp(1.5rem,3vw,3rem)] flex-[1.2] xl:max-w-xl xl:self-end pt-10 lg:pt-0 min-w-0 w-full lg:w-auto">
           {/* Shop Column */}
           <div className="flex flex-col flex-1 min-w-0">
             <h4 className="font-dm-sans font-medium text-[clamp(8px,1vw,18px)] mb-2 pb-1 border-b border-brand-gold/60 inline-block w-full pr-1 text-white/90">

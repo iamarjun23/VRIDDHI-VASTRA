@@ -45,7 +45,7 @@ export default async function Home() {
   return (
     <main className="bg-[#fafafa] min-h-screen selection:bg-black selection:text-white">
 
-      <section className="relative w-full h-screen items-center justify-center overflow-hidden flex">
+      <section className="relative w-full h-[60vh] md:h-[80vh] lg:h-screen items-center justify-center overflow-hidden flex">
         {/* Dynamic Background Image */}
         <div
           className={`absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transition-colors duration-[2000ms] ease-out ${!config.heroImage ? 'bg-[#1c1410]' : ''}`}
