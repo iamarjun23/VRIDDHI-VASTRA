@@ -50,7 +50,7 @@ export default function ProductsAdmin() {
       <header className="sticky top-0 z-30 bg-white/70 backdrop-blur-xl border-b border-gray-100/50 px-6 md:px-10 py-4 md:py-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-             <h1 className="text-2xl md:text-3xl font-bold font-display text-gray-900 tracking-tight">Product Archive</h1>
+             <h1 className="text-[clamp(20px,1.6vw,30px)] font-bold font-display text-gray-900 tracking-tight">Product Archive</h1>
              <p className="text-[10px] md:text-[11px] text-brand-green/70 tracking-[0.4em] uppercase font-bold mt-1 md:mt-1.5 ml-0.5">Vriddhi Vastra Inventory</p>
           </div>
           <div className="flex items-center">
@@ -65,38 +65,38 @@ export default function ProductsAdmin() {
       <main className="px-4 md:px-10 py-8 md:py-12 space-y-8 md:space-y-16 pb-24 md:pb-32 animate-in slide-in-from-bottom-6 duration-1000">
         
         {/* Stats Section with Expansive Styling */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
-          <div className="bg-white rounded-[32px] md:rounded-[48px] shadow-sm border border-gray-100/80 p-6 md:p-10 flex items-center justify-between group hover:shadow-2xl transition-all duration-700">
-            <div>
-              <p className="text-[10px] md:text-[12px] font-bold tracking-[0.2em] md:tracking-[0.4em] text-gray-400 uppercase">Inventory Size</p>
-              <p className="mt-2 md:mt-4 text-3xl md:text-5xl font-bold font-display text-gray-900 tracking-tighter">{products.length}</p>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-[clamp(1rem,2vw,2.5rem)]">
+          <div className="bg-white rounded-[clamp(24px,3vw,48px)] shadow-sm border border-gray-100/80 p-[clamp(1.25rem,2vw,2.5rem)] flex items-center justify-between gap-4 group hover:shadow-2xl transition-all duration-700">
+            <div className="min-w-0">
+              <p className="text-[10px] md:text-[12px] font-bold tracking-[0.2em] md:tracking-[0.4em] text-gray-400 uppercase truncate">Inventory Size</p>
+              <p className="mt-2 md:mt-4 text-[clamp(24px,2.5vw,48px)] font-bold font-display text-gray-900 tracking-tighter truncate">{products.length}</p>
             </div>
-            <div className="w-16 h-16 md:w-20 md:h-20 bg-brand-green/5 rounded-[20px] md:rounded-[28px] flex items-center justify-center text-brand-green group-hover:bg-brand-green group-hover:text-white transition-all duration-700 shadow-inner">
-              <svg className="w-8 h-8 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
-            </div>
-          </div>
-          <div className="bg-white rounded-[32px] md:rounded-[48px] shadow-sm border border-gray-100/80 p-6 md:p-10 flex items-center justify-between group hover:shadow-2xl transition-all duration-700">
-            <div>
-              <p className="text-[10px] md:text-[12px] font-bold tracking-[0.2em] md:tracking-[0.4em] text-gray-400 uppercase">Distinct Categories</p>
-              <p className="mt-2 md:mt-4 text-3xl md:text-5xl font-bold font-display text-gray-900 tracking-tighter">{new Set(products.map(p => p.category)).size}</p>
-            </div>
-            <div className="w-16 h-16 md:w-20 md:h-20 bg-brand-gold/5 rounded-[20px] md:rounded-[28px] flex items-center justify-center text-brand-gold group-hover:bg-brand-gold group-hover:text-white transition-all duration-700 shadow-inner">
-              <svg className="w-8 h-8 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+            <div className="w-[clamp(3.5rem,4vw,5rem)] h-[clamp(3.5rem,4vw,5rem)] shrink-0 bg-brand-green/5 rounded-[clamp(16px,2vw,28px)] flex items-center justify-center text-brand-green group-hover:bg-brand-green group-hover:text-white transition-all duration-700 shadow-inner">
+              <svg className="w-[clamp(1.75rem,2vw,2.5rem)] h-[clamp(1.75rem,2vw,2.5rem)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg>
             </div>
           </div>
-          <div className="bg-white rounded-[32px] md:rounded-[48px] shadow-sm border border-gray-100/80 p-6 md:p-10 flex items-center justify-between group hover:shadow-2xl transition-all duration-700">
-            <div>
-              <p className="text-[10px] md:text-[12px] font-bold tracking-[0.2em] md:tracking-[0.4em] text-gray-400 uppercase">Asset Sync Status</p>
-              <div className="mt-2 md:mt-4 flex items-center gap-4 md:gap-6">
-                <span className="text-3xl md:text-5xl font-bold font-display text-gray-900 tracking-tighter whitespace-nowrap">Active</span>
-                <span className="relative flex h-3.5 w-3.5 md:h-4 md:w-4">
+          <div className="bg-white rounded-[clamp(24px,3vw,48px)] shadow-sm border border-gray-100/80 p-[clamp(1.25rem,2vw,2.5rem)] flex items-center justify-between gap-4 group hover:shadow-2xl transition-all duration-700">
+            <div className="min-w-0">
+              <p className="text-[10px] md:text-[12px] font-bold tracking-[0.2em] md:tracking-[0.4em] text-gray-400 uppercase truncate">Distinct Categories</p>
+              <p className="mt-2 md:mt-4 text-[clamp(24px,2.5vw,48px)] font-bold font-display text-gray-900 tracking-tighter truncate">{new Set(products.map(p => p.category)).size}</p>
+            </div>
+            <div className="w-[clamp(3.5rem,4vw,5rem)] h-[clamp(3.5rem,4vw,5rem)] shrink-0 bg-brand-gold/5 rounded-[clamp(16px,2vw,28px)] flex items-center justify-center text-brand-gold group-hover:bg-brand-gold group-hover:text-white transition-all duration-700 shadow-inner">
+              <svg className="w-[clamp(1.75rem,2vw,2.5rem)] h-[clamp(1.75rem,2vw,2.5rem)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" /></svg>
+            </div>
+          </div>
+          <div className="bg-white rounded-[clamp(24px,3vw,48px)] shadow-sm border border-gray-100/80 p-[clamp(1.25rem,2vw,2.5rem)] flex items-center justify-between gap-4 group hover:shadow-2xl transition-all duration-700">
+            <div className="min-w-0">
+              <p className="text-[10px] md:text-[12px] font-bold tracking-[0.2em] md:tracking-[0.4em] text-gray-400 uppercase truncate">Asset Sync</p>
+              <div className="mt-2 md:mt-4 flex items-center gap-3">
+                <span className="text-[clamp(24px,2.5vw,48px)] font-bold font-display text-gray-900 tracking-tighter truncate">Active</span>
+                <span className="relative flex h-[clamp(10px,1vw,16px)] w-[clamp(10px,1vw,16px)] shrink-0">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-3.5 w-3.5 md:h-4 md:w-4 bg-green-500 shadow-[0_0_12px_rgba(34,197,94,0.5)]"></span>
+                  <span className="relative inline-flex rounded-full w-full h-full bg-green-500 shadow-[0_0_12px_rgba(34,197,94,0.5)]"></span>
                 </span>
               </div>
             </div>
-            <div className="w-16 h-16 md:w-20 md:h-20 bg-green-50/50 rounded-[20px] md:rounded-[28px] flex items-center justify-center text-green-600 shadow-inner">
-              <svg className="w-8 h-8 md:w-10 md:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+            <div className="w-[clamp(3.5rem,4vw,5rem)] h-[clamp(3.5rem,4vw,5rem)] shrink-0 bg-green-50/50 rounded-[clamp(16px,2vw,28px)] flex items-center justify-center text-green-600 shadow-inner">
+              <svg className="w-[clamp(1.75rem,2vw,2.5rem)] h-[clamp(1.75rem,2vw,2.5rem)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
             </div>
           </div>
         </div>

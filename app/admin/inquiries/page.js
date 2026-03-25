@@ -31,7 +31,7 @@ export default async function InquiriesPage() {
         </div>
       </header>
 
-      <main className="px-4 md:px-10 py-8 md:py-16 max-w-5xl mx-auto space-y-8 md:space-y-12 pb-24 md:pb-48">
+      <main className="px-4 md:px-10 py-8 md:py-16 max-w-5xl mx-auto space-y-6 md:space-y-8 pb-12 md:pb-24">
         {inquiries.length === 0 ? (
           <div className="bg-white rounded-[32px] md:rounded-[64px] p-12 md:p-32 text-center border border-gray-100/80 shadow-sm animate-in zoom-in-95 duration-1000">
             <div className="w-16 h-16 md:w-24 md:h-24 bg-[#F9F8F6] rounded-full flex items-center justify-center mx-auto mb-6 md:mb-10 text-gray-200 shadow-inner">
@@ -41,8 +41,8 @@ export default async function InquiriesPage() {
           </div>
         ) : (
           inquiries.map((s) => (
-            <div key={s._id.toString()} className="bg-white rounded-[32px] md:rounded-[56px] p-6 md:p-12 border border-gray-100/80 shadow-sm hover:shadow-2xl transition-all duration-1000 group animate-in slide-in-from-bottom-8 duration-1000">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 md:gap-10 mb-6 md:mb-10 pb-6 md:pb-10 border-b border-gray-50/50">
+            <div key={s._id.toString()} className="bg-white rounded-[24px] md:rounded-[40px] p-5 md:p-8 border border-gray-100/80 shadow-sm hover:shadow-2xl transition-all duration-1000 group animate-in slide-in-from-bottom-8 duration-1000">
+              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-8 mb-4 md:mb-6 pb-4 md:pb-6 border-b border-gray-50/50">
                 <div>
                   <h3 className="text-2xl md:text-4xl font-bold font-display text-gray-900 group-hover:text-brand-green transition-colors duration-700 tracking-tight">{s.name}</h3>
                   <div className="flex items-center flex-wrap gap-4 md:gap-6 mt-3 md:mt-4">
@@ -60,10 +60,10 @@ export default async function InquiriesPage() {
                   </div>
                 </div>
               </div>
-              <div className="bg-[#F9F8F6]/80 p-6 md:p-12 rounded-[24px] md:rounded-[40px] border border-gray-100/50 shadow-inner group-hover:border-brand-gold/20 transition-all duration-1000">
-                 <div className="flex gap-4 md:gap-6">
-                    <span className="text-4xl md:text-6xl text-brand-gold/10 font-serif leading-none h-fit -mt-2">“</span>
-                    <p className="text-gray-600 leading-relaxed font-medium font-sans text-sm md:text-xl pt-1 md:pt-2 pr-2 md:pr-6 italic">{s.message}</p>
+              <div className="bg-[#F9F8F6]/80 p-5 md:p-8 rounded-[20px] md:rounded-[32px] border border-gray-100/50 shadow-inner group-hover:border-brand-gold/20 transition-all duration-1000">
+                 <div className="flex gap-3 md:gap-5">
+                    <span className="text-3xl md:text-5xl text-brand-gold/10 font-serif leading-none h-fit -mt-2">“</span>
+                    <p className="text-gray-600 leading-relaxed font-medium font-sans text-sm md:text-base pt-1 md:pt-2 pr-2 md:pr-6 italic">{s.message}</p>
                  </div>
               </div>
             </div>
