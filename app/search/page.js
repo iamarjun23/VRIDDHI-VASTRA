@@ -17,8 +17,13 @@ export default async function SearchPage({ searchParams }) {
   const productsData = await Product.find({}).sort({ createdAt: -1 }).lean();
   const products = JSON.parse(JSON.stringify(productsData));
 
-  const q = (await searchParams).q || ""
-  const query = q.toLowerCase()
+  let rawQ = (await searchParams).q || ""
+  if (Array.isArray(rawQ)) rawQ = rawQ[0];
+  if (typeof rawQ !== 'string') rawQ = "";
+  
+  // Guard rail: sanitize and limit query length
+  const q = rawQ.substring(0, 100).replace(/[$\\{}]/g, ''); // basic malicious char removal
+  const query = q.toLowerCase();
 
   // Fetch site configuration
   let configData = await SiteConfig.findOne({ configId: "main" }).lean();

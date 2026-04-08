@@ -44,7 +44,13 @@ export async function POST(req) {
   const body = await req.json();
 
   try {
-    const newProduct = await Product.create(body);
+    // Guard rail: Basic sanitization to block MongoDB operators at the top level
+    const safeBody = { ...body };
+    Object.keys(safeBody).forEach(key => {
+      if (key.startsWith('$')) delete safeBody[key];
+    });
+
+    const newProduct = await Product.create(safeBody);
     return Response.json({ message: "Product Added", product: newProduct });
   } catch (error) {
     console.error("Product Creation Error:", error);
@@ -57,7 +63,21 @@ export async function PUT(req) {
   const body = await req.json();
 
   try {
-    const updated = await Product.findOneAndUpdate({ serial: body.serial }, body, { new: true });
+    if (!body || typeof body.serial !== 'string') {
+      return Response.json({ message: "Invalid payload or missing string serial" }, { status: 400 });
+    }
+
+    // Guard rail: basic sanitization
+    const safeBody = { ...body };
+    Object.keys(safeBody).forEach(key => {
+      if (key.startsWith('$')) delete safeBody[key];
+    });
+
+    const updated = await Product.findOneAndUpdate(
+      { serial: String(safeBody.serial) }, 
+      safeBody, 
+      { new: true }
+    );
     if(updated) {
        return Response.json({ message: "Product Updated", product: updated });
     }
@@ -72,7 +92,11 @@ export async function DELETE(req) {
   const { serial } = await req.json();
   
   try {
-    const deleted = await Product.findOneAndDelete({ serial });
+    if (!serial || typeof serial !== 'string') {
+       return Response.json({ message: "Valid string serial required" }, { status: 400 });
+    }
+
+    const deleted = await Product.findOneAndDelete({ serial: String(serial) });
     if(deleted) {
        return Response.json({ message: "Product Deleted" });
     }

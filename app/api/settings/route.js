@@ -46,6 +46,11 @@ export async function PUT(req) {
       });
     }
 
+    // Guard rail: Basic sanitization to prevent top-level NoSQL injection
+    Object.keys(data).forEach(key => {
+      if (key.startsWith('$')) delete data[key];
+    });
+
     const config = await SiteConfig.findOneAndUpdate(
       { configId: "main" },
       { $set: data },

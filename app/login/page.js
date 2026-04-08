@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation"
 export default function LoginPage() {
   const router = useRouter()
   const { data: session, status } = useSession()
-  const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
@@ -33,7 +32,6 @@ export default function LoginPage() {
 
     try {
       const res = await signIn("credentials", {
-        username,
         password,
         redirect: false
       })
@@ -76,21 +74,9 @@ export default function LoginPage() {
               </div>
             )}
 
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase ml-4">Identification</label>
-              <input
-                required
-                type="text"
-                placeholder="Username"
-                autoComplete="username"
-                className="w-full bg-[#F9F8F6] border border-transparent rounded-3xl px-8 py-5 text-gray-900 placeholder-gray-300 focus:bg-white focus:border-brand-green/20 focus:ring-4 focus:ring-brand-green/5 transition-all outline-none font-medium text-sm"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-              />
-            </div>
 
             <div className="space-y-2">
-              <label className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase ml-4">Security Key</label>
+              <label className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase ml-4">Password</label>
               <input
                 required
                 type="password"

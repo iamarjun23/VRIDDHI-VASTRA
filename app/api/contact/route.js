@@ -7,8 +7,14 @@ export async function POST(req) {
     await dbConnect();
     const { name, phoneNumber, message } = await req.json();
 
-    if (!name || !phoneNumber || !message) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    if (!name || typeof name !== 'string' || name.length > 100) {
+      return NextResponse.json({ error: "Invalid name format or length" }, { status: 400 });
+    }
+    if (!phoneNumber || typeof phoneNumber !== 'string' || phoneNumber.length > 20) {
+      return NextResponse.json({ error: "Invalid phone number format" }, { status: 400 });
+    }
+    if (!message || typeof message !== 'string' || message.length > 5000) {
+      return NextResponse.json({ error: "Invalid message format or length" }, { status: 400 });
     }
 
     const submission = await ContactSubmission.create({

@@ -10,19 +10,15 @@ export const authOptions = {
       name: "Admin Login",
 
       credentials: {
-        username: { label: "Username", type: "text" },
         password: { label: "Password", type: "password" }
       },
 
       async authorize(credentials) {
 
         const ADMIN_USER = "admin"
-        const ADMIN_PASS = "123456"
+        const ADMIN_PASS = "vriddhivastra@123"
 
-        if (
-          credentials.username === ADMIN_USER &&
-          credentials.password === ADMIN_PASS
-        ) {
+        if (credentials.password === ADMIN_PASS) {
           return {
             id: "1",
             name: "Admin"
