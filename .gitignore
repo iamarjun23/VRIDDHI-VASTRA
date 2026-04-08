@@ -55,3 +55,8 @@ Thumbs.db
 
 # Documentation
 README.md
+
+*.sst
+data/
+db/
+database/
