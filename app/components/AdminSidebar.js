@@ -1,10 +1,10 @@
 "use client"
 import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { signOut } from "next-auth/react"
+import { usePathname, useRouter } from "next/navigation"
 
 export default function AdminSidebar({ isOpen, onClose }) {
   const pathname = usePathname();
+  const router = useRouter();
 
   const isActive = (path) => pathname === path || pathname.startsWith(`${path}/`);
 
@@ -72,7 +72,10 @@ export default function AdminSidebar({ isOpen, onClose }) {
             Live Site
           </Link>
           <button
-            onClick={() => signOut({ callbackUrl: '/' })}
+            onClick={async () => {
+              await fetch('/api/auth/logout', { method: 'POST' });
+              router.push('/');
+            }}
             className="flex items-center justify-center gap-4 w-full py-5 px-8 bg-red-50 text-red-600 rounded-[32px] hover:bg-red-600 hover:text-white transition-all duration-700 text-[12px] font-bold tracking-[0.4em] uppercase border border-red-100 hover:border-red-600 active:scale-95 group"
           >
             <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-700"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></svg>

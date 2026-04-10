@@ -1,29 +1,13 @@
 "use client"
 
-import { signIn, useSession } from "next-auth/react"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 
 export default function LoginPage() {
   const router = useRouter()
-  const { data: session, status } = useSession()
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      router.push("/admin")
-    }
-  }, [status, router])
-
-  if (status === "loading") {
-    return (
-      <div className="min-h-screen bg-[#F9F8F6] flex items-center justify-center">
-        <div className="animate-spin h-12 w-12 border-b-2 border-brand-green rounded-full"></div>
-      </div>
-    )
-  }
 
   const handleLogin = async (e) => {
     if (e) e.preventDefault()
@@ -31,15 +15,19 @@ export default function LoginPage() {
     setError("")
 
     try {
-      const res = await signIn("credentials", {
-        password,
-        redirect: false
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ password }),
       })
 
-      if (res?.ok) {
+      if (res.ok) {
         router.push("/admin")
       } else {
-        setError("Invalid credentials. Access denied.")
+        const data = await res.json()
+        setError(data.error || "Invalid credentials. Access denied.")
       }
     } catch (err) {
       setError("A connection error occurred. Please try again.")

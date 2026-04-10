@@ -1,6 +1,3 @@
-import { getServerSession } from "next-auth"
-import { redirect } from "next/navigation"
-import { authOptions } from "../../api/auth/[...nextauth]/route"
 import dbConnect from "../../../lib/mongodb"
 
 export const dynamic = 'force-dynamic';
@@ -8,12 +5,6 @@ import ContactSubmission from "../../../models/ContactSubmission"
 import Link from "next/link"
 
 export default async function InquiriesPage() {
-  const session = await getServerSession(authOptions)
-
-  if (!session) {
-    redirect("/login")
-  }
-
   await dbConnect()
   const inquiries = await ContactSubmission.find().sort({ createdAt: -1 }).lean()
 

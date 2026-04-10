@@ -1,6 +1,3 @@
-import { getServerSession } from "next-auth"
-import { redirect } from "next/navigation"
-import { authOptions } from "../api/auth/[...nextauth]/route"
 import Link from "next/link"
 import dbConnect from "../../lib/mongodb"
 
@@ -10,12 +7,6 @@ import SiteConfig from "../../models/SiteConfig"
 import ContactSubmission from "../../models/ContactSubmission"
 
 export default async function AdminDashboard() {
-  const session = await getServerSession(authOptions)
-
-  if (!session) {
-    redirect("/login")
-  }
-
   await dbConnect()
 
   // Fetch basic statistics for the dashboard
