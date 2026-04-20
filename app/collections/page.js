@@ -63,7 +63,7 @@ export default async function CollectionsPage() {
             <div className="w-24 h-[1px] bg-brand-gold/40 mt-6"></div>
           </div>
 
-          <div className="grid grid-cols-4 gap-x-[clamp(10px,4vw,80px)] gap-y-16 mx-auto mt-20">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(10px,4vw,80px)] gap-y-16 mx-auto mt-20">
             {(config.featuredBlocks || []).slice(0, 4).map((block, i) => {
               const categoryName = block.title || `Category ${i + 1}`;
               const img = block.image || "";
@@ -119,7 +119,7 @@ export default async function CollectionsPage() {
                   </Link>
                 </header>
 
-                <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
                   {catProducts.map(product => (
                     <ProductCard key={product.serial} product={product} />
                   ))}

@@ -41,7 +41,7 @@ export default function ContactForm() {
       </div>
       
       {status === "success" ? (
-        <div className="relative z-10 flex flex-col items-center justify-center py-20 text-center animate-in fade-in zoom-in duration-500">
+        <div className="relative z-10 flex flex-col items-center justify-center py-20 text-center duration-500">
           <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mb-6 text-green-400">
             <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="w-10 h-10"><path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
           </div>
@@ -99,7 +99,7 @@ export default function ContactForm() {
                 </span>
               ) : (
                 <span className="flex items-center justify-center gap-2">
-                  Send Inquiry <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-4 h-4 transform group-hover:translate-x-1 transition-transform"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+                  Send Inquiry <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
                 </span>
               )}
             </button>

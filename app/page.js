@@ -45,7 +45,7 @@ export default async function Home() {
   return (
     <main className="bg-[#fafafa] min-h-screen selection:bg-black selection:text-white">
 
-      <section className="relative w-full h-[100vh] md:h-[100vh] lg:h-screen items-center justify-center overflow-hidden flex">
+      <section className="relative w-full h-[60vh] md:h-[70vh] lg:h-screen items-center justify-center overflow-hidden flex">
         {/* Dynamic Background Image */}
         <div
           className={`absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transition-colors duration-[2000ms] ease-out ${!config.heroImage ? 'bg-[#1c1410]' : ''}`}
@@ -190,7 +190,7 @@ export default async function Home() {
 
           {/* Left Column */}
           <div className="flex flex-col gap-[clamp(0.5rem,2vw,2.5rem)]">
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[0]?.title || '')}`} className="relative h-[clamp(140px,25vh,280px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[0]?.title || '')}`} className="relative h-[clamp(120px,30vw,280px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[0]?.image && <img src={config.lookbookBlocks[0].image} alt="Lookbook 1" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(1.5rem,4vw,2.5rem)] left-[clamp(1.5rem,4vw,2.5rem)] right-[clamp(1.5rem,4vw,2.5rem)] flex justify-start">
@@ -201,7 +201,7 @@ export default async function Home() {
               </div>
             </Link>
 
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[1]?.title || '')}`} className="relative h-[clamp(140px,25vh,280px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[1]?.title || '')}`} className="relative h-[clamp(120px,30vw,280px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[1]?.image && <img src={config.lookbookBlocks[1].image} alt="Lookbook 2" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(1rem,3vw,2rem)] left-[clamp(1rem,3vw,2rem)] right-[clamp(1rem,3vw,2rem)] flex justify-start">
@@ -212,7 +212,7 @@ export default async function Home() {
               </div>
             </Link>
 
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[2]?.title || '')}`} className="relative h-[clamp(280px,50vh,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[2]?.title || '')}`} className="relative h-[clamp(240px,60vw,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[2]?.image && <img src={config.lookbookBlocks[2].image} alt="Lookbook 3" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(1rem,3vw,2rem)] left-[clamp(1rem,3vw,2rem)] right-[clamp(1rem,3vw,2rem)] flex justify-start">
@@ -226,7 +226,7 @@ export default async function Home() {
 
           {/* Right Column */}
           <div className="flex flex-col gap-[clamp(0.5rem,2vw,2.5rem)]">
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[3]?.title || '')}`} className="relative h-[clamp(280px,50vh,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[3]?.title || '')}`} className="relative h-[clamp(240px,60vw,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[3]?.image && <img src={config.lookbookBlocks[3].image} alt="Lookbook 4" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(1.5rem,4vw,2.5rem)] left-[clamp(1.5rem,4vw,2.5rem)] right-[clamp(1.5rem,4vw,2.5rem)] flex justify-start">
@@ -237,7 +237,7 @@ export default async function Home() {
               </div>
             </Link>
 
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[4]?.title || '')}`} className="relative h-[clamp(280px,50vh,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[4]?.title || '')}`} className="relative h-[clamp(240px,60vw,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[4]?.image && <img src={config.lookbookBlocks[4].image} alt="Lookbook 5" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(2rem,6vw,3rem)] left-[clamp(2rem,6vw,3rem)] right-[clamp(2rem,6vw,3rem)] flex justify-start">

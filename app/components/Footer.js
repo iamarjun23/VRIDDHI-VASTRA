@@ -5,7 +5,7 @@ export default function Footer({ backgroundImage, logo = "" }) {
   const finalBg = backgroundImage || defaultBg;
 
   return (
-    <footer className="relative w-full text-white overflow-hidden py-12 md:py-24 px-[clamp(1rem,4vw,5vw)]">
+    <footer className="relative w-full text-white overflow-hidden py-4 md:py-8 px-[clamp(0.5rem,2vw,5vw)]">
       {/* Background Image - Only background */}
       {finalBg && (
         <div
@@ -16,10 +16,10 @@ export default function Footer({ backgroundImage, logo = "" }) {
       {/* Dark tint overlay for readability */}
       <div className="absolute inset-0 bg-black/60 z-0" />
 
-      <div className="relative z-10 flex flex-row flex-wrap lg:flex-nowrap gap-[clamp(2rem,5vw,5rem)] justify-between items-start w-full">
+      <div className="relative z-10 flex flex-row flex-nowrap gap-[clamp(0.25rem,1vw,5rem)] justify-between items-start w-full">
 
         {/* Brand & Contact Section */}
-        <div className="flex flex-row gap-[clamp(1.5rem,2vw,3.5rem)] flex-[1.5] min-w-0 items-start">
+        <div className="flex flex-row gap-[clamp(0.25rem,0.5vw,3.5rem)] flex-[1.2] min-w-0 items-start">
           {/* Logo - Minimal */}
           <Link href="/" className="shrink-0">
             {logo ? (
@@ -41,27 +41,32 @@ export default function Footer({ backgroundImage, logo = "" }) {
 
           {/* Text Group - Right of Logo */}
           <div className="flex flex-col gap-[clamp(0.4rem,1vw,1.5rem)] pt-1 w-full min-w-0">
-            <h2 className="Display H3 font-display text-[clamp(24px,5vw,55px)] leading-tight tracking-wider text-white uppercase drop-shadow-md">
+            <h2 className="Display H3 font-display text-[clamp(10px,2vw,55px)] leading-tight tracking-wider text-white uppercase drop-shadow-md">
               VRIDDHI VASTRA
             </h2>
-            <div className="flex flex-col gap-[clamp(0.5rem,1.5vw,2.5rem)]">
-              <p className="font-dm-sans text-[clamp(14px,2vw,16px)] leading-relaxed text-white/85 max-w-xl">
-                Celebrating the art of Indian handloom sarees with contemporary designs. Each piece is a testament to our artisans' skill and dedication.
+            <div className="flex flex-col gap-[clamp(0.25rem,0.5vw,1.5rem)]">
+              <p className="font-dm-sans text-[clamp(10px,1vw,16px)] leading-relaxed text-white/85 max-w-xl">
+                <span className="hidden md:block">
+                  Celebrating the art of Indian handloom sarees with contemporary designs. Each piece is a testament to our artisans' skill and dedication.
+                </span>
+                <span className="block md:hidden">
+                  Celebrating Indian handloom sarees with contemporary designs.
+                </span>
               </p>
 
               {/* Contact Info - Below description */}
-              <div className="flex flex-col gap-[clamp(0.4rem,1vw,1.5rem)] font-dm-sans text-[clamp(14px,2vw,16px)] text-white/85 tracking-wide">
-                <div className="flex items-start gap-2">
-                  <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="w-[clamp(18px,3vw,1.25rem)] h-[clamp(18px,3vw,1.25rem)] shrink-0 mt-1 opacity-80"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>
-                  <p>random no. bengaluru,<br />india, pin</p>
+              <div className="flex flex-col gap-[clamp(0.25rem,0.5vw,1.5rem)] font-dm-sans text-[clamp(10px,1vw,16px)] text-white/85 tracking-wide">
+                <div className="flex items-start gap-1">
+                  <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="w-[clamp(14px,2vw,1.25rem)] h-[clamp(14px,2vw,1.25rem)] shrink-0 mt-0.5 opacity-80"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>
+                  <p>Mansi Nagar,<br />Mysore, Karnataka</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="w-[clamp(18px,3vw,1.25rem)] h-[clamp(18px,3vw,1.25rem)] shrink-0 opacity-80"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.864-1.048l-3.413-.541c-.49-.078-.984.13-1.31.54l-1.93 2.41a15.157 15.157 0 0 1-5.748-5.748l2.409-1.93c.41-.326.618-.82.54-1.311l-.54-3.413a1.125 1.125 0 0 0-1.048-.864H4.5a2.25 2.25 0 0 0-2.25 2.25Z" /></svg>
-                  <p>+91-XXXXX-XXXXX</p>
+                <div className="flex items-center gap-1">
+                  <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="w-[clamp(14px,2vw,1.25rem)] h-[clamp(14px,2vw,1.25rem)] shrink-0 opacity-80"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.864-1.048l-3.413-.541c-.49-.078-.984.13-1.31.54l-1.93 2.41a15.157 15.157 0 0 1-5.748-5.748l2.409-1.93c.41-.326.618-.82.54-1.311l-.54-3.413a1.125 1.125 0 0 0-1.048-.864H4.5a2.25 2.25 0 0 0-2.25 2.25Z" /></svg>
+                  <p>+91-9876543210</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="w-[clamp(18px,3vw,1.25rem)] h-[clamp(18px,3vw,1.25rem)] shrink-0 opacity-80"><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
-                  <p>hello@gmail.com</p>
+                <div className="flex items-center gap-1">
+                  <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="w-[clamp(14px,3vw,1.25rem)] h-[clamp(14px,3vw,1.25rem)] shrink-0 opacity-80"><path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" /></svg>
+                  <p>Vriddhivastrasarees@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -69,43 +74,43 @@ export default function Footer({ backgroundImage, logo = "" }) {
         </div>
 
         {/* Links Columns */}
-        <div className="grid grid-cols-3 gap-[clamp(1.5rem,3vw,3rem)] flex-[1.2] xl:max-w-xl xl:self-end pt-10 lg:pt-0 min-w-0 w-full lg:w-auto">
+        <div className="grid grid-cols-3 gap-[clamp(0.25rem,1vw,3rem)] flex-[1.5] xl:max-w-xl xl:self-end pt-0 lg:pt-0 min-w-0 w-full lg:w-auto">
           {/* Shop Column */}
           <div className="flex flex-col flex-1 min-w-0">
-            <h4 className="font-dm-sans font-medium text-[clamp(16px,2vw,18px)] mb-2 pb-1 border-b border-brand-gold/60 inline-block w-full pr-1 text-white/90">
+            <h4 className="font-dm-sans font-medium text-[clamp(8px,1vw,18px)] mb-[clamp(0.25rem,0.5vw,0.5rem)] pb-[clamp(0.2rem,0.5vw,0.25rem)] border-b border-brand-gold/60 inline-block w-full pr-1 text-white/90">
               Shop
             </h4>
-            <ul className="flex flex-col gap-1.5 font-dm-sans text-[clamp(14px,1vw,16px)] text-white/80">
+            <ul className="flex flex-col gap-[clamp(0.25rem,0.5vw,0.375rem)] font-dm-sans text-[clamp(6px,1vw,16px)] text-white/80">
               <li><Link href="/tags" className="hover:text-brand-gold transition-colors">Categories</Link></li>
-              <li><Link href="/tags?category=NEW+ARRIVALS" className="hover:text-brand-gold transition-colors">New Arrivals</Link></li>
+              <li><Link href="/tags?category=NEW+ARRIVALS" className="hover:text-brand-gold transition-colors whitespace-nowrap">New Arrivals</Link></li>
               <li><Link href="/tags" className="hover:text-brand-gold transition-colors">Occasions</Link></li>
-              <li><Link href="/tags" className="hover:text-brand-gold transition-colors">Sort by price</Link></li>
+              <li><Link href="/tags" className="hover:text-brand-gold transition-colors whitespace-nowrap">Sort by price</Link></li>
             </ul>
           </div>
 
           {/* Company Column */}
           <div className="flex flex-col flex-1 min-w-0">
-            <h4 className="font-dm-sans font-medium text-[clamp(16px,2vw,18px)] mb-2 pb-1 border-b border-brand-gold/60 inline-block w-full pr-1 text-white/90">
+            <h4 className="font-dm-sans font-medium text-[clamp(8px,1vw,18px)] mb-[clamp(0.25rem,0.5vw,0.5rem)] pb-[clamp(0.2rem,0.5vw,0.25rem)] border-b border-brand-gold/60 inline-block w-full pr-1 text-white/90">
               Company
             </h4>
-            <ul className="flex flex-col gap-1.5 font-dm-sans text-[clamp(14px,1vw,16px)] text-white/80">
-              <li><a href="#" className="hover:text-brand-gold transition-colors">About us</a></li>
-              <li><a href="#" className="hover:text-brand-gold transition-colors">Our Story</a></li>
-              <li><a href="#" className="hover:text-brand-gold transition-colors">Artisans</a></li>
-              <li><a href="#" className="hover:text-brand-gold transition-colors">Contact</a></li>
+            <ul className="flex flex-col gap-[clamp(0.25rem,0.5vw,0.375rem)] font-dm-sans text-[clamp(6px,1vw,16px)] text-white/80">
+              <li><a href="https://www.instagram.com/vriddhivastra.sarees?igsh=NmtkNThmM3MxZnI0" className="hover:text-brand-gold transition-colors whitespace-nowrap">About us</a></li>
+              <li><a href="https://www.instagram.com/vriddhivastra.sarees?igsh=NmtkNThmM3MxZnI0" className="hover:text-brand-gold transition-colors whitespace-nowrap">Our Story</a></li>
+              <li><a href="https://www.instagram.com/vriddhivastra.sarees?igsh=NmtkNThmM3MxZnI0" className="hover:text-brand-gold transition-colors">Artisans</a></li>
+              <li><a href="https://www.instagram.com/vriddhivastra.sarees?igsh=NmtkNThmM3MxZnI0" className="hover:text-brand-gold transition-colors">Contact</a></li>
             </ul>
           </div>
 
           {/* Support Column */}
           <div className="flex flex-col flex-1 min-w-0">
-            <h4 className="font-dm-sans font-medium text-[clamp(16px,2vw,18px)] mb-2 pb-1 border-b border-brand-gold/60 inline-block w-full pr-1 text-white/90">
+            <h4 className="font-dm-sans font-medium text-[clamp(8px,1vw,18px)] mb-[clamp(0.25rem,0.5vw,0.5rem)] pb-[clamp(0.2rem,0.5vw,0.25rem)] border-b border-brand-gold/60 inline-block w-full pr-1 text-white/90">
               Support
             </h4>
-            <ul className="flex flex-col gap-1.5 font-dm-sans text-[clamp(14px,1vw,16px)] text-white/80">
+            <ul className="flex flex-col gap-[clamp(0.25rem,0.5vw,0.375rem)] font-dm-sans text-[clamp(6px,1vw,16px)] text-white/80">
               <li><a href="#" className="hover:text-brand-gold transition-colors">Shipping</a></li>
               <li><a href="#" className="hover:text-brand-gold transition-colors">Returns</a></li>
               <li><a href="#" className="hover:text-brand-gold transition-colors">FAQs</a></li>
-              <li><a href="#" className="hover:text-brand-gold transition-colors">Track Order</a></li>
+              <li><a href="#" className="hover:text-brand-gold transition-colors whitespace-nowrap">Track Order</a></li>
             </ul>
           </div>
         </div>

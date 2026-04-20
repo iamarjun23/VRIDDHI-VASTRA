@@ -53,7 +53,7 @@ export default async function ProductDetailsPage({ params }) {
     <main className="bg-[#F1E8CD] min-h-screen selection:bg-black selection:text-white">
       <Navbar logo={config.logo} />
 
-      <section className="pt-68 pb-24 px-[clamp(1rem,4vw,5vw)] bg-[#F1E8CD] w-full">
+      <section className="pt-28 md:pt-64 pb-24 px-[clamp(1rem,4vw,5vw)] bg-[#F1E8CD] w-full">
         <ProductDetailClient product={product} />
 
         {/* Trending Section */}

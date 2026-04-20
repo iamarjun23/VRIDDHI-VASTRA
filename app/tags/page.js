@@ -70,13 +70,13 @@ export default async function TagsPage({ searchParams }) {
         </div>
 
         {/* Main Split Layout */}
-        <div id="archive" className="flex flex-1 w-full flex-row">
+        <div id="archive" className="flex flex-1 w-full flex-col md:flex-row">
           {/* Sidebar - Search by Tags */}
-          <aside className="w-[clamp(100px,25vw,320px)] bg-[#FFFAEE] border-r border-black/5 flex-shrink-0">
-            <div className="sticky top-32 pl-[clamp(10px,2vw,48px)] md:pl-12 pr-[clamp(10px,2vw,40px)] md:pr-10 py-10 space-y-[clamp(1rem,2vw,3rem)]">
+          <aside className="w-full md:w-[clamp(150px,25vw,320px)] bg-[#FFFAEE] border-b md:border-b-0 md:border-r border-black/5 flex-shrink-0">
+            <div className="md:sticky md:top-32 pl-[clamp(1rem,4vw,48px)] pr-[clamp(1rem,4vw,40px)] py-6 md:py-10 space-y-[clamp(1rem,2vw,3rem)]">
               <div>
-                <h3 className="font-dm-sans C4 text-[clamp(8px,1vw,13px)] font-bold tracking-[0.2em] text-brand-green uppercase mb-[clamp(1rem,2vw,2.5rem)]">Search by Tags</h3>
-                <ul className="space-y-4">
+                <h3 className="font-dm-sans C4 text-[clamp(10px,1.5vw,13px)] font-bold tracking-[0.2em] text-brand-green uppercase mb-[clamp(0.5rem,2vw,2.5rem)]">Search by Tags</h3>
+                <ul className="flex flex-row md:flex-col flex-wrap gap-4 md:space-y-4">
                   <li>
                     <Link
                       href="/tags#archive"
@@ -126,7 +126,7 @@ export default async function TagsPage({ searchParams }) {
                   <p className="text-gray-300 font-serif text-2xl italic uppercase tracking-widest">No pieces found in this archive.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
                   {filteredProducts.map(product => (
                     <ProductCard key={product.serial} product={product} bgWhite={true} />
                   ))}
@@ -149,7 +149,7 @@ export default async function TagsPage({ searchParams }) {
               </h2>
             </div>
 
-            <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
               {displayTrending.map(product => (
                 <ProductCard key={`trending-tag-${product.serial}`} product={product} bgWhite={true} />
               ))}
