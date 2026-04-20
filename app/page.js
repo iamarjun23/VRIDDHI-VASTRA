@@ -45,7 +45,7 @@ export default async function Home() {
   return (
     <main className="bg-[#fafafa] min-h-screen selection:bg-black selection:text-white">
 
-      <section className="relative w-full h-[60vh] md:h-[80vh] lg:h-screen items-center justify-center overflow-hidden flex">
+      <section className="relative w-full h-[100vh] md:h-[100vh] lg:h-screen items-center justify-center overflow-hidden flex">
         {/* Dynamic Background Image */}
         <div
           className={`absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transition-colors duration-[2000ms] ease-out ${!config.heroImage ? 'bg-[#1c1410]' : ''}`}
@@ -73,7 +73,7 @@ export default async function Home() {
           </div>
         </header>
 
-        <div className="grid grid-cols-4 gap-x-[clamp(10px,4vw,80px)] gap-y-[clamp(16px,4vw,64px)]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(10px,4vw,80px)] gap-y-[clamp(16px,4vw,64px)]">
 
           {(config.featuredBlocks || []).map((block, i) => {
             const categoryName = block.title || `Category ${i + 1}`;
@@ -88,7 +88,7 @@ export default async function Home() {
                   <img
                     src="/images/Lotus.png"
                     alt="Lotus"
-                    className="w-[clamp(80px,10vw,128px)] h-[clamp(80px,10vw,128px)] object-contain"
+                    className="w-auto h-[clamp(80px,10vw,128px)] object-contain"
                   />
                 </div>
 
@@ -153,7 +153,7 @@ export default async function Home() {
           </div>
         </header>
 
-        <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
 
           {products.slice(0, 4).map((product, index) => (
 
@@ -273,7 +273,7 @@ export default async function Home() {
             </div>
           </header>
 
-          <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
             {products
               .filter(p => p.tags && p.tags.some(t => t.toUpperCase() === 'EXHIBITION CATEGORIES'))
               .slice(0, 4)
@@ -307,7 +307,7 @@ export default async function Home() {
           </div>
         </header>
 
-        <div className="grid grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
 
           {displayTrending.slice(0, 4).map((product, index) => (
             <ProductCard

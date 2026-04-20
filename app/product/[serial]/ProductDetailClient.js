@@ -50,7 +50,7 @@ export default function ProductDetailClient({ product }) {
 
 
   return (
-    <div className="grid grid-cols-[6fr_5fr] gap-[clamp(10px,3vw,64px)] items-start w-full">
+    <div className="grid grid-cols-1 lg:grid-cols-[6fr_5fr] gap-[clamp(10px,3vw,64px)] items-start w-full">
 
       {/* Left Column - Images with Zoom */}
       <div className="flex flex-col gap-4 max-w-[640px] mx-auto w-full">
