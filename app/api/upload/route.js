@@ -1,27 +1,63 @@
-import cloudinary from "@/lib/cloudinary"
+import cloudinary from "@/lib/cloudinary";
+import { cookies } from "next/headers";
+import { logActivity } from "@/lib/activity";
+import { verifyToken } from "@/lib/session";
+
+const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
+const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
 
 export async function POST(req) {
+  // Auth check — only admin can upload
+  const cookieStore = await cookies();
+  const token = cookieStore.get("admin_access")?.value;
+  const session = token ? await verifyToken(token) : null;
+  if (!session || session.role !== 'admin') {
+    return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-  const formData = await req.formData()
+  try {
+    const formData = await req.formData();
+    const file     = formData.get("file");
 
-  const file = formData.get("file")
+    if (!file || typeof file === "string") {
+      return Response.json({ error: "No file provided." }, { status: 400 });
+    }
 
-  const bytes = await file.arrayBuffer()
-  const buffer = Buffer.from(bytes)
+    // MIME type validation
+    if (!ALLOWED_MIME_TYPES.has(file.type)) {
+      return Response.json(
+        { error: "Invalid file type. Only JPEG, PNG, WebP, and GIF are allowed." },
+        { status: 415 }
+      );
+    }
 
-  const result = await new Promise((resolve, reject) => {
+    // File size validation
+    const bytes = await file.arrayBuffer();
+    if (bytes.byteLength > MAX_FILE_SIZE_BYTES) {
+      return Response.json(
+        { error: "File too large. Maximum size is 10 MB." },
+        { status: 413 }
+      );
+    }
 
-    cloudinary.uploader.upload_stream(
-      { folder: "products" },
-      (error, result) => {
-        if (error) reject(error)
-        resolve(result)
-      }
-    ).end(buffer)
+    const buffer = Buffer.from(bytes);
+    const ip     = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
 
-  })
+    const result = await new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        { folder: "products", resource_type: "image" },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      ).end(buffer);
+    });
 
-  return Response.json({
-    url: result.secure_url
-  })
+    logActivity("IMAGE_UPLOADED", result.public_id, `Uploaded ${file.name || "image"}`, ip);
+
+    return Response.json({ url: result.secure_url });
+  } catch (error) {
+    console.error("Upload error:", error.message);
+    return Response.json({ error: "Upload failed. Please try again." }, { status: 500 });
+  }
 }

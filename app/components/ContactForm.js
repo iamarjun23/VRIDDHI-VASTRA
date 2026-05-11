@@ -1,12 +1,15 @@
 "use client"
 
 import { useState } from "react"
+import toast from "react-hot-toast"
 
-export default function ContactForm() {
+export default function ContactForm({ productName = "", productSerial = "" }) {
   const [formData, setFormData] = useState({
     name: "",
     phoneNumber: "",
-    message: ""
+    message: "",
+    productName: productName,
+    productSerial: productSerial
   })
   const [status, setStatus] = useState("idle") // idle, submitting, success, error
 
@@ -23,14 +26,18 @@ export default function ContactForm() {
 
       if (res.ok) {
         setStatus("success")
-        setFormData({ name: "", phoneNumber: "", message: "" })
+        setFormData({ name: "", phoneNumber: "", message: "", productName, productSerial })
+        toast.success("Message sent successfully!")
         setTimeout(() => setStatus("idle"), 5000)
       } else {
+        const errData = await res.json()
         setStatus("error")
+        toast.error(errData.error || "Failed to send message")
       }
     } catch (error) {
       console.error("Submission error:", error)
       setStatus("error")
+      toast.error("Failed to send message. Please try again.")
     }
   }
 

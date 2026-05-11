@@ -1,23 +1,28 @@
 import Link from "next/link";
+import Image from "next/image";
 
 export default function PromoBanner({ image, heading, subtext, logo }) {
   return (
     <section className="relative w-full min-h-[30vh] md:min-h-[60vh] lg:min-h-[80vh] flex flex-col items-center justify-center overflow-hidden bg-[#1c1a17] py-12 md:py-0">
       {image && (
-        <img
+        <Image
           src={image}
           alt="Promo Background"
-          className="absolute inset-0 w-full h-full object-cover z-0 transition-opacity duration-1000"
+          fill
+          sizes="100vw"
+          className="object-cover z-0 transition-opacity duration-1000"
         />
       )}
 
       {/* Corner logo banner overlay - behind the tint */}
       {logo && (
-        <div className="absolute right-10 bottom-10 z-0 hidden md:flex">
-          <img
+        <div className="absolute right-10 bottom-10 z-0 hidden md:block w-48 h-48">
+          <Image
             src={logo}
             alt="Vriddhi Vastra Logo"
-            className="w-48 h-auto object-contain brightness-[1.1] contrast-[1.1]"
+            fill
+            sizes="192px"
+            className="object-contain brightness-[1.1] contrast-[1.1]"
           />
         </div>
       )}

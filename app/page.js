@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import HeroContent from "./components/HeroContent"
 import ProductCard from "./components/ProductCard"
 import PromoBanner from "./components/PromoBanner"
@@ -63,9 +64,9 @@ export default async function Home() {
             <p className="dm-sans-h4 tracking-[0.3em] text-brand-gold uppercase mb-6">
               Shop By Categories
             </p>
-            <h1 className="dm-sans-h1 text-brand-black leading-tight">
+            <h2 className="dm-sans-h1 text-brand-black leading-tight">
               Discover Our Signature Categories and Collection
-            </h1>
+            </h2>
             <p className="dm-sans-h3 text-brand-green mt-6 max-w-2xl mx-auto font-medium text-[clamp(12px,2vw,22px)]">
               Explore the Collection of Finest Silk Sarees of South India
             </p>
@@ -85,9 +86,11 @@ export default async function Home() {
 
                 {/* Lotus image — static, NOT a link */}
                 <div className="mb-6 flex justify-center">
-                  <img
+                  <Image
                     src="/images/Lotus.png"
                     alt="Lotus"
+                    width={128}
+                    height={128}
                     className="w-auto h-[clamp(80px,10vw,128px)] object-contain"
                   />
                 </div>
@@ -98,10 +101,12 @@ export default async function Home() {
                     className="overflow-hidden bg-[#e5e0d8] relative mb-4 shadow-md group-hover:shadow-xl transition-all duration-700 w-[95%] mx-auto aspect-[3/6] rounded-t-full"
                   >
                     {img ? (
-                      <img
+                      <Image
                         src={img}
                         alt={categoryName}
-                        className="w-full h-full object-cover transform transition-transform duration-1000 group-hover:scale-110"
+                        fill
+                        sizes="(max-width: 768px) 50vw, 25vw"
+                        className="object-cover transform transition-transform duration-1000 group-hover:scale-110"
                       />
                     ) : (
                       <div className="w-full h-full bg-brand-green/5 flex items-center justify-center text-brand-green/20 uppercase tracking-widest text-[clamp(8px,1vw,10px)]">
@@ -180,9 +185,9 @@ export default async function Home() {
           <p className="dm-sans-h4 tracking-[0.3em] text-brand-gold uppercase mb-6">
             The Style Look book: SHOP BY OCCASION
           </p>
-          <h1 className="dm-sans-h1 text-brand-green leading-tight max-w-5xl mx-auto">
+          <h2 className="dm-sans-h1 text-brand-green leading-tight max-w-5xl mx-auto">
             Find your perfect Style from our Look book and shop by occasion
-          </h1>
+          </h2>
           <div className="w-24 h-[1px] bg-brand-gold/40 mt-4"></div>
         </div>
 
@@ -191,7 +196,7 @@ export default async function Home() {
           {/* Left Column */}
           <div className="flex flex-col gap-[clamp(0.5rem,2vw,2.5rem)]">
             <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[0]?.title || '')}`} className="relative h-[clamp(120px,30vw,280px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
-              {config.lookbookBlocks?.[0]?.image && <img src={config.lookbookBlocks[0].image} alt="Lookbook 1" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
+              {config.lookbookBlocks?.[0]?.image && <Image src={config.lookbookBlocks[0].image} alt="Lookbook 1" fill sizes="(max-width: 768px) 50vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(1.5rem,4vw,2.5rem)] left-[clamp(1.5rem,4vw,2.5rem)] right-[clamp(1.5rem,4vw,2.5rem)] flex justify-start">
                 <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-2 text-left">
@@ -202,7 +207,7 @@ export default async function Home() {
             </Link>
 
             <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[1]?.title || '')}`} className="relative h-[clamp(120px,30vw,280px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
-              {config.lookbookBlocks?.[1]?.image && <img src={config.lookbookBlocks[1].image} alt="Lookbook 2" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
+              {config.lookbookBlocks?.[1]?.image && <Image src={config.lookbookBlocks[1].image} alt="Lookbook 2" fill sizes="(max-width: 768px) 50vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(1rem,3vw,2rem)] left-[clamp(1rem,3vw,2rem)] right-[clamp(1rem,3vw,2rem)] flex justify-start">
                 <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-2 text-left">
@@ -213,7 +218,7 @@ export default async function Home() {
             </Link>
 
             <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[2]?.title || '')}`} className="relative h-[clamp(240px,60vw,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
-              {config.lookbookBlocks?.[2]?.image && <img src={config.lookbookBlocks[2].image} alt="Lookbook 3" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
+              {config.lookbookBlocks?.[2]?.image && <Image src={config.lookbookBlocks[2].image} alt="Lookbook 3" fill sizes="(max-width: 768px) 50vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(1rem,3vw,2rem)] left-[clamp(1rem,3vw,2rem)] right-[clamp(1rem,3vw,2rem)] flex justify-start">
                 <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-2 text-left">
@@ -227,7 +232,7 @@ export default async function Home() {
           {/* Right Column */}
           <div className="flex flex-col gap-[clamp(0.5rem,2vw,2.5rem)]">
             <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[3]?.title || '')}`} className="relative h-[clamp(240px,60vw,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
-              {config.lookbookBlocks?.[3]?.image && <img src={config.lookbookBlocks[3].image} alt="Lookbook 4" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
+              {config.lookbookBlocks?.[3]?.image && <Image src={config.lookbookBlocks[3].image} alt="Lookbook 4" fill sizes="(max-width: 768px) 50vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(1.5rem,4vw,2.5rem)] left-[clamp(1.5rem,4vw,2.5rem)] right-[clamp(1.5rem,4vw,2.5rem)] flex justify-start">
                 <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-2 text-left">
@@ -238,7 +243,7 @@ export default async function Home() {
             </Link>
 
             <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[4]?.title || '')}`} className="relative h-[clamp(240px,60vw,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
-              {config.lookbookBlocks?.[4]?.image && <img src={config.lookbookBlocks[4].image} alt="Lookbook 5" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />}
+              {config.lookbookBlocks?.[4]?.image && <Image src={config.lookbookBlocks[4].image} alt="Lookbook 5" fill sizes="(max-width: 768px) 50vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(2rem,6vw,3rem)] left-[clamp(2rem,6vw,3rem)] right-[clamp(2rem,6vw,3rem)] flex justify-start">
                 <h4 className="display-h3 text-white tracking-[0.05em] uppercase flex items-center gap-2 text-left">

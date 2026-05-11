@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link"
+import Image from "next/image"
 import { useCart } from "../context/CartContext"
 import { formatWhatsAppMessage, getWhatsAppUrl } from "../../lib/utils"
 import StarRating from "./StarRating"
@@ -45,16 +46,20 @@ export default function ProductCard({ product, bgWhite = false }) {
         <Link href={`/product/${product.serial}`} className="block h-full group/img relative">
           {product.image1 ? (
             <>
-              <img
+              <Image
                 src={product.image1}
-                className="w-full h-full object-cover transform transition-all duration-1000 group-hover:scale-110 group-hover/img:opacity-0"
+                className="object-cover transform transition-all duration-1000 group-hover:scale-110 group-hover/img:opacity-0"
                 alt={product.name}
+                fill
+                sizes="(max-width: 768px) 50vw, 25vw"
               />
               {product.image2 && (
-                <img
+                <Image
                   src={product.image2}
-                  className="absolute inset-0 w-full h-full object-cover transform scale-105 opacity-0 group-hover/img:opacity-100 group-hover/img:scale-110 transition-all duration-1000"
+                  className="object-cover transform scale-105 opacity-0 group-hover/img:opacity-100 group-hover/img:scale-110 transition-all duration-1000"
                   alt={`${product.name} alternate view`}
+                  fill
+                  sizes="(max-width: 768px) 50vw, 25vw"
                 />
               )}
             </>

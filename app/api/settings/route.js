@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import dbConnect from "../../../lib/mongodb";
 import SiteConfig from "../../../models/SiteConfig";
+import { cookies } from "next/headers";
+import { logActivity } from "../../../lib/activity";
+import { verifyToken } from "../../../lib/session";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -27,6 +30,13 @@ export async function GET() {
 
 // PUT to update global site settings
 export async function PUT(req) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("admin_access")?.value;
+  const session = token ? await verifyToken(token) : null;
+  if (!session || session.role !== 'admin') {
+    return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+
   await dbConnect();
   try {
     const data = await req.json();
@@ -59,17 +69,17 @@ export async function PUT(req) {
 
     if (!config) throw new Error("findOneAndUpdate returned null");
 
-    console.log("Config saved successfully! Final Hero:", config.heroImage);
-
     // Force revalidate the homepage for all users
     revalidatePath("/", "page");
     revalidatePath("/collections", "page");
-    revalidatePath("/(root)", "layout"); 
-    revalidatePath("/", "layout"); // Ensure global elements refresh
+    revalidatePath("/", "layout");
 
-    return NextResponse.json({ message: "Settings updated successfully", config }, { status: 200 });
+    const ip = req.headers.get('x-forwarded-for') || req.ip || '127.0.0.1';
+    logActivity('SETTINGS_UPDATED', 'global', 'Site configuration updated', ip);
+
+    return NextResponse.json({ success: true, message: "Settings updated successfully", config }, { status: 200 });
   } catch (error) {
-    console.error("Failed to update site config:", error);
-    return NextResponse.json({ error: "Failed to update settings" }, { status: 500 });
+    console.error("Failed to update site config:", error.message);
+    return NextResponse.json({ success: false, error: "Failed to update settings" }, { status: 500 });
   }
 }

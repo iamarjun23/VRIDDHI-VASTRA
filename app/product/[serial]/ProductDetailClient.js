@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useCart } from "../../context/CartContext";
 import { formatWhatsAppMessage, getWhatsAppUrl } from "../../../lib/utils";
 import StarRating from "../../components/StarRating";
+import toast from "react-hot-toast";
+import Image from "next/image";
 
 
 export default function ProductDetailClient({ product }) {
@@ -21,6 +23,17 @@ export default function ProductDetailClient({ product }) {
   };
 
   const handleBuyNow = () => {
+    // Fire and forget click analytics tracking
+    fetch("/api/analytics/click", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        productSerial: product.serial,
+        productName: product.name,
+        source: "buy_now_button"
+      })
+    }).catch(err => console.error("Analytics error:", err));
+
     const message = formatWhatsAppMessage([{ ...product, quantity }]);
     const url = getWhatsAppUrl(message, whatsappNumber);
     window.open(url, "_blank");
@@ -40,8 +53,9 @@ export default function ProductDetailClient({ product }) {
       if (res.ok) {
         setCurrentRating(data.rating);
         setNumReviews(data.numReviews);
+        toast.success("Rating submitted!");
       } else {
-        alert(data.message || "Failed to submit rating");
+        toast.error(data.message || "Failed to submit rating");
       }
     } catch (error) {
       console.error("Rating error:", error);
@@ -63,10 +77,13 @@ export default function ProductDetailClient({ product }) {
           >
             {activeImage ? (
               <>
-                <img
+                <Image
                   src={activeImage}
                   alt={product.name}
-                  className="w-full h-full object-cover"
+                  className="object-cover"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  priority
                 />
                 {/* Source Lens on active image */}
                 {isZooming && (

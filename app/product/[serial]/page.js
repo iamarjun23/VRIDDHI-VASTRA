@@ -15,12 +15,36 @@ export async function generateMetadata({ params }) {
   
   if (!product) return { title: "Product Not Found" };
   
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.vriddhivastra.com';
+  const productUrl = `${siteUrl}/product/${serial}`;
+  const description = product.description || `Buy the elegant ${product.name} at Vriddhi Vastra. Premium quality silk sarees.`;
+
   return {
     title: product.name,
-    description: `Buy ${product.name} at Vriddhi Vastra. ${product.description || ""}`,
-    openGraph: {
-      images: [product.image1],
+    description: description,
+    alternates: {
+      canonical: productUrl,
     },
+    openGraph: {
+      title: `${product.name} | Vriddhi Vastra`,
+      description: description,
+      url: productUrl,
+      images: product.image1 ? [
+        {
+          url: product.image1,
+          width: 800,
+          height: 1000,
+          alt: product.name,
+        }
+      ] : [],
+      type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: product.name,
+      description: description,
+      images: product.image1 ? [product.image1] : [],
+    }
   };
 }
 
@@ -49,8 +73,37 @@ export default async function ProductDetailsPage({ params }) {
     )
   }
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: product.name,
+    image: product.image1 ? [product.image1] : [],
+    description: product.description || `Buy ${product.name} at Vriddhi Vastra.`,
+    sku: product.serial,
+    brand: {
+      '@type': 'Brand',
+      name: 'Vriddhi Vastra'
+    },
+    offers: {
+      '@type': 'Offer',
+      price: product.price,
+      priceCurrency: 'INR',
+      availability: 'https://schema.org/InStock',
+      url: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://www.vriddhivastra.com'}/product/${product.serial}`
+    },
+    aggregateRating: product.numReviews > 0 ? {
+      '@type': 'AggregateRating',
+      ratingValue: product.rating,
+      reviewCount: product.numReviews,
+    } : undefined,
+  };
+
   return (
     <main className="bg-[#F1E8CD] min-h-screen selection:bg-black selection:text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar logo={config.logo} />
 
       <section className="pt-28 md:pt-64 pb-24 px-[clamp(1rem,4vw,5vw)] bg-[#F1E8CD] w-full">

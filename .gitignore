@@ -1,6 +1,8 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# ─────────────────────────────────────────
+# Vriddhi Vastra — .gitignore
+# ─────────────────────────────────────────
 
-# dependencies
+# Dependencies
 /node_modules
 /.pnp
 .pnp.*
@@ -10,53 +12,67 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# Build output
 /.next/
 /out/
-
-# production
 /build
+/dist
+/.turbo
 
-# misc
-.DS_Store
-*.pem
+# Test coverage
+/coverage
 
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
+# Environment — NEVER commit secrets
 .env
+.env.*
 .env*.local
+.env.development
+.env.production
+.env.staging
 
-# vercel
+# Vercel
 .vercel
 
-# typescript
+# TypeScript
 *.tsbuildinfo
 next-env.d.ts
 
-# IDEs
+# OS artifacts
+.DS_Store
+Thumbs.db
+*.pem
+
+# Editor / IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# OS
-Thumbs.db
+# Debug logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
 
-# Turbo
-.turbo
+# next-sitemap build outputs (regenerated on every deploy)
+public/sitemap*.xml
+public/robots.txt
 
-# Documentation
-README.md
-
-*.sst
+# Legacy data files / seed scripts
+app/data/
 data/
 db/
 database/
+dump/
+*.bson
+
+# Dev-only scratch scripts & Temp files
+scratch.js
+resolve.js
+temp_settings.js
+*.tmp
+temp_*.js
+migration*.js
+test*.js
+mock*.js

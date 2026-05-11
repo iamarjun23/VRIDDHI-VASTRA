@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 
 export default function Footer({ backgroundImage, logo = "" }) {
   const defaultBg = "https://images.unsplash.com/photo-1596484552834-5a58f7004dc?q=80&w=2574&auto=format&fit=crop";
@@ -23,8 +24,8 @@ export default function Footer({ backgroundImage, logo = "" }) {
           {/* Logo - Minimal */}
           <Link href="/" className="shrink-0">
             {logo ? (
-              <div className="w-[clamp(40px,10vw,350px)] h-[clamp(40px,10vw,350px)] overflow-hidden">
-                <img src={logo} alt="Vriddhi Vastra Logo" className="w-full h-full object-contain" />
+              <div className="relative w-[clamp(40px,10vw,350px)] h-[clamp(40px,10vw,350px)] overflow-hidden">
+                <Image src={logo} alt="Vriddhi Vastra Logo" fill sizes="(max-width: 768px) 150px, 350px" className="object-contain" />
               </div>
             ) : (
               <div className="w-[clamp(100px,15vw,200px)] h-[clamp(100px,15vw,200px)] flex flex-col items-center justify-center shrink-0">

@@ -1,65 +1,126 @@
-# Vriddhi Vastra | Luxury Silk Saree Marketplace
+# Vriddhi Vastra
 
-A high-end e-commerce platform dedicated to exquisite South Indian silk sarees, built with performance, SEO, and visual excellence in mind.
+A production-grade e-commerce and operations platform for a luxury South Indian silk saree brand. Built with Next.js 16 App Router, MongoDB, and Cloudinary — designed from the ground up to feel handcrafted, premium, and operationally polished.
 
-## 🚀 Technical Stack
+---
 
-- **Framework**: [Next.js 16](https://nextjs.org/) (App Router, Turbopack)
-- **Frontend**: React 19, Vanilla CSS with [Tailwind CSS v4](https://tailwindcss.com/)
-- **Animations**: [Framer Motion](https://www.framer.com/motion/)
-- **Database**: [MongoDB](https://www.mongodb.com/) with Mongoose ORM
-- **Authentication**: Next-Auth
-- **Media Storage**: Cloudinary (via Multer)
-- **Deployment Ready**: Fully configured with `force-dynamic` for real-time data and full SEO metadata support.
+## Stack
 
-## 📁 Directory Structure
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| UI | React 19, Tailwind CSS v4 |
+| Animation | Framer Motion, Tailwind animate-in |
+| Database | MongoDB Atlas via Mongoose |
+| Media | Cloudinary |
+| Email | Nodemailer (SMTP) |
+| Auth | Cookie-based session (bcryptjs) |
+| Deployment | Vercel / Node.js |
 
-```bash
+---
+
+## Project Structure
+
+```
 ├── app/
-│   ├── admin/                # Admin dashboard for product & site management
-│   ├── api/                  # API routes (products, settings, auth)
-│   ├── category/[slug]/      # Dynamic category detail pages
-│   ├── collections/          # Collection overview pages
-│   ├── components/           # Reusable UI components (Navbar, Footer, ProductCard)
-│   ├── context/              # React Context (Cart, Auth)
-│   ├── product/[serial]/     # Dynamic product detail pages
-│   ├── tags/                 # Search and Archive page with filtering
-│   └── globals.css           # Styling with Tailwind v4 utilities
-├── lib/                      # Utility functions and DB connection
-├── models/                   # Mongoose schemas (Product, SiteConfig)
-└── public/                   # Static assets (images, icons)
+│   ├── admin/              # Admin dashboard — Inventory, Inquiries, Settings
+│   ├── api/                # API routes — Products, Settings, Auth, Analytics
+│   ├── category/[slug]/    # Dynamic category pages
+│   ├── collections/        # All collections overview
+│   ├── components/         # Shared UI components
+│   ├── contact/            # Contact & inquiry form page
+│   ├── context/            # Cart context (localStorage-backed)
+│   ├── login/              # Admin login portal
+│   ├── product/[serial]/   # Product detail page
+│   ├── search/             # Full-text product search
+│   ├── tags/               # Tag-based filtered catalog
+│   └── globals.css         # Tailwind v4 + custom utility classes
+├── lib/
+│   ├── cloudinary.js       # Cloudinary client (server-side only)
+│   ├── mongodb.js          # Mongoose connection with global caching
+│   └── utils.js            # WhatsApp message formatting utilities
+├── models/
+│   ├── Admin.js            # Admin credentials schema
+│   ├── ContactSubmission.js# Inquiry/contact form submissions
+│   ├── Product.js          # Product schema
+│   ├── ProductClick.js     # Click analytics schema
+│   └── SiteConfig.js       # CMS configuration schema
+├── middleware.js            # Route protection + API rate limiting
+├── next-sitemap.config.js   # Sitemap generation config
+└── .env.example             # Environment variable reference
 ```
 
-## 🛠️ Key Features
+---
 
-### 1. Dynamic Marketplace
-- **Real-time Data**: Every page is set to `force-dynamic`, ensuring that price changes, new arrivals, and inventory updates are reflected instantly without stale cache issues.
-- **Dynamic SEO**: Each product and category page generates its own metadata (title, description, OG images) dynamically from the database.
+## Getting Started
 
-### 2. Luxury UI/UX
-- **Custom Typography**: Integrated curated fonts (Marcellus, Jost, DM Sans) with custom H1-H6 utilities.
-- **Micro-animations**: Smooth reveals and transitions powered by Framer Motion.
-- **Product Zoom**: Premium high-detail zoom functionality on product pages for inspecting saree weaves.
+### 1. Clone the repository
 
-### 3. Smart Cart & WhatsApp Checkout
-- **Local Persistence**: The cart persists in `localStorage` across sessions.
-- **Direct Ordering**: Instead of a complex checkout flow, the "Buy Now" button generates a pre-formatted WhatsApp message directly to the brand owner with the product details and total price.
+```bash
+git clone https://github.com/your-username/vriddhivastra.git
+cd vriddhivastra
+```
 
-## ⚙️ How the Code Works
+### 2. Install dependencies
 
-### Data Flow
-1. **Server-Side Rendering**: When a user visits a page (e.g., `/product/XYZ`), Next.js calls `dbConnect()` to establish a MongoDB connection.
-2. **Dynamic Data**: The page fetches the product info based on the URL parameter (`serial`).
-3. **SEO Generation**: `generateMetadata` runs on the server to set the browser title and meta tags before the page reaches the client.
-4. **Client-Side Interaction**: `ProductDetailClient` handles quantity changes, image switching, and zoom effects.
+```bash
+npm install
+```
 
-### Styling System
-The project uses **Tailwind v4** with custom `@utility` classes defined in `globals.css`:
-- `display-h1` to `display-h6` for the elegant serif headers.
-- `dm-sans-h1` to `dm-sans-h6` for clean, modern sans-serif text.
+### 3. Configure environment variables
 
-## 📦 Deployment
+```bash
+cp .env.example .env.local
+```
 
-The project is optimized for Vercel or any Node.js environment. 
-- Run `npm run dev` for local development.
-- Run `npm run build` to prepare for production.
+Open `.env.local` and fill in your MongoDB Atlas URI, Cloudinary credentials, and SMTP email. See `.env.example` for documentation on each variable.
+
+### 4. Run the development server
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) to view the storefront.
+The admin dashboard is at [http://localhost:3000/admin](http://localhost:3000/admin) — protected by cookie-based auth.
+
+---
+
+## Admin Portal
+
+The admin panel lives at `/admin` and requires login via `/login`.
+
+| Route | Purpose |
+|---|---|
+| `/admin` | Dashboard — live analytics, trending products, recent inquiries |
+| `/admin/products` | Inventory catalog management |
+| `/admin/products/create` | Create and publish a new product |
+| `/admin/products/[serial]` | Edit an existing product |
+| `/admin/inquiries` | Manage and respond to client inquiries |
+| `/admin/settings` | CMS — Logo, hero images, collections, lookbook, contact |
+
+**First-time setup:** An admin document must exist in your MongoDB `admins` collection with a bcrypt-hashed password. The forgot-password flow uses SMTP to deliver OTPs.
+
+---
+
+## Key Features
+
+- **Real-time storefront** — All pages use `force-dynamic` rendering; inventory updates are live.
+- **Full CMS** — Admins can update the hero image, logo, lookbook, collections, and site-wide promotional banner through the Settings dashboard without touching code.
+- **WhatsApp checkout** — The cart generates a pre-formatted WhatsApp message directly to the store owner, keeping the purchase flow frictionless.
+- **Analytics** — Product click tracking feeds the "Top Engaging Pieces" dashboard widget.
+- **SEO-first** — Dynamic metadata (`generateMetadata`) on every product and category page, structured JSON-LD, and an auto-generated sitemap.
+- **Security** — Middleware-level route protection on all `/admin` and `/api` paths, plus in-memory API rate limiting (60 req/min per IP).
+
+---
+
+## Deployment
+
+The project is configured for Vercel. Set all environment variables from `.env.example` in your Vercel project settings before deploying.
+
+```bash
+npm run build   # Validate production build locally
+npm run start   # Run production server locally
+```
+
+The `postbuild` step automatically generates `sitemap.xml` and `robots.txt` via `next-sitemap`.

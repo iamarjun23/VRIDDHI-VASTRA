@@ -1,25 +1,26 @@
 "use client"
 
-import { useState, useEffect, use } from "react"
-import { useRouter } from "next/navigation"
+import { useState, useEffect, use, Suspense } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import toast from "react-hot-toast"
 
-export default function EditProduct({ params }) {
+function EditProductContent({ params }) {
   const unwrappedParams = use(params)
   const router = useRouter()
+  const searchParams = useSearchParams()
   const [loading, setLoading] = useState(false)
   const [uploadingImage, setUploadingImage] = useState(null)
   const [fetchLoading, setFetchLoading] = useState(true)
 
   const [formData, setFormData] = useState(null)
   const [categories, setCategories] = useState([])
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const [productsRes, settingsRes] = await Promise.all([
           fetch("/api/products"),
-          fetch("/api/settings", { cache: "no-store", headers: { 'Cache-Control': 'no-cache' } })
+          fetch("/api/settings", { cache: "no-store" })
         ])
         
         const products = await productsRes.json()
@@ -35,7 +36,7 @@ export default function EditProduct({ params }) {
             tags: product.tags ? product.tags.join(", ") : ""
           })
         } else {
-          alert("Product not found")
+          toast.error("Product not found")
           router.push("/admin/products")
         }
       } catch (err) {
@@ -70,7 +71,7 @@ export default function EditProduct({ params }) {
         setFormData(prev => ({ ...prev, [imageField]: json.url }))
       }
     } catch (error) {
-      alert("Image upload failed. Try again.")
+      toast.error("Image upload failed.")
     }
     setUploadingImage(null)
   }
@@ -100,307 +101,258 @@ export default function EditProduct({ params }) {
       })
 
       if (res.ok) {
+        toast.success("Piece updated successfully")
         router.refresh()
         router.push("/admin/products")
       } else {
-        alert("Failed to update product")
+        toast.error("Failed to update piece")
       }
     } catch (error) {
-      alert("Error occurred")
+      toast.error("Error occurred")
     }
     setLoading(false)
   }
 
   if (fetchLoading) return (
-    <div className="min-h-screen bg-[#F9F8F6] flex items-center justify-center">
-       <div className="flex flex-col items-center gap-10">
-          <div className="animate-spin h-20 w-20 border-b-2 border-brand-green rounded-full mb-8"></div>
-          <p className="text-gray-300 font-bold font-display text-2xl italic tracking-widest">Retrieving asset data...</p>
-       </div>
+    <div className="flex flex-col items-center justify-center p-24 h-[60vh]">
+       <div className="w-8 h-8 border-t-2 border-[#D4AF37] border-r-2 border-transparent rounded-full animate-spin mb-4"></div>
+      <p className="text-[11px] text-gray-500 font-bold uppercase tracking-[0.2em]">Loading Workspace</p>
     </div>
   )
   if (!formData) return null
 
   return (
-    <div className="min-h-screen bg-[#F9F8F6]">
-      {/* Header Section */}
-      <header className="sticky top-0 z-30 bg-white/70 backdrop-blur-xl border-b border-gray-100/50 px-6 md:px-10 py-4 md:py-6">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+    <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500 pb-12">
+      
+      {/* Luxury Header Workspace */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E0D8] pb-6 sticky top-0 bg-[#FAF9F6] z-30 py-4 -my-4 mb-4">
+        <div className="flex items-center gap-4">
+          <button onClick={() => router.back()} className="w-10 h-10 flex items-center justify-center border border-[#E5E0D8] text-gray-500 bg-white hover:bg-gray-50 transition-colors">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M10 19l-7-7m0 0l7-7m-7 7h18" /></svg>
+          </button>
           <div>
-             <h1 className="text-2xl md:text-3xl font-bold font-display text-gray-900 tracking-tight">Refine Masterpiece</h1>
-             <p className="text-[10px] md:text-[11px] text-brand-green/70 tracking-[0.4em] uppercase font-bold mt-1 md:mt-1.5 ml-0.5">Editing Archive Entry #{unwrappedParams.serial}</p>
-          </div>
-          <div className="flex items-center gap-4 md:gap-10">
-            <button type="button" onClick={() => router.back()} className="hidden md:block text-[11px] font-bold tracking-[0.4em] text-gray-400 uppercase hover:text-gray-900 transition-colors">
-              Abort Refinement
-            </button>
-            <button 
-              onClick={handleSubmit}
-              disabled={loading || uploadingImage !== null} 
-              className="bg-black hover:bg-brand-green text-white px-6 md:px-12 py-3 md:py-4 rounded-full text-[10px] md:text-[11px] font-bold tracking-[0.3em] uppercase transition-all shadow-2xl shadow-black/10 active:scale-95 disabled:opacity-50 w-full md:w-auto md:min-w-[220px]"
-            >
-              {loading ? "Synchronizing..." : uploadingImage ? "Uploading..." : "Synchronize Asset"}
-            </button>
+            <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] block mb-1">Curation Studio</span>
+            <h1 className="text-2xl lg:text-3xl font-bold font-display text-gray-900 tracking-tight truncate max-w-sm lg:max-w-md">{formData.name}</h1>
           </div>
         </div>
-      </header>
+        <div className="flex items-center gap-3">
+          <button type="button" onClick={() => router.back()} className="px-6 py-3 text-[11px] font-bold text-gray-600 bg-transparent uppercase tracking-widest hover:text-gray-900 transition-all hidden sm:block">
+            Discard
+          </button>
+          <button 
+            onClick={handleSubmit}
+            disabled={loading || uploadingImage !== null} 
+            className="w-full sm:w-auto px-8 py-3 text-[11px] font-bold text-white bg-[#1A1A1A] tracking-widest uppercase hover:bg-[#111111] transition-all duration-300 active:scale-[0.98] disabled:opacity-50 shadow-xl shadow-black/10 hover:shadow-2xl hover:shadow-black/20 flex justify-center items-center gap-2"
+          >
+            {loading ? "Synchronizing..." : uploadingImage ? "Uploading..." : "Save Modifications"}
+          </button>
+        </div>
+      </div>
 
-      <main className="max-w-5xl mx-auto px-4 md:px-10 py-8 md:py-16 space-y-8 md:space-y-16 pb-24 md:pb-48 animate-in slide-in-from-bottom-8 duration-1000">
+      {/* Split Immersive Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-start">
         
-        {/* Core Attributes Card */}
-        <section className="bg-white rounded-[32px] md:rounded-[56px] p-6 md:p-14 border border-gray-100 shadow-sm space-y-8 md:space-y-14 group hover:shadow-2xl transition-all duration-1000">
-          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
-            <div className="w-12 h-12 md:w-16 md:h-16 bg-zinc-50 rounded-[16px] md:rounded-[24px] flex items-center justify-center text-zinc-900 border border-gray-100 shadow-inner group-hover:bg-brand-green group-hover:text-white transition-all duration-700">
-               <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
-            </div>
-            <div>
-               <h3 className="text-3xl font-bold font-display text-gray-900">Core Attributes</h3>
-               <p className="text-md text-gray-400 font-medium mt-1.5">Defining the fundamental essence of this digital entry.</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="space-y-4">
-              <label className="text-[12px] font-bold tracking-[0.4em] text-gray-400 uppercase block pl-2">Archive ID (LOCKED)</label>
-              <input 
-                disabled
-                value={formData.serial} 
-                className="w-full bg-[#F9F8F6]/80 border-gray-100 border-2 rounded-[24px] px-8 py-5 font-bold tracking-[0.3em] uppercase text-sm text-gray-300 cursor-not-allowed outline-none shadow-inner" 
-              />
-            </div>
-            <div className="space-y-4">
-              <label className="text-[12px] font-bold tracking-[0.4em] text-gray-400 uppercase block pl-2">Primary Archive *</label>
-              <div className="relative group/dropdown">
-                <div 
-                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className={`w-full bg-white border-2 rounded-[24px] px-8 py-5 font-bold tracking-[0.3em] uppercase text-sm transition-all duration-500 cursor-pointer flex items-center justify-between shadow-sm hover:shadow-md ${isDropdownOpen ? 'border-brand-green ring-4 ring-brand-green/5' : 'border-gray-100 hover:border-brand-green/30'}`}
-                >
-                  <span className={formData.category ? 'text-gray-900' : 'text-gray-300'}>
-                    {formData.category || "Select Archive"}
-                  </span>
-                  <svg 
-                    className={`w-5 h-5 text-gray-400 transition-transform duration-500 ${isDropdownOpen ? 'rotate-180' : ''}`} 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="3" 
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-
-                {/* Custom Options Menu */}
-                {isDropdownOpen && (
-                  <>
-                    <div 
-                      className="fixed inset-0 z-40" 
-                      onClick={() => setIsDropdownOpen(false)}
-                    ></div>
-                    <div className="absolute top-[calc(100%+12px)] left-0 w-full bg-white border border-gray-100 rounded-[32px] shadow-[0_20px_50px_rgba(0,0,0,0.1)] py-4 z-50 overflow-hidden animate-in fade-in slide-in-from-top-4 duration-500 backdrop-blur-xl bg-white/95">
-                      <div className="max-h-[300px] overflow-y-auto custom-scrollbar">
-                        {categories.map((cat, idx) => (
-                          <div
-                            key={cat}
-                            onClick={() => {
-                              setFormData(prev => ({ ...prev, category: cat }));
-                              setIsDropdownOpen(false);
-                            }}
-                            className={`px-8 py-4 text-[12px] font-bold tracking-[0.2em] uppercase transition-all duration-300 cursor-pointer flex items-center justify-between group/opt ${formData.category === cat ? 'bg-brand-green text-white' : 'text-gray-500 hover:bg-gray-50 hover:text-brand-green'}`}
-                          >
-                            <span>{cat}</span>
-                            {formData.category === cat && (
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
-                            )}
-                          </div>
-                        ))}
-                        {formData.category && !categories.includes(formData.category) && (
-                           <div
-                              onClick={() => setIsDropdownOpen(false)}
-                              className="px-8 py-4 text-[12px] font-bold tracking-[0.2em] uppercase bg-gray-50 text-gray-400 italic flex items-center justify-between"
-                            >
-                              <span>{formData.category} (Legacy Archive)</span>
-                              <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
-                           </div>
-                        )}
+        {/* Left Pane - Gallery Workspace */}
+        <div className="lg:col-span-5 xl:col-span-4 space-y-6 lg:sticky lg:top-[120px]">
+           <div className="bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-6 space-y-6">
+              <h2 className="text-[14px] font-bold text-gray-900 uppercase tracking-widest">Gallery Assets</h2>
+              
+              <div className="space-y-5">
+                {[
+                  { field: 'image1', label: 'Primary Feature' },
+                  { field: 'image2', label: 'Detail View' }
+                ].map((img) => (
+                  <div key={img.field} className="group relative aspect-[4/5] w-full bg-[#FAF9F6] border-2 border-dashed border-[#E5E0D8] hover:border-[#D4AF37] hover:bg-white transition-all duration-500 flex items-center justify-center overflow-hidden">
+                    {uploadingImage === img.field ? (
+                      <div className="flex flex-col items-center">
+                        <div className="animate-spin h-6 w-6 border-b-2 border-gray-900 rounded-full mb-3"></div>
+                        <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">Syncing...</span>
                       </div>
-                    </div>
-                  </>
-                )}
+                    ) : formData[img.field] && !formData[img.field].includes('placeholder') ? (
+                      <>
+                        <img src={formData[img.field]} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Preview" />
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center backdrop-blur-[2px]">
+                           <span className="text-[10px] font-bold tracking-widest text-white uppercase mb-2">{img.label}</span>
+                           <span className="text-[10px] font-bold tracking-widest text-gray-900 uppercase bg-white px-6 py-2">Replace</span>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex flex-col items-center text-[#D4AF37] opacity-60 group-hover:opacity-100 transition-opacity">
+                        <svg className="w-8 h-8 mb-3" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                        <span className="text-[10px] font-bold tracking-widest uppercase">Add {img.label}</span>
+                      </div>
+                    )}
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={(e) => handleImageUpload(e, img.field)} 
+                      className="absolute inset-0 opacity-0 cursor-pointer" 
+                      disabled={uploadingImage !== null}
+                    />
+                  </div>
+                ))}
               </div>
-            </div>
-          </div>
+           </div>
+        </div>
 
-          <div className="space-y-4">
-            <label className="text-[12px] font-bold tracking-[0.4em] text-gray-400 uppercase block pl-2">Masterpiece Title *</label>
-            <input 
-              required 
-              name="name" 
-              value={formData.name} 
-              onChange={handleChange} 
-              className="w-full bg-[#F9F8F6]/50 border-gray-100 border-2 rounded-[24px] px-8 py-6 font-bold font-display text-3xl text-gray-900 focus:border-brand-green focus:bg-white transition-all outline-none shadow-sm" 
-            />
-          </div>
-
-          <div className="space-y-4">
-            <label className="text-[12px] font-bold tracking-[0.4em] text-gray-400 uppercase block pl-2">Design Narrative *</label>
-            <textarea 
-              required 
-              name="description" 
-              value={formData.description} 
-              onChange={handleChange} 
-              rows={5}
-              className="w-full bg-[#F9F8F6]/50 border-gray-100 border-2 rounded-[40px] px-10 py-8 text-gray-600 font-medium leading-relaxed text-lg focus:border-brand-green focus:bg-white transition-all outline-none resize-none shadow-sm" 
-            />
-          </div>
-        </section>
-
-        {/* Commercial Parameters Card */}
-        <section className="bg-white rounded-[32px] md:rounded-[56px] p-6 md:p-14 border border-gray-100 shadow-sm space-y-8 md:space-y-14 group hover:shadow-xl transition-all duration-1000">
-          <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
-            <div className="w-12 h-12 md:w-16 md:h-16 bg-zinc-50 rounded-[16px] md:rounded-[24px] flex items-center justify-center text-zinc-900 border border-gray-100 shadow-inner group-hover:bg-brand-gold group-hover:text-white transition-all duration-700">
-               <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m.599-1c.51-.598.599-1.33.599-2s-.09-1.402-.599-1M12 16c-1.11 0-2.08-.402-2.599-1M12 16V15" /></svg>
-            </div>
-            <div>
-               <h3 className="text-3xl font-bold font-display text-gray-900">Commercial Parameters</h3>
-               <p className="text-md text-gray-400 font-medium mt-1.5">Refining market positioning and discovery metadata.</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="space-y-4">
-              <label className="text-[12px] font-bold tracking-[0.4em] text-gray-400 uppercase block pl-2">Current Valuation (INR) *</label>
-              <div className="relative">
-                <span className="absolute left-8 top-1/2 -translate-y-1/2 text-brand-gold font-display text-2xl">₹</span>
+        {/* Right Pane - Forms */}
+        <div className="lg:col-span-7 xl:col-span-8 space-y-6">
+          
+          <div className="bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-8 lg:p-10 space-y-8">
+            <h2 className="text-[18px] font-bold font-display text-gray-900 border-b border-[#E5E0D8] pb-4">Essential Details</h2>
+            
+            <div className="space-y-5">
+              <div>
+                <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Title / Name *</label>
                 <input 
                   required 
-                  type="number" 
-                  name="price" 
-                  value={formData.price} 
+                  name="name" 
+                  value={formData.name} 
                   onChange={handleChange} 
-                  className="w-full bg-[#F9F8F6]/50 border-gray-100 border-2 rounded-[24px] pl-16 pr-8 py-5 font-bold text-xl text-gray-900 focus:border-brand-green focus:bg-white transition-all outline-none shadow-sm" 
+                  className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-bold text-gray-900 hover:border-gray-300 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 focus:bg-white transition-all duration-300 outline-none" 
+                  placeholder="e.g. Kanchipuram Silk Saree"
                 />
               </div>
-            </div>
-            <div className="space-y-4">
-              <label className="text-[12px] font-bold tracking-[0.4em] text-gray-400 uppercase block pl-2">Acquisition MRP (INR)</label>
-              <div className="relative">
-                <span className="absolute left-8 top-1/2 -translate-y-1/2 text-gray-300 font-display text-2xl">₹</span>
-                <input 
-                  type="number" 
-                  name="originalPrice" 
-                  value={formData.originalPrice} 
-                  onChange={handleChange} 
-                  className="w-full bg-[#F9F8F6]/50 border-gray-100 border-2 rounded-[24px] pl-16 pr-8 py-5 font-bold text-xl text-gray-900 focus:border-brand-green focus:bg-white transition-all outline-none shadow-sm" 
-                />
-              </div>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            <div className="space-y-4">
-              <label className="text-[12px] font-bold tracking-[0.4em] text-gray-400 uppercase block pl-2">Quality Index (0-5)</label>
-              <input 
-                type="number" 
-                name="rating" 
-                step="0.1"
-                min="0"
-                max="5"
-                value={formData.rating || ""} 
-                onChange={handleChange} 
-                className="w-full bg-[#F9F8F6]/50 border-gray-100 border-2 rounded-[24px] px-8 py-5 font-bold text-gray-900 focus:border-brand-green focus:bg-white transition-all outline-none shadow-sm" 
-              />
-            </div>
-            <div className="space-y-4">
-              <label className="text-[12px] font-bold tracking-[0.4em] text-gray-400 uppercase block pl-2">Certified Reviews</label>
-              <input 
-                type="number" 
-                name="numReviews" 
-                value={formData.numReviews || ""} 
-                onChange={handleChange} 
-                className="w-full bg-[#F9F8F6]/50 border-gray-100 border-2 rounded-[24px] px-8 py-5 font-bold text-gray-900 focus:border-brand-green focus:bg-white transition-all outline-none shadow-sm" 
-              />
-            </div>
-          </div>
 
-
-          <div className="space-y-4">
-            <label className="text-[12px] font-bold tracking-[0.4em] text-gray-400 uppercase block pl-2">Exhibition Categories (Comma Separated)</label>
-            <input 
-              name="tags" 
-              value={formData.tags} 
-              onChange={handleChange} 
-              placeholder="e.g. SILK, TRADITIONAL, HANDLOOM"
-              className="w-full bg-[#F9F8F6]/50 border-gray-100 border-2 rounded-[24px] px-8 py-6 font-bold tracking-[0.4em] uppercase text-sm text-gray-600 focus:border-brand-green focus:bg-white transition-all outline-none shadow-sm" 
-            />
-          </div>
-        </section>
-
-        {/* Editorial Assets Card */}
-        <section className="bg-white rounded-[32px] md:rounded-[56px] p-6 md:p-14 border border-gray-100 shadow-sm space-y-8 md:space-y-14 group hover:shadow-xl transition-all duration-1000">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
-              <div className="w-12 h-12 md:w-16 md:h-16 bg-zinc-50 rounded-[16px] md:rounded-[24px] flex items-center justify-center text-zinc-900 border border-gray-100 shadow-inner group-hover:bg-brand-green group-hover:text-white transition-all duration-700">
-                 <svg className="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
-              </div>
-              <div>
-                 <h3 className="text-3xl font-bold font-display text-gray-900">Editorial Assets</h3>
-                 <p className="text-md text-gray-400 font-medium mt-1.5">Visual documentation for the online archive.</p>
-              </div>
-            </div>
-            <div className="px-8 py-3 bg-blue-50/50 border border-blue-100/50 rounded-full flex items-center gap-4 shadow-sm">
-              <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse shadow-[0_0_12px_rgba(59,130,246,0.4)]"></div>
-              <span className="text-[11px] font-bold tracking-[0.2em] text-blue-600 uppercase">CDN SYNC ACTIVE</span>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
-            {[
-              { field: 'image1', label: 'Primary Portfolio Shot', desc: 'The leading perspective for the collection search.' },
-              { field: 'image2', label: 'Secondary Angle', desc: 'Detail focus on texture and weaving patterns.' }
-            ].map((img, i) => (
-              <div key={img.field} className="space-y-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
-                  <h4 className="text-[12px] font-bold tracking-[0.5em] text-gray-900 uppercase">ASSET 0{i+1}. {img.label}</h4>
-                  <p className="text-sm text-gray-400 mt-2.5 font-medium leading-relaxed">{img.desc}</p>
-                </div>
-                
-                <div className="relative aspect-[4/5] w-full rounded-[48px] bg-[#F9F8F6]/50 border-2 border-dashed border-gray-100 hover:border-brand-green transition-all duration-1000 flex items-center justify-center overflow-hidden group shadow-inner cursor-pointer">
-                  {uploadingImage === img.field ? (
-                    <div className="flex flex-col items-center gap-8">
-                       <div className="animate-spin h-14 w-14 border-b-2 border-brand-green rounded-full"></div>
-                       <span className="text-[12px] font-bold tracking-[0.4em] text-brand-green uppercase animate-pulse">Synchronizing...</span>
-                    </div>
-                  ) : formData[img.field] && !formData[img.field].includes("placeholder") ? (
-                    <>
-                      <img src={formData[img.field]} className="w-full h-full object-contain p-14 transform group-hover:scale-110 transition-transform duration-[2s]" alt="Preview" />
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-700 flex items-center justify-center pointer-events-none">
-                         <span className="text-[12px] font-bold tracking-[0.5em] text-white uppercase bg-black/30 backdrop-blur-xl px-12 py-5 rounded-full border border-white/20 shadow-2xl scale-95 group-hover:scale-100 transition-transform duration-700">Synchronize New Asset</span>
-                      </div>
-                    </>
-                  ) : (
-                    <div className="flex flex-col items-center gap-10">
-                       <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center shadow-xl text-gray-100 border border-gray-100 group-hover:scale-110 transition-transform duration-700">
-                          <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M12 4v16m8-8H4" /></svg>
-                       </div>
-                       <div className="text-center space-y-3">
-                          <p className="text-sm font-bold text-gray-900 tracking-[0.3em] uppercase">Upload High-Res Portrait</p>
-                          <p className="text-[11px] text-gray-400 uppercase tracking-widest leading-relaxed font-medium">JPG, PNG or WEBP<br/>800×1200 Recommended</p>
-                       </div>
-                    </div>
-                  )}
+                  <label className="flex items-center justify-between text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">
+                    Archive Serial 
+                    <span className="px-1.5 py-0.5 border border-[#E5E0D8] text-[8px] bg-gray-50 tracking-widest text-gray-400">LOCKED</span>
+                  </label>
                   <input 
-                    type="file" 
-                    accept="image/*" 
-                    onChange={(e) => handleImageUpload(e, img.field)} 
-                    className="absolute inset-0 opacity-0 cursor-pointer z-20" 
-                    disabled={uploadingImage !== null}
+                    disabled 
+                    value={formData.serial} 
+                    className="w-full bg-gray-50/50 border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-bold text-gray-400 cursor-not-allowed outline-none font-mono tracking-wider" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Collection *</label>
+                  <div className="relative">
+                    <select
+                      name="category"
+                      value={formData.category}
+                      onChange={handleChange}
+                      className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-bold text-gray-900 hover:border-gray-300 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 focus:bg-white transition-all duration-300 outline-none appearance-none"
+                    >
+                      <option value="" disabled>Assign Collection</option>
+                      {categories.map(cat => (
+                        <option key={cat} value={cat}>{cat}</option>
+                      ))}
+                      {formData.category && !categories.includes(formData.category) && (
+                        <option value={formData.category}>{formData.category} (Legacy)</option>
+                      )}
+                    </select>
+                    <svg className="w-4 h-4 text-gray-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" /></svg>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Curator's Notes *</label>
+                <textarea 
+                  required 
+                  name="description" 
+                  value={formData.description} 
+                  onChange={handleChange} 
+                  rows={6}
+                  className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-medium text-gray-800 hover:border-gray-300 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 focus:bg-white transition-all duration-300 outline-none resize-y leading-relaxed" 
+                  placeholder="Detail the weave, origin, and characteristics..."
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-8 lg:p-10 space-y-8">
+            <h2 className="text-[18px] font-bold font-display text-gray-900 border-b border-[#E5E0D8] pb-4">Commerce & Discovery</h2>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Valuation (₹) *</label>
+                <div className="relative">
+                  <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
+                  <input 
+                    required 
+                    type="number"
+                    name="price" 
+                    value={formData.price} 
+                    onChange={handleChange} 
+                    className="w-full bg-[#FAF9F6] border border-[#E5E0D8] pl-10 pr-5 py-3.5 text-[14px] font-bold text-gray-900 hover:border-gray-300 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 focus:bg-white transition-all duration-300 outline-none" 
+                    placeholder="0"
                   />
                 </div>
               </div>
-            ))}
-          </div>
-        </section>
+              <div>
+                <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Original MRP (₹)</label>
+                <div className="relative">
+                  <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
+                  <input 
+                    type="number"
+                    name="originalPrice" 
+                    value={formData.originalPrice} 
+                    onChange={handleChange} 
+                    className="w-full bg-[#FAF9F6] border border-[#E5E0D8] pl-10 pr-5 py-3.5 text-[14px] font-bold text-gray-900 hover:border-gray-300 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 focus:bg-white transition-all duration-300 outline-none" 
+                    placeholder="0"
+                  />
+                </div>
+              </div>
+            </div>
 
-      </main>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 border-t border-[#E5E0D8] pt-6 mt-2">
+              <div>
+                <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Rating Overwrite</label>
+                <input 
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  max="5"
+                  name="rating" 
+                  value={formData.rating || ""} 
+                  onChange={handleChange} 
+                  className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-bold text-gray-900 hover:border-gray-300 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 focus:bg-white transition-all duration-300 outline-none" 
+                  placeholder="e.g. 4.8"
+                />
+              </div>
+              <div>
+                <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Reviews Count</label>
+                <input 
+                  type="number"
+                  name="numReviews" 
+                  value={formData.numReviews || ""} 
+                  onChange={handleChange} 
+                  className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-bold text-gray-900 hover:border-gray-300 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 focus:bg-white transition-all duration-300 outline-none" 
+                  placeholder="0"
+                />
+              </div>
+            </div>
+
+            <div className="border-t border-[#E5E0D8] pt-6 mt-2">
+              <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Taxonomy Tags</label>
+              <input 
+                name="tags" 
+                value={formData.tags} 
+                onChange={handleChange} 
+                className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-bold text-gray-900 hover:border-gray-300 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 focus:bg-white transition-all duration-300 outline-none" 
+                placeholder="e.g. Bridal, Handwoven, Zari (Comma separated)"
+              />
+              <p className="text-[11px] text-gray-400 mt-2 font-medium">Used for advanced filtering and search indexing.</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
+}
+
+export default function EditProduct({ params }) {
+  return (
+    <Suspense fallback={
+      <div className="flex flex-col items-center justify-center p-24 h-[60vh]">
+        <div className="w-8 h-8 border-t-2 border-[#D4AF37] border-r-2 border-transparent rounded-full animate-spin mb-4"></div>
+        <p className="text-[11px] text-gray-500 font-bold uppercase tracking-[0.2em]">Loading Workspace</p>
+      </div>
+    }>
+      <EditProductContent params={params} />
+    </Suspense>
+  )
 }

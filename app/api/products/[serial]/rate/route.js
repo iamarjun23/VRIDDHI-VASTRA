@@ -1,19 +1,32 @@
 import dbConnect from "@/lib/mongodb";
 import Product from "@/models/Product";
+import rateLimit from "@/lib/rate-limit";
+
+const limiter = rateLimit({
+  interval: 60 * 1000, // 1 minute
+  uniqueTokenPerInterval: 500,
+});
 
 export async function POST(req, { params }) {
+  try {
+    const ip = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
+    await limiter.check(5, ip); // 5 requests per minute
+  } catch {
+    return Response.json({ success: false, error: "Rate limit exceeded" }, { status: 429 });
+  }
+
   await dbConnect();
   const { serial } = await params;
   const { rating } = await req.json();
 
   if (typeof rating !== 'number' || rating < 1 || rating > 5) {
-    return Response.json({ message: "Invalid rating" }, { status: 400 });
+    return Response.json({ success: false, error: "Invalid rating" }, { status: 400 });
   }
 
   try {
     const product = await Product.findOne({ serial });
     if (!product) {
-      return Response.json({ message: "Product not found" }, { status: 404 });
+      return Response.json({ success: false, error: "Product not found" }, { status: 404 });
     }
 
     // Calculate new average rating
@@ -26,12 +39,13 @@ export async function POST(req, { params }) {
     await product.save();
 
     return Response.json({ 
+      success: true,
       message: "Rating submitted", 
       rating: product.rating, 
       numReviews: product.numReviews 
     });
   } catch (error) {
-    console.error("Rating submission error:", error);
-    return Response.json({ message: "Submission failed", error: error.message }, { status: 500 });
+    console.error("Rating submission error:", error.message);
+    return Response.json({ success: false, error: "Submission failed" }, { status: 500 });
   }
 }

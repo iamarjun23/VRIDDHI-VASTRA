@@ -1,107 +1,176 @@
 import dbConnect from "../../../lib/mongodb";
 import Product from "../../../models/Product";
-import fs from "fs";
-import path from "path";
+import ProductClick from "../../../models/ProductClick";
+import Inquiry from "../../../models/Inquiry";
+import { cookies } from "next/headers";
+import { v2 as cloudinary } from "cloudinary";
+import { logActivity } from "../../../lib/activity";
+import { verifyToken } from "../../../lib/session";
 
-export const dynamic = 'force-dynamic';
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+export const dynamic    = 'force-dynamic';
 export const revalidate = 0;
 export const fetchCache = 'force-no-store';
 
-// Migration flag
-let jsonMigrated = false;
+// Extracts Cloudinary public_id from a hosted URL
+function extractPublicId(url) {
+  if (!url || !url.includes("cloudinary.com")) return null;
+  try {
+    const parts       = url.split("/");
+    const uploadIndex = parts.indexOf("upload");
+    if (uploadIndex === -1) return null;
+    let idParts = parts.slice(uploadIndex + 1);
+    if (idParts.length > 0 && /^v\d+$/.test(idParts[0])) idParts.shift();
+    const full = idParts.join("/");
+    return full.substring(0, full.lastIndexOf('.')) || full;
+  } catch {
+    return null;
+  }
+}
 
 export async function GET() {
   await dbConnect();
-  
-  let products = await Product.find({}).sort({ createdAt: -1 });
-
-  // Auto-migrate from JSON if db is empty on the first pull
-  if (products.length === 0 && !jsonMigrated) {
-    try {
-      const dataFilePath = path.join(process.cwd(), "app/data/products.json");
-      if (fs.existsSync(dataFilePath)) {
-         const data = fs.readFileSync(dataFilePath, "utf-8");
-         const jsonProducts = JSON.parse(data);
-         if(jsonProducts.length > 0) {
-             // Create documents
-             for(let pData of jsonProducts) {
-               await Product.updateOne({ serial: pData.serial }, pData, { upsert: true });
-             }
-             jsonMigrated = true;
-             products = await Product.find({}).sort({ createdAt: -1 });
-         }
-      }
-    } catch(e) {
-       console.error("Migration failed", e);
-    }
-  }
-
+  const products = await Product.find({}).sort({ createdAt: -1 });
   return Response.json(products);
 }
 
 export async function POST(req) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("admin_access")?.value;
+  const session = token ? await verifyToken(token) : null;
+  if (!session || session.role !== 'admin') {
+    return Response.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+
   await dbConnect();
   const body = await req.json();
 
-  try {
-    // Guard rail: Basic sanitization to block MongoDB operators at the top level
-    const safeBody = { ...body };
-    Object.keys(safeBody).forEach(key => {
-      if (key.startsWith('$')) delete safeBody[key];
-    });
+  // Sanitize: block MongoDB operator injection
+  const safeBody = Object.fromEntries(
+    Object.entries(body).filter(([key]) => !key.startsWith('$'))
+  );
 
+  // Normalize serial
+  if (typeof safeBody.serial === 'string') {
+    safeBody.serial = safeBody.serial.trim();
+  }
+
+  if (!safeBody.serial) {
+    return Response.json({ success: false, field: "serial", error: "Serial number is required." }, { status: 400 });
+  }
+
+  // Duplicate serial check
+  const exists = await Product.findOne({ serial: safeBody.serial });
+  if (exists) {
+    return Response.json(
+      { success: false, field: "serial", error: "A product with this serial already exists." },
+      { status: 409 }
+    );
+  }
+
+  try {
     const newProduct = await Product.create(safeBody);
-    return Response.json({ message: "Product Added", product: newProduct });
+    const ip = req.headers.get('x-forwarded-for') || req.ip || '127.0.0.1';
+    logActivity('PRODUCT_CREATED', newProduct.serial, `Created: ${newProduct.name}`, ip);
+    return Response.json({ success: true, message: "Product created", product: newProduct });
   } catch (error) {
-    console.error("Product Creation Error:", error);
-    return Response.json({ message: "Failed to create", error: error.message }, { status: 500 });
+    console.error("Product creation error:", error.message);
+    return Response.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
 export async function PUT(req) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("admin_access")?.value;
+  const session = token ? await verifyToken(token) : null;
+  if (!session || session.role !== 'admin') {
+    return Response.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+
   await dbConnect();
   const body = await req.json();
 
+  if (!body || typeof body.serial !== 'string') {
+    return Response.json({ success: false, error: "Invalid payload: serial is required" }, { status: 400 });
+  }
+
+  const safeBody = Object.fromEntries(
+    Object.entries(body).filter(([key]) => !key.startsWith('$'))
+  );
+  const serial = String(safeBody.serial).trim();
+
   try {
-    if (!body || typeof body.serial !== 'string') {
-      return Response.json({ message: "Invalid payload or missing string serial" }, { status: 400 });
+    const updated = await Product.findOneAndUpdate({ serial }, safeBody, { new: true });
+    if (!updated) {
+      return Response.json({ success: false, error: "Product not found" }, { status: 404 });
     }
-
-    // Guard rail: basic sanitization
-    const safeBody = { ...body };
-    Object.keys(safeBody).forEach(key => {
-      if (key.startsWith('$')) delete safeBody[key];
-    });
-
-    const updated = await Product.findOneAndUpdate(
-      { serial: String(safeBody.serial) }, 
-      safeBody, 
-      { new: true }
-    );
-    if(updated) {
-       return Response.json({ message: "Product Updated", product: updated });
-    }
-    return Response.json({ message: "Product Not Found" }, { status: 404 });
-  } catch(error) {
-    return Response.json({ message: "Update failed", error: error.message }, { status: 500 });
+    return Response.json({ success: true, message: "Product updated", product: updated });
+  } catch (error) {
+    return Response.json({ success: false, error: error.message }, { status: 500 });
   }
 }
 
 export async function DELETE(req) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("admin_access")?.value;
+  const session = token ? await verifyToken(token) : null;
+  if (!session || session.role !== 'admin') {
+    return Response.json({ success: false, error: "Unauthorized" }, { status: 401 });
+  }
+
   await dbConnect();
   const { serial } = await req.json();
-  
+
+  if (!serial || typeof serial !== 'string') {
+    return Response.json({ success: false, error: "Valid serial is required" }, { status: 400 });
+  }
+
   try {
-    if (!serial || typeof serial !== 'string') {
-       return Response.json({ message: "Valid string serial required" }, { status: 400 });
+    const product = await Product.findOne({ serial: String(serial) });
+    if (!product) {
+      return Response.json({ success: false, error: "Product not found" }, { status: 404 });
     }
 
-    const deleted = await Product.findOneAndDelete({ serial: String(serial) });
-    if(deleted) {
-       return Response.json({ message: "Product Deleted" });
+    // Parallel cleanup: Cloudinary assets + analytics + inquiries
+    const cleanupTasks = [];
+
+    for (const imageUrl of [product.image1, product.image2].filter(Boolean)) {
+      const publicId = extractPublicId(imageUrl);
+      if (publicId) {
+        cleanupTasks.push(
+          cloudinary.uploader.destroy(publicId).catch(err =>
+            console.error(`Cloudinary cleanup failed for ${publicId}:`, err)
+          )
+        );
+      }
     }
-    return Response.json({ message: "Product Not Found" }, { status: 404 });
-  } catch(error) {
-    return Response.json({ message: "Delete failed", error: error.message }, { status: 500 });
+
+    cleanupTasks.push(
+      ProductClick.deleteMany({ productSerial: serial }).catch(err =>
+        console.error(`Click history cleanup failed for ${serial}:`, err)
+      )
+    );
+
+    cleanupTasks.push(
+      Inquiry.deleteMany({ productSerial: serial }).catch(err =>
+        console.error(`Inquiry cleanup failed for ${serial}:`, err)
+      )
+    );
+
+    await Promise.all(cleanupTasks);
+    await Product.findOneAndDelete({ serial: String(serial) });
+
+    const ip = req.headers.get('x-forwarded-for') || req.ip || '127.0.0.1';
+    logActivity('PRODUCT_DELETED', serial, `Deleted product ${serial}`, ip);
+
+    return Response.json({ success: true, message: "Product and all associated data deleted" });
+  } catch (error) {
+    console.error("Product deletion error:", error);
+    return Response.json({ success: false, error: error.message }, { status: 500 });
   }
 }

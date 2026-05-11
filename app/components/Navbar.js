@@ -1,5 +1,6 @@
-"use client"
-import Link from "next/link"
+"use client";
+import Link from "next/link";
+import Image from "next/image";
 import { useState, useRef, useEffect } from "react"
 import { useCart } from "../context/CartContext"
 
@@ -35,8 +36,8 @@ export default function Navbar({ theme = "light", logo = "" }) {
       <div className="flex items-center gap-4">
         <Link href="/" className="flex items-center gap-[clamp(0.5rem,1.5vw,1.5rem)] group">
           {logo ? (
-            <div className="rounded-full overflow-hidden border border-brand-gold/30 shadow-lg group-hover:scale-105 transition-all duration-500 w-[clamp(45px,6vw,100px)] h-[clamp(45px,6vw,100px)]">
-              <img src={logo} alt="Logo" className="w-full h-full object-cover" />
+            <div className="relative rounded-full overflow-hidden border border-brand-gold/30 shadow-lg group-hover:scale-105 transition-all duration-500 w-[clamp(45px,6vw,100px)] h-[clamp(45px,6vw,100px)]">
+              <Image src={logo} alt="Logo" fill sizes="100px" className="object-cover" />
             </div>
           ) : (
             <div className="rounded-2xl border border-brand-gold/40 bg-brand-green flex flex-col items-center justify-center shadow-xl relative shrink-0 overflow-hidden transform group-hover:rotate-3 transition-all duration-500 w-[clamp(45px,6vw,100px)] h-[clamp(45px,6vw,100px)]">
