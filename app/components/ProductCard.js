@@ -40,9 +40,9 @@ export default function ProductCard({ product, bgWhite = false }) {
   };
 
   return (
-    <div className={`group relative overflow-hidden transition-all duration-700 flex flex-col h-full rounded-[clamp(20px,4vw,40px)] ${bgWhite ? 'bg-white shadow-sm hover:shadow-md' : ''}`}>
-
-      <div className="relative overflow-hidden aspect-[4/5] rounded-t-[clamp(20px,4vw,40px)] bg-black/[0.03]">
+    <div className={`group relative overflow-hidden transition-all duration-700 flex flex-col h-full rounded-2xl ${bgWhite ? 'bg-white shadow-sm hover:shadow-md' : ''}`}>
+ 
+      <div className="relative overflow-hidden aspect-[4/5] rounded-t-2xl bg-black/[0.03]">
         <Link href={`/product/${product.serial}`} className="block h-full group/img relative">
           {product.image1 ? (
             <>
@@ -69,7 +69,7 @@ export default function ProductCard({ product, bgWhite = false }) {
             </div>
           )}
         </Link>
-
+ 
         {/* Hover Actions for Cart/Buy */}
         <div className="absolute inset-x-4 bottom-4 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-10 hidden sm:flex flex-col gap-2">
           <button
@@ -91,33 +91,33 @@ export default function ProductCard({ product, bgWhite = false }) {
           </button>
         </div>
       </div>
-
-      <div className={`p-[clamp(0.4rem,1.5vw,1.25rem)] flex flex-col items-center flex-1 ${bgWhite ? 'px-[clamp(0.5rem,1.5vw,1.5rem)] pb-[clamp(0.5rem,1.5vw,1.5rem)]' : ''}`}>
-        <h2 className="text-[clamp(8px,1.2vw,22px)] font-dm-sans font-bold text-[#1A3D1C] tracking-wide truncate w-full text-center mb-1.5 group-hover:text-brand-green transition-colors">
+ 
+      <div className={`px-[clamp(0.4rem,1.5vw,1.25rem)] pt-2 pb-[clamp(0.4rem,1.5vw,1.25rem)] flex flex-col items-center flex-1 ${bgWhite ? 'px-[clamp(0.5rem,1.5vw,1.5rem)] pb-[clamp(0.5rem,1.5vw,1.5rem)]' : ''}`}>
+        <h2 className="text-[19px] font-dm-sans font-bold text-[#1A3D1C] tracking-wide truncate w-full text-center mb-1 group-hover:text-brand-green transition-colors">
           {product.name}
         </h2>
-
-        <div className="flex justify-center items-baseline gap-5 font-dm-sans mb-3">
-          <p className="text-[clamp(6px,1.5vw,23px)] font-bold text-[#b38b59]">
+ 
+        <div className="flex justify-center items-baseline gap-4 font-dm-sans mb-2">
+          <p className="text-[23px] font-bold text-[#b38b59]">
             ₹{product.price.toLocaleString()}
           </p>
           {(product.originalPrice && product.originalPrice > product.price) && (
-            <p className="text-[clamp(5px,1vw,17px)] text-gray-400 line-through font-light">
+            <p className="text-[18px] text-gray-400 line-through font-light">
               ₹{product.originalPrice.toLocaleString()}
             </p>
           )}
         </div>
-
-        <div className="flex flex-row flex-nowrap justify-between items-center w-full mt-auto pt-5 gap-x-2">
+ 
+        <div className="flex flex-row flex-nowrap justify-between items-center w-full mt-auto pt-4 gap-x-2">
           <StarRating
             rating={currentRating}
             numReviews={numReviews}
             interactive={true}
             onRate={handleRate}
-            size="clamp(8px, 1vw, 16px)"
+            size="clamp(10px, 1.2vw, 20px)"
             gap="0.1rem"
           />
-
+ 
           <Link
             href={`/product/${product.serial}`}
             className="flex items-center gap-[clamp(2px,0.5vw,4px)] text-[clamp(5px,0.8vw,12px)] font-medium tracking-[0.1em] text-gray-800 hover:text-brand-green transition-all uppercase underline whitespace-nowrap ml-auto"
@@ -127,7 +127,7 @@ export default function ProductCard({ product, bgWhite = false }) {
           </Link>
         </div>
       </div>
-
+ 
     </div>
   )
 }

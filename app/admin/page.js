@@ -48,7 +48,7 @@ function AdminDashboardContent() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-[#E5E0D8] pb-6">
         <div>
           <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] block mb-2">Workspace Overview</span>
-          <h1 className="text-4xl font-bold font-display text-gray-900">Good morning, Vriddhi.</h1>
+          <h1 className="text-[clamp(1.5rem,5vw,3rem)] font-bold font-display text-gray-900 leading-tight">Good morning, Vriddhi.</h1>
         </div>
         <Link 
           href="/admin/products/create" 

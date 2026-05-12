@@ -34,18 +34,18 @@ export default function HeroContent({ logo = "" }) {
       </div>
 
       {/* Hero Text Content — pinned top-left, just below navbar */}
-      <div className="absolute inset-x-0 top-0 z-10 flex flex-col items-start text-left px-[clamp(0.5rem,1.5vw,2rem)] pt-[100px] md:pt-[140px] xl:pt-[180px]">
+      <div className="absolute inset-x-0 top-0 z-10 flex flex-col items-start text-left px-[clamp(0.5rem,1.5vw,2rem)] pl-[90px] pt-[100px] md:pt-[140px] xl:pt-[180px]">
 
         {/* Main Heading */}
         <h2
-          className={`text-white font-display text-[clamp(24px,4vw,90px)] tracking-[0.15em] md:tracking-[0.25em] font-light mb-4 uppercase leading-[1.1] will-change-[transform,opacity] whitespace-nowrap ${tr} ${stage >= 2 ? vis : hid}`}
+          className={`text-white font-display text-[clamp(24px,4vw,90px)] tracking-[0.15em] md:tracking-[0.25em] font-light mb-1 uppercase leading-[1.1] will-change-[transform,opacity] whitespace-nowrap ${tr} ${stage >= 2 ? vis : hid}`}
         >
           TIMELESS &nbsp; ELEGANCE
         </h2>
 
         {/* Kannada Subtext */}
         <h3
-          className={`text-white font-kannada text-[clamp(14px,3vw,60px)] tracking-[0.3em] font-light mb-14 mt-4 xl:mt-10 will-change-[transform,opacity] whitespace-nowrap ${tr} ${stage >= 2 ? vis : hid}`}
+          className={`text-white font-kannada text-[clamp(14px,3vw,60px)] tracking-[0.3em] font-light mb-10 mt-1 xl:mt-2 will-change-[transform,opacity] whitespace-nowrap ${tr} ${stage >= 2 ? vis : hid}`}
         >
           ಭಾ ರ ತೀ ಯ &nbsp;ಪ ರ ೦ ಪ ರೆ
         </h3>

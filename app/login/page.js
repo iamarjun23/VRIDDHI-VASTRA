@@ -1,7 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -21,6 +23,19 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
   const [message, setMessage] = useState("")
+  const [mounted, setMounted] = useState(false)
+  const [currentTime, setCurrentTime] = useState("")
+
+  useEffect(() => {
+    setMounted(true)
+    const updateTime = () => {
+      const now = new Date()
+      setCurrentTime(now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' }))
+    }
+    updateTime()
+    const interval = setInterval(updateTime, 1000)
+    return () => clearInterval(interval)
+  }, [])
 
   const handleLogin = async (e) => {
     if (e) e.preventDefault()
@@ -110,192 +125,377 @@ export default function LoginPage() {
     }
   }
 
+  if (!mounted) return null
+
   return (
-    <div className="min-h-screen bg-[#F9F8F6] flex items-center justify-center px-4">
-      <div className="w-full max-w-[440px] animate-in fade-in zoom-in duration-700">
-        
-        {/* Brand Header */}
-        <div className="text-center mb-10">
-          <h1 className="text-[10px] md:text-[11px] font-bold tracking-[0.5em] text-brand-green/60 uppercase mb-4">Vriddhi Vastra</h1>
-          <h2 className="text-4xl md:text-5xl font-bold font-display text-gray-900 tracking-tighter">Admin Portal</h2>
-          <p className="text-gray-400 mt-4 text-[12px] md:text-[13px] font-medium tracking-wide text-balance">
-            {view === 'login' && "Enter your credentials to access the digital archive."}
-            {view === 'forgot' && "Enter your admin email to receive a reset OTP."}
-            {view === 'reset' && "Enter the OTP and your new password."}
-          </p>
-        </div>
-
-        {/* Login Card */}
-        <div className="bg-white rounded-[40px] md:rounded-[56px] shadow-2xl shadow-black/5 border border-gray-100/50 p-8 md:p-12 relative overflow-hidden group">
-          
-          {/* Subtle Decorative Elements */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-brand-gold/5 rounded-full -mr-16 -mt-16 blur-3xl transition-all duration-1000 group-hover:bg-brand-gold/10"></div>
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-brand-green/5 rounded-full -ml-16 -mb-16 blur-3xl transition-all duration-1000 group-hover:bg-brand-green/10"></div>
-
-          {error && (
-            <div className="mb-6 bg-red-50 text-red-500 text-[11px] font-bold tracking-wider uppercase p-4 rounded-2xl text-center border border-red-100 animate-in shake duration-500 relative z-10">
-              {error}
-            </div>
-          )}
-          {message && (
-            <div className="mb-6 bg-green-50 text-green-600 text-[11px] font-bold tracking-wider uppercase p-4 rounded-2xl text-center border border-green-100 animate-in fade-in duration-500 relative z-10">
-              {message}
-            </div>
-          )}
-
-          {view === 'login' && (
-            <form onSubmit={handleLogin} className="space-y-6 relative z-10">
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase ml-4">Password</label>
-                <div className="relative">
-                  <input
-                    required
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    autoComplete="current-password"
-                    className="w-full bg-[#F9F8F6] border border-transparent rounded-3xl pl-8 pr-16 py-5 text-gray-900 placeholder-gray-300 focus:bg-white focus:border-brand-green/20 focus:ring-4 focus:ring-brand-green/5 transition-all outline-none font-medium text-sm"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-6 top-1/2 -translate-y-1/2 p-2 text-gray-400 hover:text-gray-600 transition-colors focus:outline-none"
-                    aria-label={showPassword ? "Hide password" : "Show password"}
-                  >
-                    {showPassword ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" /></svg>
-                    ) : (
-                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" /><path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex justify-end pr-2">
-                <button type="button" onClick={() => { setView('forgot'); setError(""); setMessage(""); }} className="text-[10px] md:text-[11px] font-bold tracking-wider text-brand-green/70 hover:text-brand-green transition-colors uppercase">
-                  Forgot Password?
-                </button>
-              </div>
-
-              <button
-                disabled={loading}
-                type="submit"
-                className="w-full bg-black hover:bg-brand-green text-white py-6 rounded-3xl text-[11px] font-bold tracking-[0.4em] uppercase transition-all duration-500 shadow-xl shadow-black/10 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed mt-4 group/btn overflow-hidden relative"
-              >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  {loading ? (
-                    <>
-                      <svg className="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Authenticating
-                    </>
-                  ) : (
-                    <>
-                      Unlock Access
-                      <svg className="w-4 h-4 transform group-hover/btn:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                      </svg>
-                    </>
-                  )}
-                </span>
-              </button>
-            </form>
-          )}
-
-          {view === 'forgot' && (
-            <form onSubmit={handleForgotPassword} className="space-y-6 relative z-10">
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase ml-4">Admin Email</label>
-                <input
-                  required
-                  type="email"
-                  placeholder="admin@example.com"
-                  className="w-full bg-[#F9F8F6] border border-transparent rounded-3xl px-8 py-5 text-gray-900 placeholder-gray-300 focus:bg-white focus:border-brand-green/20 focus:ring-4 focus:ring-brand-green/5 transition-all outline-none font-medium text-sm"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </div>
-
-              <button
-                disabled={loading}
-                type="submit"
-                className="w-full bg-black hover:bg-brand-green text-white py-6 rounded-3xl text-[11px] font-bold tracking-[0.4em] uppercase transition-all duration-500 shadow-xl shadow-black/10 active:scale-95 disabled:opacity-50 mt-4"
-              >
-                {loading ? "Sending..." : "Send Reset OTP"}
-              </button>
-
-              <div className="text-center mt-4">
-                <button type="button" onClick={() => { setView('login'); setError(""); setMessage(""); }} className="text-[10px] font-bold tracking-wider text-gray-400 hover:text-gray-900 transition-colors uppercase">
-                  Back to Login
-                </button>
-              </div>
-            </form>
-          )}
-
-          {view === 'reset' && (
-            <form onSubmit={handleResetPassword} className="space-y-4 relative z-10">
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase ml-4">6-Digit OTP</label>
-                <input
-                  required
-                  type="text"
-                  placeholder="123456"
-                  maxLength={6}
-                  className="w-full bg-[#F9F8F6] border border-transparent rounded-3xl px-8 py-4 text-center text-gray-900 placeholder-gray-300 focus:bg-white focus:border-brand-green/20 focus:ring-4 focus:ring-brand-green/5 transition-all outline-none font-bold tracking-[0.5em] text-xl"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase ml-4">New Password</label>
-                <input
-                  required
-                  type="password"
-                  placeholder="••••••••"
-                  className="w-full bg-[#F9F8F6] border border-transparent rounded-3xl px-8 py-5 text-gray-900 placeholder-gray-300 focus:bg-white focus:border-brand-green/20 focus:ring-4 focus:ring-brand-green/5 transition-all outline-none font-medium text-sm"
-                  value={newPassword}
-                  onChange={(e) => setNewPassword(e.target.value)}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-[10px] font-bold tracking-[0.3em] text-gray-400 uppercase ml-4">Confirm New Password</label>
-                <input
-                  required
-                  type="password"
-                  placeholder="••••••••"
-                  className="w-full bg-[#F9F8F6] border border-transparent rounded-3xl px-8 py-5 text-gray-900 placeholder-gray-300 focus:bg-white focus:border-brand-green/20 focus:ring-4 focus:ring-brand-green/5 transition-all outline-none font-medium text-sm"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-              </div>
-
-              <button
-                disabled={loading}
-                type="submit"
-                className="w-full bg-black hover:bg-brand-green text-white py-6 rounded-3xl text-[11px] font-bold tracking-[0.4em] uppercase transition-all duration-500 shadow-xl shadow-black/10 active:scale-95 disabled:opacity-50 mt-4"
-              >
-                {loading ? "Resetting..." : "Reset Password"}
-              </button>
-
-              <div className="text-center mt-4">
-                <button type="button" onClick={() => { setView('login'); setError(""); setMessage(""); }} className="text-[10px] font-bold tracking-wider text-gray-400 hover:text-gray-900 transition-colors uppercase">
-                  Cancel
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-
-        {/* Footer Info */}
-        <div className="mt-12 text-center text-[9px] md:text-[10px] text-gray-300 font-bold tracking-[0.3em] uppercase opacity-60">
-          Protected by vriddhi vastra security protocols
-        </div>
+    <div className="min-h-screen bg-[#0A0A0A] text-[#F5F5F0] font-sans selection:bg-[#c39b56]/30 selection:text-[#F5F5F0] overflow-hidden relative flex flex-col md:flex-row">
+      
+      {/* Cinematic Background Elements */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(19,19,19,0)_0%,rgba(10,10,10,1)_100%)]"></div>
+        <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3")` }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#c39b56]/5 rounded-full blur-[120px] animate-pulse"></div>
       </div>
+
+      {/* Left Side: Brand Atmosphere */}
+      <div className="relative z-10 w-full md:w-1/2 lg:w-[60%] flex flex-col justify-between p-8 md:p-16 lg:p-24 overflow-hidden">
+        
+        {/* Top: Logo & System Identity */}
+        <motion.div 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-col gap-6"
+        >
+          <div className="relative w-16 h-16 md:w-20 md:h-20 group">
+            <div className="absolute inset-0 bg-[#c39b56]/20 rounded-full blur-2xl group-hover:bg-[#c39b56]/30 transition-all duration-1000"></div>
+            <Image 
+              src="/images/Lotus.png" 
+              alt="Vriddhi Vastra" 
+              fill
+              className="object-contain relative z-10 brightness-[1.2]"
+              priority
+            />
+          </div>
+          <div>
+            <h1 className="text-xl md:text-2xl font-display tracking-[0.3em] uppercase text-[#F5F5F0]">Vriddhi Vastra</h1>
+            <p className="text-[10px] md:text-[11px] tracking-[0.5em] uppercase text-[#c39b56] mt-2 font-medium">Private Operations Console</p>
+          </div>
+        </motion.div>
+
+        {/* Middle: Cinematic Statement */}
+        <motion.div 
+          initial={{ opacity: 0, x: -30 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 1.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="my-12 md:my-0"
+        >
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-display leading-[1.1] text-balance">
+            Curating the <br />
+            <span className="text-[#c39b56]/80 italic">Digital Archive</span>
+          </h2>
+          <div className="w-24 h-[1px] bg-gradient-to-r from-[#c39b56] to-transparent mt-8"></div>
+        </motion.div>
+
+        {/* Bottom: Operational Indicators */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="flex flex-wrap gap-4 md:gap-8 items-center"
+        >
+          <div className="flex flex-col gap-1">
+            <span className="text-[9px] tracking-[0.2em] uppercase text-[#F5F5F0]/40">System Time</span>
+            <span className="text-xs font-mono tracking-widest text-[#F5F5F0]/80">{currentTime}</span>
+          </div>
+          
+          <div className="flex gap-3">
+            <StatusPill label="Secure Session" active />
+            <StatusPill label="MongoDB" active />
+            <StatusPill label="Cloudinary" active />
+            <StatusPill label="Production" active gold />
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Right Side: Auth Panel */}
+      <div className="relative z-10 w-full md:w-1/2 lg:w-[40%] flex items-center justify-center p-6 md:p-12 lg:p-16">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+          className="w-full max-w-[480px] relative"
+        >
+          {/* Glass Card */}
+          <div className="relative bg-[#1A1A1A]/60 backdrop-blur-3xl rounded-[32px] border border-[#F5F5F0]/10 p-8 md:p-12 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] overflow-hidden group">
+            
+            {/* Subtle Gold Edge Lighting */}
+            <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#c39b56]/40 to-transparent"></div>
+            <div className="absolute bottom-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#c39b56]/20 to-transparent"></div>
+
+            {/* Form Header */}
+            <div className="mb-10">
+              <h3 className="text-2xl font-display tracking-tight text-[#F5F5F0]">Access Platform</h3>
+              <p className="text-xs text-[#F5F5F0]/50 mt-2 tracking-wide">
+                {view === 'login' && "Authentication required for secure infrastructure access."}
+                {view === 'forgot' && "Initiate administrative credential recovery."}
+                {view === 'reset' && "Verification complete. Define new security protocols."}
+              </p>
+            </div>
+
+            {/* Error/Message Alerts */}
+            <AnimatePresence mode="wait">
+              {error && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mb-6 overflow-hidden"
+                >
+                  <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold tracking-widest uppercase p-4 rounded-xl text-center">
+                    {error}
+                  </div>
+                </motion.div>
+              )}
+              {message && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="mb-6 overflow-hidden"
+                >
+                  <div className="bg-[#c39b56]/10 border border-[#c39b56]/20 text-[#c39b56] text-[10px] font-bold tracking-widest uppercase p-4 rounded-xl text-center">
+                    {message}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Form Views */}
+            <AnimatePresence mode="wait">
+              {view === 'login' && (
+                <motion.form 
+                  key="login-form"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.5 }}
+                  onSubmit={handleLogin} 
+                  className="space-y-8"
+                >
+                  <div className="relative group">
+                    <input
+                      required
+                      type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      placeholder=" "
+                      className="peer w-full bg-[#0A0A0A]/40 border border-[#F5F5F0]/10 rounded-2xl px-6 py-5 text-[#F5F5F0] outline-none transition-all focus:border-[#c39b56]/50 focus:bg-[#0A0A0A]/60 focus:ring-4 focus:ring-[#c39b56]/5 placeholder-transparent"
+                    />
+                    <label className="absolute left-6 top-1/2 -translate-y-1/2 text-[10px] font-bold tracking-[0.2em] text-[#F5F5F0]/40 uppercase transition-all pointer-events-none peer-focus:top-0 peer-focus:text-[#c39b56] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-[#c39b56]">
+                      Security Key
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-6 top-1/2 -translate-y-1/2 text-[#F5F5F0]/30 hover:text-[#c39b56] transition-colors"
+                    >
+                      {showPassword ? (
+                        <EyeOffIcon className="w-4 h-4" />
+                      ) : (
+                        <EyeIcon className="w-4 h-4" />
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button 
+                      type="button" 
+                      onClick={() => { setView('forgot'); setError(""); setMessage(""); }} 
+                      className="text-[9px] font-bold tracking-[0.2em] text-[#F5F5F0]/40 hover:text-[#c39b56] transition-colors uppercase"
+                    >
+                      Recovery Access
+                    </button>
+                  </div>
+
+                  <button
+                    disabled={loading}
+                    type="submit"
+                    className="group/btn relative w-full bg-[#F5F5F0] hover:bg-white text-[#0A0A0A] py-5 rounded-2xl text-[11px] font-bold tracking-[0.4em] uppercase transition-all duration-500 overflow-hidden disabled:opacity-50"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#c39b56]/20 to-transparent -translate-x-full group-hover/btn:animate-[shimmer_2s_infinite]"></div>
+                    <span className="relative flex items-center justify-center gap-3">
+                      {loading ? (
+                        <div className="w-4 h-4 border-2 border-[#0A0A0A]/20 border-t-[#0A0A0A] rounded-full animate-spin"></div>
+                      ) : (
+                        <>
+                          Enter Console
+                          <ArrowRightIcon className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+                        </>
+                      )}
+                    </span>
+                  </button>
+                </motion.form>
+              )}
+
+              {view === 'forgot' && (
+                <motion.form 
+                  key="forgot-form"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.5 }}
+                  onSubmit={handleForgotPassword} 
+                  className="space-y-8"
+                >
+                  <div className="relative group">
+                    <input
+                      required
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder=" "
+                      className="peer w-full bg-[#0A0A0A]/40 border border-[#F5F5F0]/10 rounded-2xl px-6 py-5 text-[#F5F5F0] outline-none transition-all focus:border-[#c39b56]/50 focus:bg-[#0A0A0A]/60 focus:ring-4 focus:ring-[#c39b56]/5 placeholder-transparent"
+                    />
+                    <label className="absolute left-6 top-1/2 -translate-y-1/2 text-[10px] font-bold tracking-[0.2em] text-[#F5F5F0]/40 uppercase transition-all pointer-events-none peer-focus:top-0 peer-focus:text-[#c39b56] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-[#c39b56]">
+                      Admin Email
+                    </label>
+                  </div>
+
+                  <button
+                    disabled={loading}
+                    type="submit"
+                    className="w-full bg-[#F5F5F0] hover:bg-white text-[#0A0A0A] py-5 rounded-2xl text-[11px] font-bold tracking-[0.4em] uppercase transition-all duration-500 disabled:opacity-50"
+                  >
+                    {loading ? "Processing..." : "Initiate Recovery"}
+                  </button>
+
+                  <div className="text-center">
+                    <button 
+                      type="button" 
+                      onClick={() => { setView('login'); setError(""); setMessage(""); }} 
+                      className="text-[9px] font-bold tracking-[0.2em] text-[#F5F5F0]/40 hover:text-[#F5F5F0] transition-colors uppercase"
+                    >
+                      Return to Console
+                    </button>
+                  </div>
+                </motion.form>
+              )}
+
+              {view === 'reset' && (
+                <motion.form 
+                  key="reset-form"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.5 }}
+                  onSubmit={handleResetPassword} 
+                  className="space-y-6"
+                >
+                  <div className="relative group">
+                    <input
+                      required
+                      type="text"
+                      maxLength={6}
+                      value={otp}
+                      onChange={(e) => setOtp(e.target.value)}
+                      placeholder=" "
+                      className="peer w-full bg-[#0A0A0A]/40 border border-[#F5F5F0]/10 rounded-2xl px-6 py-5 text-[#F5F5F0] outline-none transition-all focus:border-[#c39b56]/50 focus:bg-[#0A0A0A]/60 focus:ring-4 focus:ring-[#c39b56]/5 text-center tracking-[1em] font-bold text-xl placeholder-transparent"
+                    />
+                    <label className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 text-[10px] font-bold tracking-[0.2em] text-[#F5F5F0]/40 uppercase transition-all pointer-events-none peer-focus:top-0 peer-focus:text-[#c39b56] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-[#c39b56]">
+                      Security OTP
+                    </label>
+                  </div>
+
+                  <div className="relative group">
+                    <input
+                      required
+                      type="password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder=" "
+                      className="peer w-full bg-[#0A0A0A]/40 border border-[#F5F5F0]/10 rounded-2xl px-6 py-5 text-[#F5F5F0] outline-none transition-all focus:border-[#c39b56]/50 focus:bg-[#0A0A0A]/60 focus:ring-4 focus:ring-[#c39b56]/5 placeholder-transparent"
+                    />
+                    <label className="absolute left-6 top-1/2 -translate-y-1/2 text-[10px] font-bold tracking-[0.2em] text-[#F5F5F0]/40 uppercase transition-all pointer-events-none peer-focus:top-0 peer-focus:text-[#c39b56] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-[#c39b56]">
+                      New Security Key
+                    </label>
+                  </div>
+
+                  <div className="relative group">
+                    <input
+                      required
+                      type="password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      placeholder=" "
+                      className="peer w-full bg-[#0A0A0A]/40 border border-[#F5F5F0]/10 rounded-2xl px-6 py-5 text-[#F5F5F0] outline-none transition-all focus:border-[#c39b56]/50 focus:bg-[#0A0A0A]/60 focus:ring-4 focus:ring-[#c39b56]/5 placeholder-transparent"
+                    />
+                    <label className="absolute left-6 top-1/2 -translate-y-1/2 text-[10px] font-bold tracking-[0.2em] text-[#F5F5F0]/40 uppercase transition-all pointer-events-none peer-focus:top-0 peer-focus:text-[#c39b56] peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:text-[#c39b56]">
+                      Confirm Key
+                    </label>
+                  </div>
+
+                  <button
+                    disabled={loading}
+                    type="submit"
+                    className="w-full bg-[#F5F5F0] hover:bg-white text-[#0A0A0A] py-5 rounded-2xl text-[11px] font-bold tracking-[0.4em] uppercase transition-all duration-500 disabled:opacity-50"
+                  >
+                    {loading ? "Updating..." : "Establish Access"}
+                  </button>
+
+                  <div className="text-center">
+                    <button 
+                      type="button" 
+                      onClick={() => { setView('login'); setError(""); setMessage(""); }} 
+                      className="text-[9px] font-bold tracking-[0.2em] text-[#F5F5F0]/40 hover:text-[#F5F5F0] transition-colors uppercase"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </motion.form>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Environment Info */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.4 }}
+            transition={{ delay: 1, duration: 1 }}
+            className="mt-8 flex justify-between items-center px-4"
+          >
+            <div className="flex flex-col gap-1">
+              <span className="text-[8px] font-bold tracking-[0.3em] uppercase opacity-50">Session ID</span>
+              <span className="text-[10px] font-mono tracking-widest uppercase">{Math.random().toString(36).substring(2, 10)}</span>
+            </div>
+            <div className="text-right">
+              <span className="text-[8px] font-bold tracking-[0.3em] uppercase opacity-50 block">Encryption</span>
+              <span className="text-[10px] font-mono tracking-widest uppercase">AES-256-GCM</span>
+            </div>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      <style jsx global>{`
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+      `}</style>
     </div>
+  )
+}
+
+function StatusPill({ label, active, gold }) {
+  return (
+    <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border ${gold ? 'border-[#c39b56]/30 bg-[#c39b56]/5' : 'border-[#F5F5F0]/10 bg-[#F5F5F0]/5'} backdrop-blur-md`}>
+      <div className={`w-1 h-1 rounded-full ${gold ? 'bg-[#c39b56]' : 'bg-green-400'} ${active ? 'animate-pulse' : ''} shadow-[0_0_8px_rgba(195,155,86,0.5)]`}></div>
+      <span className={`text-[9px] font-bold tracking-widest uppercase ${gold ? 'text-[#c39b56]' : 'text-[#F5F5F0]/60'}`}>{label}</span>
+    </div>
+  )
+}
+
+function EyeIcon({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+    </svg>
+  )
+}
+
+function EyeOffIcon({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+    </svg>
+  )
+}
+
+function ArrowRightIcon({ className }) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className={className}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+    </svg>
   )
 }

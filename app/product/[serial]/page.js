@@ -61,6 +61,12 @@ export default async function ProductDetailsPage({ params }) {
   if (!configData) configData = {};
   const config = JSON.parse(JSON.stringify(configData));
 
+  // Dynamic Trending Logic
+  const trendingProducts = products.filter(p => p.tags && p.tags.some(t => t.toLowerCase() === 'trending')).slice(0, 4);
+  const displayTrending = trendingProducts.length > 0 
+    ? trendingProducts 
+    : [...products].sort(() => 0.5 - Math.random()).slice(0, 4);
+
   if (!product) {
     return (
       <main className="bg-[#F1E8CD] min-h-screen">
@@ -106,21 +112,19 @@ export default async function ProductDetailsPage({ params }) {
       />
       <Navbar logo={config.logo} />
 
-      <section className="pt-28 md:pt-64 pb-24 px-[clamp(1rem,4vw,5vw)] bg-[#F1E8CD] w-full">
+      <section className="pt-24 md:pt-40 pb-24 px-[clamp(1rem,4vw,5vw)] bg-[#F1E8CD] w-full">
         <ProductDetailClient product={product} />
 
-        {/* Trending Section */}
-        {/* Trending Section */}
         <div className="mt-32 w-full pt-16 border-t border-black/5 text-left">
-          <p className="dm-sans-h2 tracking-[0.2em] text-brand-green uppercase font-medium mb-4">
+          <p className="font-dm-sans text-[23px] font-bold tracking-[0.2em] text-brand-green uppercase mb-4">
             TRENDING COLLECTION
           </p>
-          <h2 className="font-[var(--font-dm-sans)] text-[clamp(28px,4vw,56px)] leading-tight flex items-center gap-4 flex-wrap mb-12">
+          <h2 className="font-dm-sans text-[36px] font-normal leading-tight flex items-center gap-4 flex-wrap mb-12 text-black">
             Want to look through our Trending Collections
-            <img src="/images/fire.png" alt="🔥" className="w-5 h-5 md:w-8 md:h-8 object-contain inline-block" />
+            <img src="/images/fire.png" alt="🔥" className="w-8 h-8 object-contain inline-block" />
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
-            {products.slice(0, 4).map(p => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(15px,3vw,60px)] gap-y-[clamp(16px,4vw,64px)]">
+            {displayTrending.map(p => (
               <ProductCard key={`trend-${p.serial}`} product={p} bgWhite={true} />
             ))}
           </div>

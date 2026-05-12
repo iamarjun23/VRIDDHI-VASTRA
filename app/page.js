@@ -58,16 +58,17 @@ export default async function Home() {
       </section>
       <HeroContent logo={config.logo} />
 
-      <section className="w-full bg-[#F1E8CD] py-16 px-[clamp(1rem,4vw,5vw)] relative">
+      <section className="w-full bg-[#F1E8CD] py-16 relative">
+        <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5vw)]">
         <header className="flex flex-col items-center mb-16 gap-2 text-center relative w-full">
           <div className="flex flex-col items-center text-center">
-            <p className="dm-sans-h4 tracking-[0.3em] text-brand-gold uppercase mb-6">
+            <p className="font-dm-sans text-[16px] tracking-[0.3em] text-brand-gold uppercase mb-6">
               Shop By Categories
             </p>
-            <h2 className="dm-sans-h1 text-brand-black leading-tight">
+            <h2 className="font-dm-sans text-[28px] text-brand-black leading-tight">
               Discover Our Signature Categories and Collection
             </h2>
-            <p className="dm-sans-h3 text-brand-green mt-6 max-w-2xl mx-auto font-medium text-[clamp(12px,2vw,22px)]">
+            <p className="font-dm-sans text-[19px] text-brand-green mt-6 max-w-2xl mx-auto font-medium">
               Explore the Collection of Finest Silk Sarees of South India
             </p>
             <div className="w-24 h-[1px] bg-brand-gold/40 mt-4"></div>
@@ -98,7 +99,7 @@ export default async function Home() {
                 <Link href={`/tags?category=${encodeURIComponent(categoryName)}#archive`} className="flex flex-col items-center group w-full dynamic-title-container">
                   {/* Arch card */}
                   <div
-                    className="overflow-hidden bg-[#e5e0d8] relative mb-4 shadow-md group-hover:shadow-xl transition-all duration-700 w-[95%] mx-auto aspect-[3/6] rounded-t-full"
+                    className="overflow-hidden bg-[#e5e0d8] relative mb-2 shadow-md group-hover:shadow-xl transition-all duration-700 w-[95%] mx-auto aspect-[3/6] rounded-t-full"
                   >
                     {img ? (
                       <Image
@@ -117,7 +118,7 @@ export default async function Home() {
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors duration-500" />
                   </div>
 
-                  <h4 className="dynamic-title tracking-[0.1em] text-brand-green group-hover:text-brand-gold transition-colors duration-300 uppercase mt-1 px-1">
+                  <h4 className="font-dm-sans text-[23px] tracking-[0.1em] text-brand-green group-hover:text-brand-gold transition-colors duration-300 uppercase mt-1 px-1 text-center w-full">
                     {categoryName}
                   </h4>
                 </Link>
@@ -128,31 +129,32 @@ export default async function Home() {
         </div>
 
         {/* View All Button */}
-        <div className="w-full flex justify-center mt-20">
+        <div className="w-full flex justify-center mt-10">
           <Link
             href="/collections"
-            className="inline-flex items-center justify-center px-14 py-4 bg-[#D1A054]/15 rounded-[1.25rem] shadow-lg shadow-black/20 border-[3px] border-white hover:bg-[#D1A054]/25 transition-all duration-300"
+            className="inline-flex items-center justify-center px-20 py-4 bg-[#D1A054]/15 rounded-[1.25rem] shadow-lg shadow-black/20 border-[3px] border-white hover:bg-[#D1A054]/25 transition-all duration-300"
           >
-            <span className="dm-sans-h4 text-[#1A3D1C] uppercase tracking-widest">
+            <span className="font-dm-sans text-[23px] text-[#1A3D1C] uppercase tracking-widest">
               VIEW ALL
             </span>
           </Link>
         </div>
-
+        </div>
       </section>
-      <section className="w-full bg-[#FFFAEE] py-16 px-[clamp(1rem,4vw,5vw)] relative">
+      <section className="w-full bg-[#FFFAEE] py-16 relative">
+        <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5vw)]">
         <header className="relative flex flex-col items-center text-center mb-16 w-full">
           <div className="flex flex-col items-center pb-8 md:pb-0">
-            <p className="dm-sans-h4 tracking-[0.2em] text-brand-gold uppercase font-medium mb-6">
+            <p className="font-dm-sans text-[16px] tracking-[0.2em] text-brand-gold uppercase font-medium mb-6">
               New Arrivals - Fresh From The Loom
             </p>
-            <h3 className="dm-sans-h1 text-brand-green leading-tight max-w-[900px]">
+            <h3 className="font-dm-sans text-[28px] text-brand-green leading-tight max-w-[900px]">
               Unveil Our Newest Collection of Sarees, blending Tradition with Modern Elegance
             </h3>
           </div>
           <div className="absolute right-0 bottom-0">
             <Link href="/tags?category=NEW+ARRIVALS#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300">
-              <span className="text-[clamp(8px,1vw,14px)] font-dm-sans tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
+              <span className="text-[19px] font-dm-sans tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
               <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.5vw,16px)] h-[clamp(10px,1.5vw,16px)] transition-transform group-hover:translate-y-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
             </Link>
           </div>
@@ -170,29 +172,23 @@ export default async function Home() {
           ))}
 
         </div>
-
+        </div>
       </section>
 
-
-
-
-
-
-      {/* Style Lookbook Section */}
-      <section className="w-full bg-[#F1E8CD] py-16 px-[clamp(1rem,4vw,5vw)] relative">
-
+      <section className="w-full bg-[#F1E8CD] py-16 relative">
+        <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5vw)]">
         <div className="flex flex-col items-center text-center w-full mb-16 px-4">
-          <p className="dm-sans-h4 tracking-[0.3em] text-brand-gold uppercase mb-6">
+          <p className="font-dm-sans text-[16px] tracking-[0.3em] text-brand-gold uppercase mb-6">
             The Style Look book: SHOP BY OCCASION
           </p>
-          <h2 className="dm-sans-h1 text-brand-green leading-tight max-w-5xl mx-auto">
+          <h2 className="font-dm-sans text-[28px] text-brand-green leading-tight max-w-5xl mx-auto">
             Find your perfect Style from our Look book and shop by occasion
           </h2>
           <div className="w-24 h-[1px] bg-brand-gold/40 mt-4"></div>
         </div>
-
+ 
         <div className="grid grid-cols-2 gap-x-[clamp(10px,3vw,48px)] gap-y-[clamp(16px,5vw,80px)] w-full">
-
+ 
           {/* Left Column */}
           <div className="flex flex-col gap-[clamp(0.5rem,2vw,2.5rem)]">
             <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[0]?.title || '')}`} className="relative h-[clamp(120px,30vw,280px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
@@ -205,7 +201,7 @@ export default async function Home() {
                 </h4>
               </div>
             </Link>
-
+ 
             <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[1]?.title || '')}`} className="relative h-[clamp(120px,30vw,280px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[1]?.image && <Image src={config.lookbookBlocks[1].image} alt="Lookbook 2" fill sizes="(max-width: 768px) 50vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
@@ -216,7 +212,7 @@ export default async function Home() {
                 </h4>
               </div>
             </Link>
-
+ 
             <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[2]?.title || '')}`} className="relative h-[clamp(240px,60vw,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[2]?.image && <Image src={config.lookbookBlocks[2].image} alt="Lookbook 3" fill sizes="(max-width: 768px) 50vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
@@ -228,10 +224,10 @@ export default async function Home() {
               </div>
             </Link>
           </div>
-
-          {/* Right Column */}
+ 
+          {/* Right Column - Account for extra gap in left column by splitting total height */}
           <div className="flex flex-col gap-[clamp(0.5rem,2vw,2.5rem)]">
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[3]?.title || '')}`} className="relative h-[clamp(240px,60vw,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[3]?.title || '')}`} className="relative h-[calc(clamp(240px,60vw,560px)+clamp(0.25rem,1vw,1.25rem))] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[3]?.image && <Image src={config.lookbookBlocks[3].image} alt="Lookbook 4" fill sizes="(max-width: 768px) 50vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(1.5rem,4vw,2.5rem)] left-[clamp(1.5rem,4vw,2.5rem)] right-[clamp(1.5rem,4vw,2.5rem)] flex justify-start">
@@ -241,8 +237,8 @@ export default async function Home() {
                 </h4>
               </div>
             </Link>
-
-            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[4]?.title || '')}`} className="relative h-[clamp(240px,60vw,560px)] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
+ 
+            <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[4]?.title || '')}`} className="relative h-[calc(clamp(240px,60vw,560px)+clamp(0.25rem,1vw,1.25rem))] rounded-[32px] overflow-hidden group cursor-pointer bg-gray-200">
               {config.lookbookBlocks?.[4]?.image && <Image src={config.lookbookBlocks[4].image} alt="Lookbook 5" fill sizes="(max-width: 768px) 50vw, 50vw" className="object-cover group-hover:scale-105 transition-transform duration-700" />}
               <div className="absolute inset-0 bg-black/40" />
               <div className="absolute bottom-[clamp(2rem,6vw,3rem)] left-[clamp(2rem,6vw,3rem)] right-[clamp(2rem,6vw,3rem)] flex justify-start">
@@ -253,13 +249,13 @@ export default async function Home() {
               </div>
             </Link>
           </div>
-
+ 
         </div>
-
+        </div>
       </section>
-
       {products.some(p => p.tags && p.tags.some(t => t.toUpperCase() === 'EXHIBITION CATEGORIES')) && (
-        <section className="w-full bg-[#FFFAEE] py-16 px-[clamp(1rem,4vw,5vw)] border-t border-brand-gold/10 relative">
+        <section className="w-full bg-[#FFFAEE] py-16 border-t border-brand-gold/10 relative">
+          <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5vw)]">
 
           <header className="relative flex flex-col items-center text-center mb-16 w-full">
             <div className="flex flex-col items-center pb-8 md:pb-0">
@@ -272,7 +268,7 @@ export default async function Home() {
             </div>
             <div className="absolute right-0 bottom-2">
               <Link href="/tags?category=EXHIBITION+CATEGORIES#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300">
-                <span className="text-[clamp(8px,1vw,14px)] font-medium tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
+                <span className="text-[19px] font-dm-sans tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
                 <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.5vw,16px)] h-[clamp(10px,1.5vw,16px)] transition-transform group-hover:translate-y-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
               </Link>
             </div>
@@ -290,6 +286,7 @@ export default async function Home() {
               ))
             }
           </div>
+          </div>
         </section>
       )}
 
@@ -297,16 +294,16 @@ export default async function Home() {
       <section className="w-full bg-[#FFFAEE] py-16 px-[clamp(1rem,4vw,5vw)] relative">
         <header className="relative flex flex-col items-center text-center mb-16 w-full">
           <div className="flex flex-col items-center pb-8 md:pb-0">
-            <p className="dm-sans-h4 tracking-[0.2em] text-brand-gold uppercase font-medium mb-6">
+            <p className="font-dm-sans text-[16px] tracking-[0.2em] text-brand-gold uppercase font-medium mb-6">
               Trending Deals Deal Of The Day
             </p>
-            <h3 className="dm-sans-h1 text-brand-green leading-tight">
+            <h3 className="font-dm-sans text-[28px] text-brand-green leading-tight">
               VRIDDHI VASTRA’s Irresistible deals
             </h3>
           </div>
           <div className="absolute right-0 bottom-2">
             <Link href="/tags?category=TRENDING+DEALS#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300">
-              <span className="text-[clamp(8px,1vw,14px)] font-medium tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
+              <span className="text-[19px] font-dm-sans tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
               <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.5vw,16px)] h-[clamp(10px,1.5vw,16px)] transition-transform group-hover:translate-y-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
             </Link>
           </div>

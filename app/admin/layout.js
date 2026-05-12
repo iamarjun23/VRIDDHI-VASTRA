@@ -30,7 +30,7 @@ export default function AdminLayout({ children }) {
 
       {/* Main Content Area */}
       <div className="flex-1 min-w-0 flex flex-col h-screen overflow-y-auto pt-16 lg:pt-0 relative z-10 custom-scrollbar">
-        <div className="flex-1 w-full max-w-7xl mx-auto p-4 md:p-8 lg:p-10">
+        <div className="flex-1 w-full max-w-[2000px] mx-auto p-4 md:p-8 lg:p-12">
           {children}
         </div>
       </div>
