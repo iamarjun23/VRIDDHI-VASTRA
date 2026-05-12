@@ -144,7 +144,7 @@ function SettingsPageContent() {
   const isAnyUploading = Object.values(uploadingFields).some(Boolean);
 
   const LocalImageUploader = ({ label, desc, image, onUpload, aspect, isUploadingKey, compact = false }) => (
-    <div className={`bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-8 group flex flex-col justify-between`}>
+    <div className={`bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-6 sm:p-8 group flex flex-col justify-between`}>
       <div className="mb-6 shrink-0 border-b border-[#E5E0D8] pb-4">
         <h3 className={`font-bold font-display text-gray-900 ${compact ? 'text-[18px]' : 'text-[22px]'}`}>{label}</h3>
         {desc && <p className="text-[13px] text-gray-500 mt-1 font-medium">{desc}</p>}
@@ -185,22 +185,22 @@ function SettingsPageContent() {
   return (
     <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500 pb-12">
       
-      {/* Luxury Header Workspace */}
+      {/* Luxury Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E0D8] pb-6 sticky top-0 bg-[#FAF9F6] z-40 py-4 -my-4 mb-4">
         <div>
           <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] block mb-2">Platform Configuration</span>
-          <h1 className="text-4xl font-bold font-display text-gray-900 tracking-tight">Settings</h1>
+          <h1 className="text-[clamp(1.5rem,3vw,2.5rem)] font-bold font-display text-gray-900 tracking-tight">Settings</h1>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           {message.text && (
-            <span className={`px-4 py-2 text-[10px] font-bold tracking-widest uppercase transition-opacity border ${message.type === 'error' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-white text-gray-900 border-[#E5E0D8]'}`}>
+            <span className={`px-3 sm:px-4 py-2 text-[10px] font-bold tracking-widest uppercase transition-opacity border ${message.type === 'error' ? 'bg-red-50 text-red-600 border-red-100' : 'bg-white text-gray-900 border-[#E5E0D8]'}`}>
               {message.text}
             </span>
           )}
           <button
             onClick={() => saveSettings(formData)}
             disabled={isSaving || isAnyUploading}
-            className="bg-[#1A1A1A] text-white px-8 py-3 text-[11px] font-bold tracking-widest uppercase hover:bg-[#111111] transition-all duration-300 shadow-xl shadow-black/10 hover:shadow-2xl hover:shadow-black/20 active:scale-95 disabled:opacity-50 w-full sm:w-auto"
+            className="bg-[#1A1A1A] text-white px-4 sm:px-8 py-2.5 sm:py-3 text-[11px] font-bold tracking-widest uppercase hover:bg-[#111111] transition-all duration-300 shadow-xl shadow-black/10 hover:shadow-2xl hover:shadow-black/20 active:scale-95 disabled:opacity-50 w-full sm:w-auto whitespace-nowrap"
           >
             {isSaving ? "Synchronizing..." : "Save Configuration"}
           </button>
@@ -208,10 +208,11 @@ function SettingsPageContent() {
       </div>
 
       {/* Split Immersive Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
         
-        {/* Left Pane - Navigation */}
-        <div className="lg:col-span-3 space-y-2 lg:sticky lg:top-[140px]">
+        {/* Left Pane - Navigation Tabs (horizontal scroll on mobile) */}
+        <div className="lg:col-span-3 lg:sticky lg:top-[140px]">
+          <div className="flex lg:flex-col flex-row overflow-x-auto lg:overflow-x-visible gap-1 sm:gap-2 pb-2 lg:pb-0 custom-scrollbar">
           {tabs.map(tab => (
             <button
               key={tab.id}
@@ -219,13 +220,14 @@ function SettingsPageContent() {
                 setActiveTab(tab.id);
                 window.history.pushState(null, '', `?tab=${tab.id}`);
               }}
-              className={`w-full flex items-center gap-4 px-5 py-4 transition-all duration-300 relative group ${activeTab === tab.id ? 'bg-white shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-[#E5E0D8]' : 'bg-transparent border border-transparent hover:bg-[#FAF9F6]'}`}
+              className={`flex-shrink-0 lg:flex-shrink flex items-center gap-3 sm:gap-4 px-4 sm:px-5 py-3 sm:py-4 transition-all duration-300 relative group ${activeTab === tab.id ? 'bg-white shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-[#E5E0D8]' : 'bg-transparent border border-transparent hover:bg-[#FAF9F6]'}`}
             >
               {activeTab === tab.id && <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#D4AF37]" />}
-              <span className={`transition-transform duration-300 ${activeTab === tab.id ? 'text-[#D4AF37] scale-110' : 'text-gray-400 group-hover:text-gray-600'}`}>{tab.icon}</span>
-              <span className={`text-[11px] font-bold tracking-widest uppercase ${activeTab === tab.id ? 'text-gray-900' : 'text-gray-500'}`}>{tab.label}</span>
+              <span className={`transition-transform duration-300 shrink-0 ${activeTab === tab.id ? 'text-[#D4AF37] scale-110' : 'text-gray-400 group-hover:text-gray-600'}`}>{tab.icon}</span>
+              <span className={`text-[10px] sm:text-[11px] font-bold tracking-widest uppercase whitespace-nowrap ${activeTab === tab.id ? 'text-gray-900' : 'text-gray-500'}`}>{tab.label}</span>
             </button>
           ))}
+          </div>
         </div>
 
         {/* Right Pane - Content */}
@@ -234,7 +236,7 @@ function SettingsPageContent() {
           {/* BRANDING CORE TAB */}
           {activeTab === 'hero' && (
             <div key="hero" className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
-              <div className="bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-8 lg:p-10">
+              <div className="bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-6 sm:p-8 lg:p-10">
                 <h2 className="text-[18px] font-bold font-display text-gray-900 border-b border-[#E5E0D8] pb-4 mb-6">Identity & Communication</h2>
                 
                 <div className="space-y-6">
@@ -292,7 +294,7 @@ function SettingsPageContent() {
                 />
               </div>
 
-              <div className="bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-8 lg:p-10 space-y-6 flex flex-col xl:flex-row gap-8">
+              <div className="bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-6 sm:p-8 lg:p-10 space-y-6 flex flex-col xl:flex-row gap-8">
                 <div className="w-full xl:w-1/2">
                   <h3 className="text-[18px] font-bold font-display text-gray-900 border-b border-[#E5E0D8] pb-4 mb-6">Promotional Narrative</h3>
                   
@@ -367,7 +369,7 @@ function SettingsPageContent() {
           {activeTab === 'categories' && (
             <div key="categories" className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-in fade-in slide-in-from-bottom-2 duration-500">
               {formData.featuredBlocks.map((block, index) => (
-                <div key={`feat-${index}`} className="bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-8 lg:p-10 group">
+                <div key={`feat-${index}`} className="bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-6 sm:p-8 lg:p-10 group">
                   <div className="flex items-center justify-between mb-8">
                     <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-[#D4AF37]">Archetype 0{index + 1}</span>
                   </div>
@@ -459,7 +461,7 @@ function SettingsPageContent() {
 
           {/* FILTERS TAB */}
           {activeTab === 'filters' && (
-            <div key="filters" className="bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-8 lg:p-10 space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
+            <div key="filters" className="bg-white border border-[#E5E0D8] shadow-[0_2px_10px_rgba(0,0,0,0.02)] p-6 sm:p-8 lg:p-10 space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-500">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E0D8] pb-6">
                 <div>
                   <h3 className="text-[18px] font-bold font-display text-gray-900">Active Navigation Tags</h3>

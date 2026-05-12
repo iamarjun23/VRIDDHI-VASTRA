@@ -7,7 +7,7 @@ import dbConnect from "../../lib/mongodb"
 import Product from "../../models/Product"
 import SiteConfig from "../../models/SiteConfig"
 
-export const dynamic = 'force-dynamic'; // Fixes the caching issue!
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: "Search & Archive",
@@ -28,7 +28,6 @@ export default async function TagsPage({ searchParams }) {
   const categories = config.collectionsCategories || [];
   const { category: selectedCategory, search: searchQuery } = await searchParams;
 
-  // Normalize a string for flexible matching (remove spaces, hyphens, and trailing 'S' for plurality)
   const normalize = (str) => {
     if (!str) return "";
     let s = str.toUpperCase().replace(/[-\s]/g, '');
@@ -38,7 +37,6 @@ export default async function TagsPage({ searchParams }) {
 
   const searchNormalized = normalize(selectedCategory);
 
-  // Filter products for the main grid
   const filteredProducts = products.filter(p => {
     if (searchQuery) {
       const s = searchQuery.toLowerCase();
@@ -57,36 +55,66 @@ export default async function TagsPage({ searchParams }) {
   });
 
   const trendingProducts = products.filter(p => p.tags && p.tags.some(t => t.toLowerCase() === 'trending')).slice(0, 4);
-  // If no specific trending tags, pick 4 random products that are different from the first 4 to ensure variety
   const displayTrending = trendingProducts.length > 0
     ? trendingProducts
     : [...products].sort(() => 0.5 - Math.random()).slice(0, 4);
 
   return (
-    <div 
+    <div
       className="min-h-screen selection:bg-brand-green selection:text-white flex flex-col"
       style={{ backgroundColor: 'color-mix(in srgb, #F1E8CD, white 20%)' }}
     >
       <Navbar logo={config.logo} bgColor="#E9DAC1" />
 
       <main className="flex flex-col flex-1">
-        {/* Top Hero Banner - Gap Fixed */}
-        <div className="pt-[70px]">
+        {/* Top Hero Banner */}
+        <div className="pt-[clamp(52px,8vw,70px)]">
           <PromoBanner {...config.promoBanner} logo={config.logo} />
         </div>
 
-        {/* Main Split Layout */}
+        {/* Mobile ONLY Header - Luxury Style */}
+        <section className="md:hidden bg-[#FFFAEE] py-[clamp(3.5rem,10vw,5rem)] px-6 border-b border-black/5">
+          <div className="flex flex-col items-center text-center">
+            <div className="flex items-center gap-2 text-[10px] text-brand-gold tracking-[0.4em] uppercase mb-6 opacity-70">
+              <div className="w-8 h-[1px] bg-brand-gold"></div>
+              Vriddhi Vastra Archive
+              <div className="w-8 h-[1px] bg-brand-gold"></div>
+            </div>
+            <h1 className="font-display text-[clamp(28px,7vw,46px)] text-brand-green leading-tight mb-10">
+              {searchQuery ? `Search Results` : (selectedCategory || "The Archive")}
+            </h1>
+            <div className="w-full flex flex-wrap justify-center gap-x-6 gap-y-5 pt-8 border-t border-black/5">
+               <Link href="/tags#archive" className={`text-[12px] font-bold tracking-[0.2em] uppercase transition-all ${!selectedCategory ? 'text-brand-green border-b-2 border-brand-green pb-1' : 'text-brand-green/30'}`}>All Archive</Link>
+               {Array.from(new Set([
+                  "HOT OFFERS",
+                  "BEST SELLER",
+                  ...(config.collectionsCategories || ["KANCHIPURAM LUXURY", "BANARASI SILK"])
+                ])).map(cat => (
+                  <Link 
+                    key={cat} 
+                    href={`/tags?category=${encodeURIComponent(cat)}#archive`}
+                    className={`text-[12px] font-bold tracking-[0.2em] uppercase transition-all whitespace-nowrap ${selectedCategory === cat ? 'text-brand-green border-b-2 border-brand-green pb-1' : 'text-brand-green/30'}`}
+                  >
+                    {cat}
+                  </Link>
+                ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Main Layout */}
         <div id="archive" className="flex flex-1 w-full flex-col md:flex-row">
-          {/* Sidebar - Search by Tags */}
-          <aside className="w-full md:w-[clamp(220px,30vw,380px)] bg-[#FFFAEE] border-b md:border-b-0 md:border-r border-black/5 flex-shrink-0">
-            <div className="md:sticky md:top-32 pl-[clamp(1rem,4vw,48px)] pr-[clamp(1rem,4vw,40px)] py-6 md:py-10 space-y-[clamp(1rem,2vw,3rem)]">
+
+          {/* Desktop Sidebar - Original Style */}
+          <aside className="hidden md:block w-[clamp(200px,22vw,350px)] bg-[#FFFAEE] border-r border-black/5 flex-shrink-0">
+            <div className="sticky top-[100px] pl-[clamp(1.5rem,3vw,3rem)] pr-[clamp(1rem,2vw,2rem)] py-10 space-y-12">
               <div>
-                <h3 className="font-dm-sans text-[23px] font-bold tracking-[0.1em] text-[#848484]/45 uppercase mb-10">Search by Tags</h3>
-                <ul className="flex flex-row md:flex-col flex-wrap gap-x-6 gap-y-6 md:space-y-6">
+                <h3 className="font-dm-sans text-[14px] font-bold tracking-[0.1em] text-brand-green/30 uppercase mb-10">Search by Tags</h3>
+                <ul className="flex flex-col gap-y-6">
                   <li>
                     <Link
                       href="/tags#archive"
-                      className={`text-[23px] font-bold tracking-[0.05em] uppercase transition-all block ${!selectedCategory ? 'text-brand-green' : 'text-brand-green/50 hover:text-brand-green'}`}
+                      className={`text-[15px] font-bold tracking-[0.05em] uppercase transition-all block ${!selectedCategory ? 'text-brand-green' : 'text-brand-green/40 hover:text-brand-green'}`}
                     >
                       All Archive
                     </Link>
@@ -99,7 +127,7 @@ export default async function TagsPage({ searchParams }) {
                     <li key={cat}>
                       <Link
                         href={`/tags?category=${encodeURIComponent(cat)}#archive`}
-                        className={`text-[23px] font-bold tracking-[0.05em] uppercase transition-all block ${selectedCategory === cat ? 'text-brand-green' : 'text-brand-green/50 hover:text-brand-green'}`}
+                        className={`text-[15px] font-bold tracking-[0.05em] uppercase transition-all block ${selectedCategory === cat ? 'text-brand-green' : 'text-brand-green/40 hover:text-brand-green'}`}
                       >
                         {cat}
                       </Link>
@@ -110,26 +138,26 @@ export default async function TagsPage({ searchParams }) {
             </div>
           </aside>
 
-          {/* Product Grid Content */}
-          <div className="flex-1 bg-[#F1E8CD] pl-[clamp(10px,2vw,40px)] md:pl-10 pr-[clamp(10px,2vw,56px)] md:pr-14 py-16 min-w-0">
-            <div className="max-w-[2000px] mx-auto w-full animate-in fade-in slide-in-from-bottom-8 duration-1000">
-              <div className="mb-20">
-                <p className="font-dm-sans text-[28px] font-bold tracking-[0.1em] text-brand-green uppercase mb-6">
+          {/* Content Area */}
+          <div className="flex-1 bg-[#F1E8CD] px-[clamp(1.25rem,4vw,5rem)] py-[clamp(2.5rem,6vw,8rem)]">
+            <div className="max-w-[2000px] mx-auto w-full">
+              
+              {/* Desktop Header - Original Style */}
+              <div className="hidden md:block mb-16">
+                <p className="font-dm-sans text-[clamp(18px,2vw,28px)] font-bold tracking-[0.1em] text-brand-green uppercase mb-6">
                   {searchQuery ? `Search Results` : (selectedCategory || "All Archive")}
                 </p>
-                <div className="w-full h-[1px] bg-gray-100 mt-10" />
+                <div className="w-full h-[1px] bg-brand-green/10" />
               </div>
 
               {filteredProducts.length === 0 ? (
-                <div className="py-40 text-center">
-                  <p className="text-gray-300 font-serif text-2xl italic uppercase tracking-widest">No pieces found in this archive.</p>
+                <div className="py-20 text-center opacity-40">
+                  <p className="font-display text-2xl uppercase tracking-widest">No pieces found in the archive.</p>
                 </div>
               ) : (
-                <div className="flex flex-wrap gap-x-[clamp(15px,3vw,60px)] gap-y-[clamp(16px,4vw,64px)] justify-start">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(1.5rem,4vw,5rem)] animate-in fade-in slide-in-from-bottom-12 duration-1000">
                   {filteredProducts.map(product => (
-                    <div key={product.serial} className="w-[300px] h-[520px] flex-shrink-0">
-                      <ProductCard product={product} bgWhite={true} />
-                    </div>
+                    <ProductCard key={product.serial} product={product} bgWhite={true} />
                   ))}
                 </div>
               )}
@@ -137,37 +165,32 @@ export default async function TagsPage({ searchParams }) {
           </div>
         </div>
 
-        {/* Trending Section - Styled to match Product Page */}
-        <section className="w-full bg-[#F1E8CD] py-24 border-t border-black/5">
-          <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5vw)]">
-            <div className="mb-12">
-              <p className="font-dm-sans text-[23px] font-bold tracking-[0.2em] text-brand-green uppercase mb-4">
-                TRENDING COLLECTION
-              </p>
-              <h2 className="font-dm-sans text-[36px] font-normal leading-tight flex items-center gap-4 flex-wrap text-black">
-                Want to look through our Trending Collections
-                <img src="/images/fire.png" alt="🔥" className="w-8 h-8 object-contain inline-block" />
+        {/* Trending Section */}
+        <section className="w-full bg-[#FFFAEE] py-[clamp(4rem,6vw,10rem)] border-t border-black/5">
+          <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5rem)]">
+            <div className="flex flex-col items-center text-center mb-12 sm:mb-20 px-4">
+              <p className="text-[clamp(10px,1.2vw,14px)] tracking-[0.4em] text-brand-gold uppercase mb-6 font-bold">Trending Collection</p>
+              <h2 className="font-dm-sans text-[clamp(24px,3vw,48px)] text-brand-green leading-tight max-w-4xl font-normal">
+                Pieces that are currently capturing the community's heart
               </h2>
             </div>
 
-            <div className="flex flex-wrap gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)] justify-start">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[clamp(8px,2vw,40px)] gap-y-[clamp(1.5rem,3vw,4rem)]">
               {displayTrending.map(product => (
-                <div key={`trending-tag-${product.serial}`} className="w-[300px] h-[520px] flex-shrink-0">
-                  <ProductCard product={product} bgWhite={true} />
-                </div>
+                <ProductCard key={`trending-tag-${product.serial}`} product={product} bgWhite={true} />
               ))}
             </div>
 
-            <div className="flex justify-center mt-20">
-              <Link href="/collections" className="px-[clamp(1.5rem,5vw,3.5rem)] py-[clamp(0.75rem,1.5vw,1rem)] border-2 border-brand-green text-brand-green text-[clamp(10px,1.5vw,18px)] tracking-[0.2em] font-medium uppercase rounded-full hover:bg-brand-green hover:text-white transition-all duration-300">
+            <div className="flex justify-center mt-12 sm:mt-20">
+              <Link href="/collections" className="px-[clamp(1.5rem,5vw,3.5rem)] py-[clamp(0.75rem,1.5vw,1rem)] border-2 border-brand-green text-brand-green text-[clamp(11px,1.3vw,18px)] tracking-[0.2em] font-medium uppercase rounded-full hover:bg-brand-green hover:text-white transition-all duration-300">
                 View All Collections
               </Link>
             </div>
-            </div>
+          </div>
         </section>
       </main>
 
-      <Footer backgroundImage={config.footerImage} logo={config.logo} />
+      <Footer backgroundImage={config.footerImage} logo={config.logo} whatsappNumber={config.whatsappNumber} />
     </div>
   )
 }

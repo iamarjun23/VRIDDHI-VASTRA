@@ -6,10 +6,12 @@ import { formatWhatsAppMessage, getWhatsAppUrl } from "../../../lib/utils";
 import StarRating from "../../components/StarRating";
 import toast from "react-hot-toast";
 import Image from "next/image";
+import Link from "next/link";
 
 
-export default function ProductDetailClient({ product }) {
-  const { addToCart, whatsappNumber } = useCart();
+export default function ProductDetailClient({ product, whatsappNumber: serverWhatsappNumber }) {
+  const { addToCart, whatsappNumber: contextWhatsappNumber } = useCart();
+  const whatsappNumber = serverWhatsappNumber || contextWhatsappNumber;
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(product.image1);
   const [isZooming, setIsZooming] = useState(false);
@@ -23,7 +25,6 @@ export default function ProductDetailClient({ product }) {
   };
 
   const handleBuyNow = () => {
-    // Fire and forget click analytics tracking
     fetch("/api/analytics/click", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -65,142 +66,169 @@ export default function ProductDetailClient({ product }) {
 
   return (
     <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5rem)]">
-      <div className="grid grid-cols-1 lg:grid-cols-[6fr_5fr] gap-[clamp(20px,5vw,80px)] items-start w-full pt-10 lg:pt-16">
+      {/* Breadcrumbs - Desktop feeling */}
+      <div className="flex items-center gap-2 text-[clamp(10px,1vw,14px)] text-brand-green/60 uppercase tracking-widest pt-4 sm:pt-8 mb-4">
+        <Link href="/" className="hover:text-brand-gold transition-colors">Home</Link>
+        <span>/</span>
+        <Link href="/collections" className="hover:text-brand-gold transition-colors">Collections</Link>
+        <span>/</span>
+        <span className="text-brand-green font-medium truncate max-w-[150px] sm:max-w-none">{product.name}</span>
+      </div>
 
-      {/* Left Column - Images with Zoom */}
-      <div className="flex flex-col gap-4 max-w-[640px] mx-auto w-full">
-        <div className="relative">
-          <div
-            className="relative w-full aspect-[3/4] rounded-[32px] overflow-hidden bg-gray-200 cursor-crosshair group"
-            onMouseEnter={() => setIsZooming(true)}
-            onMouseLeave={() => setIsZooming(false)}
-            onMouseMove={handleMouseMove}
-          >
-            {activeImage ? (
-              <>
-                <Image
-                  src={activeImage}
-                  alt={product.name}
-                  className="object-cover"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                  priority
-                />
-                {/* Source Lens on active image */}
-                {isZooming && (
-                  <div
-                    className="absolute z-10 pointer-events-none border border-white/50 bg-white/20"
-                    style={{
-                      left: `${zoomPos.x}%`,
-                      top: `${zoomPos.y}%`,
-                      width: '35%',
-                      height: '45%',
-                      transform: 'translate(-50%, -50%)',
-                      boxShadow: '0 0 0 9999px rgba(0,0,0,0.1)'
-                    }}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-[1.2fr_1fr] gap-[clamp(1.5rem,5vw,5rem)] items-start w-full pt-6 md:pt-10 lg:pt-16">
+
+        {/* Left Column - Images with Zoom */}
+        <div className="flex flex-col gap-4 max-w-[640px] mx-auto w-full md:sticky md:top-[120px]">
+          <div className="flex items-center gap-2 mb-2">
+            <span className="text-brand-gold text-[clamp(10px,1vw,14px)] tracking-[0.3em] uppercase font-bold">Vriddhi Vastra</span>
+            <div className="flex-1 h-[1px] bg-brand-gold/20"></div>
+          </div>
+          <div className="relative">
+            <div
+              className="relative w-full aspect-[3/4] rounded-[clamp(16px,2.5vw,32px)] overflow-hidden bg-gray-200 cursor-crosshair group"
+              onMouseEnter={() => setIsZooming(true)}
+              onMouseLeave={() => setIsZooming(false)}
+              onMouseMove={handleMouseMove}
+            >
+              {activeImage ? (
+                <>
+                  <Image
+                    src={activeImage}
+                    alt={product.name}
+                    className="object-cover"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 40vw"
+                    priority
                   />
-                )}
-              </>
-            ) : (
-              <div className="w-full h-full bg-black/5 flex items-center justify-center text-gray-500 font-sans tracking-widest text-sm uppercase">
-                No Image Available
+                  {/* Source Lens on active image - LG ONLY */}
+                  {isZooming && (
+                    <div
+                      className="absolute z-10 pointer-events-none border border-white/50 bg-white/20 hidden lg:block"
+                      style={{
+                        left: `${zoomPos.x}%`,
+                        top: `${zoomPos.y}%`,
+                        width: '35%',
+                        height: '45%',
+                        transform: 'translate(-50%, -50%)',
+                        boxShadow: '0 0 0 9999px rgba(0,0,0,0.1)'
+                      }}
+                    />
+                  )}
+                </>
+              ) : (
+                <div className="w-full h-full bg-black/5 flex items-center justify-center text-gray-500 font-sans tracking-widest text-sm uppercase">
+                  No Image Available
+                </div>
+              )}
+            </div>
+
+            {/* External Zoom Preview Box */}
+            {isZooming && activeImage && (
+              <div
+                className="absolute left-[102%] top-0 w-[120%] h-full bg-white shadow-[0_30px_70px_rgba(0,0,0,0.2)] z-[100] border border-gray-100 overflow-hidden hidden lg:block rounded-[24px] pointer-events-none"
+                style={{
+                  backgroundImage: `url(${activeImage})`,
+                  backgroundPosition: `${zoomPos.x}% ${zoomPos.y}%`,
+                  backgroundSize: '300%',
+                }}
+              >
+                <div className="absolute top-4 left-4 px-3 py-1 bg-black/50 backdrop-blur-md text-white text-[clamp(8px,1vw,12px)] font-bold tracking-widest rounded-full uppercase">
+                  High Detail View
+                </div>
               </div>
             )}
           </div>
 
-          {/* External Zoom Preview Box (LUXURY SIDE SIDE) */}
-          {isZooming && activeImage && (
-            <div
-              className="absolute left-[102%] top-0 w-[120%] h-full bg-white shadow-[0_30px_70px_rgba(0,0,0,0.2)] z-[100] border border-gray-100 overflow-hidden hidden lg:block rounded-[24px] pointer-events-none"
-              style={{
-                backgroundImage: `url(${activeImage})`,
-                backgroundPosition: `${zoomPos.x}% ${zoomPos.y}%`,
-                backgroundSize: '300%', // Magnification level
-              }}
-            >
-              <div className="absolute top-4 left-4 px-3 py-1 bg-black/50 backdrop-blur-md text-white text-[clamp(8px,1vw,12px)] font-bold tracking-widest rounded-full uppercase">
-                High Detail View
-              </div>
-            </div>
-          )}
-        </div>
-
-        {/* Thumbnails — centered under main image */}
-        <div className="flex justify-center gap-4 mt-2">
-          {[product.image1, product.image2].map((img, i) => (
-            img ? (
-              <button
-                key={i}
-                onClick={() => setActiveImage(img)}
-                className={`w-20 h-24 rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-brand-green shadow-md scale-105' : 'border-transparent opacity-70 hover:opacity-100'}`}
-              >
-                <img src={img} alt={`thumb ${i}`} className="w-full h-full object-cover" />
-              </button>
-            ) : null
-          ))}
-        </div>
-      </div>
-
-      {/* Right Column - Details */}
-      <div className="flex flex-col py-3 gap-5">
-
-        {/* Brand Label & Tag */}
-        <div className="flex items-center gap-4 mb-[10px]">
-          <p className="display-h6 text-brand-green">Vriddhi Vastra</p>
-          {product.tags && product.tags.some(t => t.toUpperCase() === 'EXHIBITION CATEGORIES') && (
-            <span className="px-4 py-1.5 bg-brand-green/10 text-brand-green text-[clamp(8px,1vw,12px)] font-bold tracking-[0.2em] uppercase rounded-full border border-brand-green/20">Exhibition Signature</span>
-          )}
-        </div>
-
-        <h1 className="font-dm-sans text-[36px] text-brand-green font-medium leading-tight">
-          {product.name}
-        </h1>
-
-        <div className="flex items-baseline gap-6 pt-6 border-t border-black/5">
-          <span className="font-dm-sans text-[40px] font-bold text-gold tracking-tight">₹{product.price.toLocaleString()}</span>
-          {product.originalPrice && product.originalPrice > product.price && (
-            <span className="text-gray-400 line-through text-[24px] font-normal font-dm-sans">₹{product.originalPrice.toLocaleString()}</span>
-          )}
-        </div>
-
-        {/* Quantity */}
-        <div className="pt-2">
-          <p className="text-[clamp(16px,2vw,25px)] DMsansC3 text-[#020202] mb-8">Quantity</p>
-          <div className="inline-flex items-center border border-[#E3D7BD] rounded-xl bg-[#F7F1DF] overflow-hidden">
-            <button
-              onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="w-15 h-15 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors border-r border-gray-200 text-lg"
-            >
-              -
-            </button>
-            <span className="w-15 text-center text-base font-medium text-gray-900">{quantity}</span>
-            <button
-              onClick={() => setQuantity(quantity + 1)}
-              className="w-15 h-15 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors border-l border-gray-200 text-lg"
-            >
-              +
-            </button>
+          {/* Thumbnails */}
+          <div className="flex justify-center gap-3 sm:gap-4 mt-2">
+            {[product.image1, product.image2].map((img, i) => (
+              img ? (
+                <button
+                  key={i}
+                  onClick={() => setActiveImage(img)}
+                  className={`w-[clamp(60px,8vw,80px)] h-[clamp(72px,10vw,96px)] rounded-xl overflow-hidden border-2 transition-all ${activeImage === img ? 'border-brand-green shadow-md scale-105' : 'border-transparent opacity-70 hover:opacity-100'}`}
+                >
+                  <img src={img} alt={`thumb ${i}`} className="w-full h-full object-cover" />
+                </button>
+              ) : null
+            ))}
           </div>
         </div>
 
-        {/* CTA Buttons - stacked */}
-        <div className="flex flex-col gap-7 pt-10 ">
-          <button
-            onClick={() => addToCart(product, quantity)}
-            className="w-full lg:w-[80%] mx-auto px-2 py-[clamp(0.75rem,1.5vw,1.25rem)] rounded-full bg-white/45 text-[#2E4B36] font-dm-sans text-[clamp(14px,1.2vw,21px)] tracking-[0.1em] hover:bg-brand-green hover:text-white transition-all duration-300 active:scale-95 shadow-sm"
-          >
-            Add to Cart
-          </button>
-          <button
-            onClick={handleBuyNow}
-            className="w-full lg:w-[80%] mx-auto px-2 py-[clamp(0.75rem,1.5vw,1.25rem)] rounded-full bg-white/45 text-[#2E4B36] font-dm-sans text-[clamp(14px,1.2vw,21px)] tracking-[0.1em] hover:bg-brand-green hover:text-white transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 shadow-sm"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.411 0 .01 5.403.007 12.04c0 2.123.554 4.197 1.606 6.04L0 24l6.117-1.605a11.787 11.787 0 005.925 1.585h.005c6.64 0 12.042-5.402 12.045-12.043a11.794 11.794 0 00-3.418-8.525z" /></svg>
-            Buy Now
-          </button>
-        </div>
+        {/* Right Column - Details */}
+        <div className="flex flex-col py-6 sm:py-3 gap-5 sm:gap-5 md:pl-4 lg:pl-0">
 
-      </div>
+          {/* Tag for Exhibition */}
+          <div className="flex items-center gap-3 sm:gap-4 mb-2 flex-wrap">
+            {product.tags && product.tags.some(t => t.toUpperCase() === 'EXHIBITION CATEGORIES') && (
+              <span className="px-3 sm:px-4 py-1.5 bg-brand-green/10 text-brand-green text-[clamp(8px,0.9vw,12px)] font-bold tracking-[0.2em] uppercase rounded-full border border-brand-green/20">Exhibition Signature</span>
+            )}
+          </div>
+
+          <h1 className="font-dm-sans text-[clamp(22px,2.5vw,36px)] text-brand-green font-medium leading-tight">
+            {product.name}
+          </h1>
+
+          <div className="flex items-baseline gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-black/5">
+            <span className="font-dm-sans text-[clamp(26px,3vw,40px)] font-bold text-gold tracking-tight">₹{product.price.toLocaleString()}</span>
+            {product.originalPrice && product.originalPrice > product.price && (
+              <span className="text-gray-400 line-through text-[clamp(16px,1.8vw,24px)] font-normal font-dm-sans">₹{product.originalPrice.toLocaleString()}</span>
+            )}
+          </div>
+
+          {/* Rating - Professional desktop feel */}
+          <div className="flex items-center gap-4">
+            <StarRating
+              rating={currentRating}
+              numReviews={numReviews}
+              interactive={true}
+              onRate={handleRate}
+              size="clamp(16px, 1.4vw, 22px)"
+              gap="0.2rem"
+            />
+            {numReviews > 0 && (
+              <span className="text-gray-500 text-[clamp(12px,1.1vw,16px)] font-dm-sans">({numReviews} Customer Reviews)</span>
+            )}
+          </div>
+
+          {/* Quantity */}
+          <div className="pt-2">
+            <p className="text-[clamp(14px,1.5vw,25px)] text-[#020202] mb-4 sm:mb-8">Quantity</p>
+            <div className="inline-flex items-center border border-[#E3D7BD] rounded-xl bg-[#F7F1DF] overflow-hidden">
+              <button
+                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                className="w-12 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors border-r border-gray-200 text-lg"
+              >
+                -
+              </button>
+              <span className="w-12 text-center text-base font-medium text-gray-900">{quantity}</span>
+              <button
+                onClick={() => setQuantity(quantity + 1)}
+                className="w-12 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors border-l border-gray-200 text-lg"
+              >
+                +
+              </button>
+            </div>
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 pt-6 sm:pt-10">
+            <button
+              onClick={() => addToCart(product, quantity)}
+              className="flex-1 px-2 py-[clamp(0.6rem,1.5vw,1.1rem)] rounded-full bg-white/45 text-[#2E4B36] font-dm-sans text-[clamp(13px,1.2vw,18px)] tracking-[0.1em] hover:bg-brand-green hover:text-white transition-all duration-300 active:scale-95 shadow-sm whitespace-nowrap"
+            >
+              Add to Cart
+            </button>
+            <button
+              onClick={handleBuyNow}
+              className="flex-1 px-2 py-[clamp(0.6rem,1.5vw,1.1rem)] rounded-full bg-white/45 text-[#2E4B36] font-dm-sans text-[clamp(13px,1.2vw,18px)] tracking-[0.1em] hover:bg-brand-green hover:text-white transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 shadow-sm whitespace-nowrap"
+            >
+              <svg className="w-5 h-5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.411 0 .01 5.403.007 12.04c0 2.123.554 4.197 1.606 6.04L0 24l6.117-1.605a11.787 11.787 0 005.925 1.585h.005c6.64 0 12.042-5.402 12.045-12.043a11.794 11.794 0 00-3.418-8.525z" /></svg>
+              Buy Now
+            </button>
+          </div>
+
+        </div>
       </div>
     </div>
   );

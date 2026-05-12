@@ -29,7 +29,7 @@ export function CartProvider({ children }) {
 
   useEffect(() => {
     // Fetch WhatsApp number from settings
-    fetch("/api/settings")
+    fetch("/api/settings", { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
         if (data.whatsappNumber) setWhatsappNumber(data.whatsappNumber);
@@ -43,6 +43,26 @@ export function CartProvider({ children }) {
       localStorage.setItem("cart", JSON.stringify(cartItems));
     }
   }, [cartItems, isInitialized]);
+
+  // Refresh settings when cart opens to ensure latest WhatsApp number
+  useEffect(() => {
+    const fetchSettings = () => {
+      fetch("/api/settings", { cache: 'no-store' })
+        .then(res => res.json())
+        .then(data => {
+          if (data.whatsappNumber) setWhatsappNumber(data.whatsappNumber);
+        })
+        .catch(err => console.error("Failed to refresh WhatsApp number", err));
+    };
+
+    if (isCartOpen) {
+      fetchSettings();
+    }
+
+    // Also refresh on window focus to sync across tabs (Admin -> Storefront)
+    window.addEventListener('focus', fetchSettings);
+    return () => window.removeEventListener('focus', fetchSettings);
+  }, [isCartOpen]);
 
   const addToCart = (product, quantity = 1) => {
     setCartItems((prevItems) => {

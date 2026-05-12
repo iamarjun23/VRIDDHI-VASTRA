@@ -11,7 +11,7 @@ function CreateProductContent() {
   const [uploadingImage, setUploadingImage] = useState(null)
   const [serialError, setSerialError] = useState("")
   const [checkingSerial, setCheckingSerial] = useState(false)
-  
+
   const [categories, setCategories] = useState([])
 
   const [formData, setFormData] = useState({
@@ -106,10 +106,10 @@ function CreateProductContent() {
 
     const payload = {
       ...formData,
-      serial:        formData.serial.trim(),
-      price:         Number(formData.price),
+      serial: formData.serial.trim(),
+      price: Number(formData.price),
       originalPrice: Number(formData.originalPrice || formData.price),
-      tags:          tagsArray
+      tags: tagsArray
     }
 
     try {
@@ -139,7 +139,7 @@ function CreateProductContent() {
 
   return (
     <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500 pb-12">
-      
+
       {/* Luxury Header Workspace */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E5E0D8] pb-6 sticky top-0 bg-[#FAF9F6] z-30 py-4 -my-4 mb-4">
         <div className="flex items-center gap-4">
@@ -155,9 +155,9 @@ function CreateProductContent() {
           <button type="button" onClick={() => router.back()} className="px-6 py-3 text-[11px] font-bold text-gray-600 bg-transparent uppercase tracking-widest hover:text-gray-900 transition-all hidden sm:block">
             Discard
           </button>
-          <button 
+          <button
             onClick={handleSubmit}
-            disabled={loading || uploadingImage !== null || !!serialError || checkingSerial} 
+            disabled={loading || uploadingImage !== null || !!serialError || checkingSerial}
             className="w-full sm:w-auto px-8 py-3 text-[11px] font-bold text-white bg-[#1A1A1A] tracking-widest uppercase hover:bg-black transition-all active:scale-[0.98] disabled:opacity-50 flex items-center justify-center gap-2 shadow-xl shadow-black/10"
           >
             {loading ? "Archiving..." : uploadingImage ? "Uploading..." : "Publish Piece"}
@@ -167,65 +167,65 @@ function CreateProductContent() {
 
       {/* Split Immersive Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
+
         {/* Left Pane - Gallery Workspace */}
         <div className="lg:col-span-5 xl:col-span-4 space-y-6 lg:sticky lg:top-[120px]">
-           <div className="bg-white border border-[#E5E0D8] shadow-sm p-5 space-y-5">
-              <h2 className="text-[14px] font-bold text-gray-900 uppercase tracking-widest">Gallery Assets</h2>
-              
-              <div className="space-y-5">
-                {[
-                  { field: 'image1', label: 'Primary Feature' },
-                  { field: 'image2', label: 'Detail View' }
-                ].map((img) => (
-                  <div key={img.field} className="group relative aspect-[4/5] w-full bg-[#FAF9F6] border-2 border-dashed border-[#E5E0D8] hover:border-[#D4AF37] transition-all flex items-center justify-center overflow-hidden">
-                    {uploadingImage === img.field ? (
-                      <div className="flex flex-col items-center">
-                        <div className="animate-spin h-6 w-6 border-b-2 border-gray-900 rounded-full mb-3"></div>
-                        <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">Syncing...</span>
+          <div className="bg-white border border-[#E5E0D8] shadow-sm p-5 space-y-5">
+            <h2 className="text-[14px] font-bold text-gray-900 uppercase tracking-widest">Gallery Assets</h2>
+
+            <div className="space-y-5">
+              {[
+                { field: 'image1', label: 'Primary Feature' },
+                { field: 'image2', label: 'Detail View' }
+              ].map((img) => (
+                <div key={img.field} className="group relative aspect-[4/5] w-full bg-[#FAF9F6] border-2 border-dashed border-[#E5E0D8] hover:border-[#D4AF37] transition-all flex items-center justify-center overflow-hidden">
+                  {uploadingImage === img.field ? (
+                    <div className="flex flex-col items-center">
+                      <div className="animate-spin h-6 w-6 border-b-2 border-gray-900 rounded-full mb-3"></div>
+                      <span className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">Syncing...</span>
+                    </div>
+                  ) : formData[img.field] ? (
+                    <>
+                      <img src={formData[img.field]} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Preview" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center backdrop-blur-[2px]">
+                        <span className="text-[10px] font-bold tracking-widest text-white uppercase mb-2">{img.label}</span>
+                        <span className="text-[10px] font-bold tracking-widest text-gray-900 uppercase bg-white px-6 py-2">Replace</span>
                       </div>
-                    ) : formData[img.field] ? (
-                      <>
-                        <img src={formData[img.field]} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" alt="Preview" />
-                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center backdrop-blur-[2px]">
-                           <span className="text-[10px] font-bold tracking-widest text-white uppercase mb-2">{img.label}</span>
-                           <span className="text-[10px] font-bold tracking-widest text-gray-900 uppercase bg-white px-6 py-2">Replace</span>
-                        </div>
-                      </>
-                    ) : (
-                      <div className="flex flex-col items-center text-[#D4AF37] opacity-60 group-hover:opacity-100 transition-opacity">
-                        <svg className="w-8 h-8 mb-3" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
-                        <span className="text-[10px] font-bold tracking-widest uppercase">Add {img.label}</span>
-                      </div>
-                    )}
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      onChange={(e) => handleImageUpload(e, img.field)} 
-                      className="absolute inset-0 opacity-0 cursor-pointer" 
-                      disabled={uploadingImage !== null}
-                    />
-                  </div>
-                ))}
-              </div>
-           </div>
+                    </>
+                  ) : (
+                    <div className="flex flex-col items-center text-[#D4AF37] opacity-60 group-hover:opacity-100 transition-opacity">
+                      <svg className="w-8 h-8 mb-3" fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
+                      <span className="text-[10px] font-bold tracking-widest uppercase">Add {img.label}</span>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => handleImageUpload(e, img.field)}
+                    className="absolute inset-0 opacity-0 cursor-pointer"
+                    disabled={uploadingImage !== null}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Right Pane - Forms */}
         <div className="lg:col-span-7 xl:col-span-8 space-y-6">
-          
+
           <div className="bg-white border border-[#E5E0D8] shadow-sm p-8 space-y-6">
             <h2 className="text-[18px] font-bold font-display text-gray-900 border-b border-[#E5E0D8] pb-4">Essential Details</h2>
-            
+
             <div className="space-y-5">
               <div>
                 <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Title / Name *</label>
-                <input 
-                  required 
-                  name="name" 
-                  value={formData.name} 
-                  onChange={handleChange} 
-                  className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-bold text-gray-900 focus:border-[#D4AF37] focus:bg-white transition-all outline-none" 
+                <input
+                  required
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-bold text-gray-900 focus:border-[#D4AF37] focus:bg-white transition-all outline-none"
                   placeholder="e.g. Kanchipuram Silk Saree"
                 />
               </div>
@@ -233,10 +233,10 @@ function CreateProductContent() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div>
                   <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Archive Serial *</label>
-                  <input 
-                    required 
-                    name="serial" 
-                    value={formData.serial} 
+                  <input
+                    required
+                    name="serial"
+                    value={formData.serial}
                     onChange={handleChange}
                     onBlur={handleSerialBlur}
                     className={`w-full bg-[#FAF9F6] border px-5 py-3.5 text-[14px] font-bold text-gray-900 focus:bg-white transition-all outline-none font-mono tracking-wider ${serialError ? 'border-red-400 focus:border-red-400' : 'border-[#E5E0D8] focus:border-[#D4AF37]'}`}
@@ -270,13 +270,13 @@ function CreateProductContent() {
 
               <div>
                 <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Curator's Notes *</label>
-                <textarea 
-                  required 
-                  name="description" 
-                  value={formData.description} 
-                  onChange={handleChange} 
+                <textarea
+                  required
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
                   rows={6}
-                  className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-medium text-gray-800 focus:border-[#D4AF37] focus:bg-white transition-all outline-none resize-y leading-relaxed" 
+                  className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-medium text-gray-800 focus:border-[#D4AF37] focus:bg-white transition-all outline-none resize-y leading-relaxed"
                   placeholder="Detail the weave, origin, and characteristics..."
                 />
               </div>
@@ -285,19 +285,19 @@ function CreateProductContent() {
 
           <div className="bg-white border border-[#E5E0D8] shadow-sm p-8 space-y-6">
             <h2 className="text-[18px] font-bold font-display text-gray-900 border-b border-[#E5E0D8] pb-4">Commerce & Discovery</h2>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div>
                 <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Valuation (₹) *</label>
                 <div className="relative">
                   <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
-                  <input 
-                    required 
+                  <input
+                    required
                     type="number"
-                    name="price" 
-                    value={formData.price} 
-                    onChange={handleChange} 
-                    className="w-full bg-[#FAF9F6] border border-[#E5E0D8] pl-10 pr-5 py-3.5 text-[14px] font-bold text-gray-900 focus:border-[#D4AF37] focus:bg-white transition-all outline-none" 
+                    name="price"
+                    value={formData.price}
+                    onChange={handleChange}
+                    className="w-full bg-[#FAF9F6] border border-[#E5E0D8] pl-10 pr-5 py-3.5 text-[14px] font-bold text-gray-900 focus:border-[#D4AF37] focus:bg-white transition-all outline-none"
                     placeholder="0"
                   />
                 </div>
@@ -306,12 +306,12 @@ function CreateProductContent() {
                 <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Original MRP (₹)</label>
                 <div className="relative">
                   <span className="absolute left-5 top-1/2 -translate-y-1/2 text-gray-400 font-bold">₹</span>
-                  <input 
+                  <input
                     type="number"
-                    name="originalPrice" 
-                    value={formData.originalPrice} 
-                    onChange={handleChange} 
-                    className="w-full bg-[#FAF9F6] border border-[#E5E0D8] pl-10 pr-5 py-3.5 text-[14px] font-bold text-gray-900 focus:border-[#D4AF37] focus:bg-white transition-all outline-none" 
+                    name="originalPrice"
+                    value={formData.originalPrice}
+                    onChange={handleChange}
+                    className="w-full bg-[#FAF9F6] border border-[#E5E0D8] pl-10 pr-5 py-3.5 text-[14px] font-bold text-gray-900 focus:border-[#D4AF37] focus:bg-white transition-all outline-none"
                     placeholder="0"
                   />
                 </div>
@@ -320,11 +320,11 @@ function CreateProductContent() {
 
             <div className="border-t border-[#E5E0D8] pt-6 mt-2">
               <label className="block text-[10px] font-bold text-gray-500 mb-2 uppercase tracking-[0.2em]">Taxonomy Tags</label>
-              <input 
-                name="tags" 
-                value={formData.tags} 
-                onChange={handleChange} 
-                className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-bold text-gray-900 focus:border-[#D4AF37] focus:bg-white transition-all outline-none" 
+              <input
+                name="tags"
+                value={formData.tags}
+                onChange={handleChange}
+                className="w-full bg-[#FAF9F6] border border-[#E5E0D8] px-5 py-3.5 text-[14px] font-bold text-gray-900 focus:border-[#D4AF37] focus:bg-white transition-all outline-none"
                 placeholder="e.g. Bridal, Handwoven (Comma separated)"
               />
               <p className="text-[11px] text-gray-400 mt-2 font-medium">Used for advanced filtering and search indexing.</p>

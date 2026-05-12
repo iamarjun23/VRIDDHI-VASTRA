@@ -12,9 +12,9 @@ export async function generateMetadata({ params }) {
   await dbConnect();
   const { serial } = await params;
   const product = await Product.findOne({ serial }).lean();
-  
+
   if (!product) return { title: "Product Not Found" };
-  
+
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.vriddhivastra.com';
   const productUrl = `${siteUrl}/product/${serial}`;
   const description = product.description || `Buy the elegant ${product.name} at Vriddhi Vastra. Premium quality silk sarees.`;
@@ -63,8 +63,8 @@ export default async function ProductDetailsPage({ params }) {
 
   // Dynamic Trending Logic
   const trendingProducts = products.filter(p => p.tags && p.tags.some(t => t.toLowerCase() === 'trending')).slice(0, 4);
-  const displayTrending = trendingProducts.length > 0 
-    ? trendingProducts 
+  const displayTrending = trendingProducts.length > 0
+    ? trendingProducts
     : [...products].sort(() => 0.5 - Math.random()).slice(0, 4);
 
   if (!product) {
@@ -74,7 +74,7 @@ export default async function ProductDetailsPage({ params }) {
         <div className="pt-40 text-center">
           <h1 className="text-[clamp(18px,3vw,28px)]">Product not found</h1>
         </div>
-        <Footer backgroundImage={config.footerImage} logo={config.logo} />
+        <Footer backgroundImage={config.footerImage} logo={config.logo} whatsappNumber={config.whatsappNumber} />
       </main>
     )
   }
@@ -112,18 +112,18 @@ export default async function ProductDetailsPage({ params }) {
       />
       <Navbar logo={config.logo} />
 
-      <section className="pt-24 md:pt-40 pb-24 px-[clamp(1rem,4vw,5vw)] bg-[#F1E8CD] w-full">
-        <ProductDetailClient product={product} />
+      <section className="pt-[clamp(80px,12vw,160px)] pb-[clamp(3rem,6vw,6rem)] bg-[#F1E8CD] w-full">
+        <ProductDetailClient product={product} whatsappNumber={config.whatsappNumber} />
 
-        <div className="mt-32 w-full pt-16 border-t border-black/5 text-left">
-          <p className="font-dm-sans text-[23px] font-bold tracking-[0.2em] text-brand-green uppercase mb-4">
+        <div className="mt-[clamp(4rem,8vw,8rem)] w-full pt-[clamp(2rem,4vw,4rem)] border-t border-black/5 text-left max-w-[2000px] mx-auto px-[clamp(1rem,4vw,5rem)]">
+          <p className="font-dm-sans text-[clamp(13px,1.6vw,23px)] font-bold tracking-[0.2em] text-brand-green uppercase mb-4">
             TRENDING COLLECTION
           </p>
-          <h2 className="font-dm-sans text-[36px] font-normal leading-tight flex items-center gap-4 flex-wrap mb-12 text-black">
+          <h2 className="font-dm-sans text-[clamp(20px,2.5vw,36px)] font-normal leading-tight flex items-center gap-3 flex-wrap mb-8 sm:mb-12 text-black">
             Want to look through our Trending Collections
-            <img src="/images/fire.png" alt="🔥" className="w-8 h-8 object-contain inline-block" />
+            <img src="/images/fire.png" alt="🔥" className="w-6 h-6 sm:w-8 sm:h-8 object-contain inline-block" />
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(15px,3vw,60px)] gap-y-[clamp(16px,4vw,64px)]">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(8px,2vw,40px)] gap-y-[clamp(1.5rem,3vw,4rem)]">
             {displayTrending.map(p => (
               <ProductCard key={`trend-${p.serial}`} product={p} bgWhite={true} />
             ))}
@@ -131,7 +131,7 @@ export default async function ProductDetailsPage({ params }) {
         </div>
       </section>
 
-      <Footer backgroundImage={config.footerImage} logo={config.logo} />
+      <Footer backgroundImage={config.footerImage} logo={config.logo} whatsappNumber={config.whatsappNumber} />
     </main>
   )
 }

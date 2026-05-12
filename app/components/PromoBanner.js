@@ -1,49 +1,57 @@
-import Link from "next/link";
-import Image from "next/image";
+import Image from "next/image"
+import Link from "next/link"
 
 export default function PromoBanner({ image, heading, subtext, logo }) {
+  if (!image && !heading && !subtext) return null;
+
   return (
-    <section className="relative w-full min-h-[30vh] md:min-h-[60vh] lg:min-h-[80vh] flex flex-col items-center justify-center overflow-hidden bg-[#1c1a17] py-12 md:py-0">
+    <section className="relative w-full overflow-hidden min-h-[clamp(200px,30vw,500px)] flex items-center justify-center py-[clamp(2rem,5vw,5rem)]">
+      {/* Background Image */}
       {image && (
-        <Image
-          src={image}
-          alt="Promo Background"
-          fill
-          sizes="100vw"
-          className="object-cover z-0 transition-opacity duration-1000"
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat z-0"
+          style={{ backgroundImage: `url('${image}')` }}
         />
       )}
+      <div className="absolute inset-0 bg-black/50 z-0" />
 
-      {/* Corner logo banner overlay - behind the tint */}
-      {logo && (
-        <div className="absolute right-10 bottom-10 z-0 hidden md:block w-48 h-48">
-          <Image
-            src={logo}
-            alt="Vriddhi Vastra Logo"
-            fill
-            sizes="192px"
-            className="object-contain brightness-[1.1] contrast-[1.1]"
-          />
+      {/* Content */}
+      <div className="relative z-10 max-w-[2000px] mx-auto w-full px-[clamp(1rem,5vw,5rem)] flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-10">
+
+        {/* Left Text */}
+        <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
+          {heading && (
+            <h2 className="font-serif text-[clamp(20px,4vw,56px)] text-white font-medium leading-tight drop-shadow-xl">
+              {heading}
+            </h2>
+          )}
+          {subtext && (
+            <p className="font-sans text-[clamp(13px,1.4vw,20px)] text-white/80 mt-3 sm:mt-4 max-w-xl leading-relaxed font-light">
+              {subtext}
+            </p>
+          )}
+          <Link
+            href="/collections"
+            className="mt-6 sm:mt-8 inline-flex items-center gap-3 px-[clamp(1.5rem,4vw,3rem)] py-[clamp(0.6rem,1.5vw,1rem)] border border-white/60 text-white text-[clamp(10px,1.1vw,14px)] font-bold tracking-[0.25em] uppercase hover:bg-white hover:text-black transition-all duration-500 rounded-sm backdrop-blur-sm bg-white/10"
+          >
+            Explore Collections
+          </Link>
         </div>
-      )}
 
-      <div className="absolute inset-0 bg-gray-900/65 z-10" />
-
-      <div className="relative z-20 flex flex-col items-center text-center px-4 w-full max-w-7xl">
-
-        <h2 className="text-white font-display text-[clamp(18px,6vw,65px)] font-medium mb-[clamp(0.5rem,2vw,2.5rem)] leading-[1.1] drop-shadow-lg whitespace-pre-line">
-          {heading ? heading.replace(/\\n/g, '\n') : "Unwrap and Unlock Timeless Elegance\nwith upto 50% Off"}
-        </h2>
-
-        <p className="text-white/95 font-sans text-[clamp(10px,2vw,24px)] font-normal mb-[clamp(1rem,3vw,3rem)] max-w-4xl drop-shadow-md">
-          {subtext || "Celebrate timeless beauty with handcrafted silk sarees at a price that feels good and looks stunning"}
-        </p>
-
-        <Link href="/collections" className="group flex items-center justify-center gap-2 px-[clamp(2rem,5vw,3rem)] py-[clamp(0.5rem,2vw,1rem)] rounded-xl border border-white text-white font-sans text-[clamp(12px,2vw,17px)] tracking-widest hover:bg-white hover:text-black transition-all duration-500">
-          Shop Now
-          <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="w-[clamp(14px,2vw,20px)] h-[clamp(14px,2vw,20px)] group-hover:translate-x-1 transition-transform"><path strokeLinecap="round" strokeLinejoin="round" d="M17.25 8.25 21 12m0 0-3.75 3.75M21 12H3" /></svg>
-        </Link>
-
+        {/* Right Logo */}
+        {logo && (
+          <div className="shrink-0 opacity-20 hidden sm:block">
+            <div className="relative w-[clamp(80px,10vw,180px)] h-[clamp(80px,10vw,180px)]">
+              <Image
+                src={logo}
+                alt="Brand Logo"
+                fill
+                sizes="(max-width: 1024px) 100px, 180px"
+                className="object-contain filter brightness-0 invert"
+              />
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )

@@ -12,7 +12,7 @@ function ProductsAdminContent() {
   const [products, setProducts] = useState([])
   const [filteredProducts, setFilteredProducts] = useState([])
   const [loading, setLoading] = useState(true)
-  
+
   const [searchQuery, setSearchQuery] = useState("")
   const [activeFilter, setActiveFilter] = useState("All")
   const [categories, setCategories] = useState([])
@@ -27,7 +27,7 @@ function ProductsAdminContent() {
       const data = await res.json()
       setProducts(data)
       setFilteredProducts(data)
-      
+
       const cats = new Set(data.map(p => p.category).filter(Boolean))
       setCategories(["All", ...Array.from(cats)])
     } catch (err) {
@@ -48,8 +48,8 @@ function ProductsAdminContent() {
     }
     if (searchQuery.trim() !== "") {
       const q = searchQuery.toLowerCase();
-      result = result.filter(p => 
-        p.name.toLowerCase().includes(q) || 
+      result = result.filter(p =>
+        p.name.toLowerCase().includes(q) ||
         p.serial.toLowerCase().includes(q)
       )
     }
@@ -59,7 +59,7 @@ function ProductsAdminContent() {
   const deleteProduct = async () => {
     if (!productToDelete) return;
     setIsDeleting(true);
-    
+
     try {
       const res = await fetch("/api/products", {
         method: "DELETE",
@@ -67,7 +67,7 @@ function ProductsAdminContent() {
         body: JSON.stringify({ serial: productToDelete.serial })
       })
       const data = await res.json()
-      
+
       if (res.ok && data.success) {
         toast.success("Piece permanently deleted")
         setProducts(prev => prev.filter(p => p.serial !== productToDelete.serial))
@@ -95,40 +95,43 @@ function ProductsAdminContent() {
   return (
     <div className="space-y-6 animate-in fade-in zoom-in-95 duration-500 pb-12">
       {/* Luxury Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-[#E5E0D8] pb-6">
+      <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 border-b border-[#E5E0D8] pb-8 px-1">
         <div>
-          <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-[0.3em] block mb-2">Inventory Operations</span>
-          <h1 className="text-4xl font-bold font-display text-gray-900">Showroom Catalog</h1>
+          <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-luxury block mb-3">Inventory Operations</span>
+          <h1 className="text-[clamp(1.75rem,4vw,2.5rem)] font-bold font-display text-gray-900 leading-none">Catalog</h1>
         </div>
-        <div className="flex flex-col sm:flex-row items-center gap-4">
-          <div className="relative w-full sm:w-[280px]">
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
+          <div className="relative w-full sm:flex-1 lg:w-[320px]">
             <svg className="w-4 h-4 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-            <input 
-              type="text" 
-              placeholder="Search by name or serial..." 
+            <input
+              type="text"
+              placeholder="Search pieces..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-white border border-[#E5E0D8] pl-10 pr-4 py-3 text-[13px] font-medium text-gray-900 hover:border-gray-300 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 outline-none shadow-sm transition-all"
+              className="w-full bg-white border border-[#E5E0D8] pl-11 pr-4 py-3.5 text-[14px] font-medium text-gray-900 hover:border-gray-300 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]/20 outline-none shadow-sm transition-all"
             />
           </div>
-          <Link 
-            href="/admin/products/create" 
-            className="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-3 bg-[#1A1A1A] text-white text-[12px] font-bold tracking-widest uppercase rounded-none hover:bg-[#111111] transition-all duration-300 active:scale-[0.98] shrink-0 shadow-xl shadow-black/10 hover:shadow-2xl hover:shadow-black/20"
+          <Link
+            href="/admin/products/create"
+            className="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-8 py-3.5 bg-[#1A1A1A] text-white text-[10px] font-bold tracking-luxury uppercase rounded-none hover:bg-black transition-all duration-300 active:scale-[0.98] shrink-0 shadow-xl shadow-black/10"
           >
             Add Piece
           </Link>
         </div>
       </div>
 
-      {/* Filter Ribbon */}
-      <div className="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-2">
+      {/* Filter Ribbon - Luxury Optimized */}
+      <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pb-1 border-b border-[#E5E0D8]/40 -mx-3 px-3 sm:mx-0 sm:px-0">
         {categories.map(cat => (
           <button
             key={cat}
             onClick={() => setActiveFilter(cat)}
-            className={`whitespace-nowrap px-6 py-2.5 text-[11px] font-bold uppercase tracking-widest transition-all duration-300 border ${activeFilter === cat ? 'bg-white border-[#D4AF37] text-gray-900 shadow-sm' : 'bg-transparent border-transparent text-gray-500 hover:text-gray-900 hover:bg-white/50 hover:border-[#E5E0D8]'}`}
+            className={`whitespace-nowrap px-6 py-4 text-[9px] font-bold uppercase tracking-luxury transition-all duration-500 relative ${activeFilter === cat ? 'text-gray-900' : 'text-gray-400 hover:text-gray-600'}`}
           >
             {cat}
+            {activeFilter === cat && (
+              <div className="absolute bottom-0 left-6 right-6 h-[2px] bg-[#D4AF37] animate-in slide-in-from-left-full duration-500" />
+            )}
           </button>
         ))}
       </div>
@@ -144,7 +147,7 @@ function ProductsAdminContent() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
           {filteredProducts.map((product, index) => (
             <div key={product.serial} style={{ animationDelay: `${index * 50}ms`, animationFillMode: 'backwards' }} className="animate-in fade-in slide-in-from-bottom-4 duration-500 bg-white border border-[#E5E0D8] group hover:border-[#D4AF37] transition-all shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.08)] flex flex-col hover:-translate-y-1 relative z-10 hover:z-20">
-              
+
               {/* Product Thumbnail (4:5 Aspect) */}
               <div className="relative w-full aspect-[4/5] bg-[#FAF9F6] overflow-hidden border-b border-[#E5E0D8]">
                 {product.image1 && !product.image1.includes('placeholder') ? (
@@ -154,7 +157,7 @@ function ProductsAdminContent() {
                     <svg className="w-8 h-8 text-[#E5E0D8]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2-2v12a2 2 0 002 2z" /></svg>
                   </div>
                 )}
-                
+
                 {/* Status Badge */}
                 <div className="absolute top-3 right-3">
                   {product.image1 && !product.image1.includes('placeholder') ? (
@@ -168,23 +171,23 @@ function ProductsAdminContent() {
                   )}
                 </div>
 
-                {/* Hover Actions Overlay */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col items-center justify-center gap-3 backdrop-blur-[2px]">
-                   <Link 
-                     href={`/admin/products/${product.serial}`} 
-                     className="w-3/4 py-2.5 bg-white text-gray-900 text-[10px] font-bold tracking-widest uppercase text-center border border-white hover:bg-[#1A1A1A] hover:border-[#1A1A1A] hover:text-[#D4AF37] transition-all duration-300 shadow-sm"
-                   >
-                     Edit Details
-                   </Link>
-                   <button 
-                     onClick={() => {
-                       setProductToDelete(product);
-                       setIsConfirmOpen(true);
-                     }} 
-                     className="w-3/4 py-2.5 bg-red-600/90 text-white text-[10px] font-bold tracking-widest uppercase text-center border border-red-500/50 hover:bg-red-600 hover:border-red-600 transition-all duration-300 shadow-sm"
-                   >
-                     Remove
-                   </button>
+                {/* Desktop Hover Actions Overlay */}
+                <div className="hidden lg:flex absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex-col items-center justify-center gap-3 backdrop-blur-[2px]">
+                  <Link
+                    href={`/admin/products/${product.serial}`}
+                    className="w-3/4 py-2.5 bg-white text-gray-900 text-[10px] font-bold tracking-widest uppercase text-center border border-white hover:bg-[#1A1A1A] hover:border-[#1A1A1A] hover:text-[#D4AF37] transition-all duration-300 shadow-sm"
+                  >
+                    Edit Details
+                  </Link>
+                  <button
+                    onClick={() => {
+                      setProductToDelete(product);
+                      setIsConfirmOpen(true);
+                    }}
+                    className="w-3/4 py-2.5 bg-red-600/90 text-white text-[10px] font-bold tracking-widest uppercase text-center border border-red-500/50 hover:bg-red-600 hover:border-red-600 transition-all duration-300 shadow-sm"
+                  >
+                    Remove
+                  </button>
                 </div>
               </div>
 
@@ -193,16 +196,25 @@ function ProductsAdminContent() {
                 <span className="text-[9px] font-bold text-[#D4AF37] uppercase tracking-[0.2em] truncate">{product.category}</span>
                 <p className="text-[13px] font-bold font-display text-gray-900 truncate tracking-tight">{product.name}</p>
                 <div className="flex items-center justify-between mt-1">
-                   <p className="text-[10px] font-mono text-gray-400">{product.serial}</p>
-                   <p className="text-[13px] font-bold text-gray-900">₹{product.price.toLocaleString()}</p>
+                  <p className="text-[10px] font-mono text-gray-400">{product.serial}</p>
+                  <p className="text-[13px] font-bold text-gray-900">₹{product.price.toLocaleString()}</p>
+                </div>
+                {/* Mobile Actions */}
+                <div className="flex lg:hidden gap-2 mt-3 pt-3 border-t border-[#E5E0D8]">
+                  <Link href={`/admin/products/${product.serial}`} className="flex-1 py-2 bg-[#FAF9F6] text-center text-[10px] font-bold uppercase tracking-widest text-gray-900 border border-[#E5E0D8] active:bg-gray-100">
+                    Edit
+                  </Link>
+                  <button onClick={() => { setProductToDelete(product); setIsConfirmOpen(true); }} className="w-10 flex items-center justify-center border border-red-100 text-red-500 bg-red-50 active:bg-red-100">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                  </button>
                 </div>
               </div>
             </div>
           ))}
         </div>
       )}
-      
-      <ConfirmDialog 
+
+      <ConfirmDialog
         isOpen={isConfirmOpen}
         isLoading={isDeleting}
         onClose={() => setIsConfirmOpen(false)}

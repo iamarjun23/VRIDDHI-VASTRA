@@ -14,7 +14,6 @@ export default function AdminSidebar({ isOpen, onClose }) {
   const pathname = usePathname();
   const router = useRouter();
   const [logo, setLogo] = useState(null);
-
   const [logoError, setLogoError] = useState(false);
 
   useEffect(() => {
@@ -32,42 +31,44 @@ export default function AdminSidebar({ isOpen, onClose }) {
 
   return (
     <aside className={`
-      fixed inset-y-0 left-0 z-50 w-[260px] flex flex-col shrink-0
+      fixed inset-y-0 left-0 z-50 w-[280px] sm:w-[260px] flex flex-col shrink-0
       bg-[#121212] border-r border-[#2A2A2A]
-      transition-transform duration-500 cubic-bezier(0.16, 1, 0.3, 1) lg:translate-x-0 lg:static lg:h-screen
+      transition-transform duration-500 lg:translate-x-0 lg:static lg:h-screen
       ${isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:shadow-none'}
     `}>
-      <div className="h-[120px] flex items-center justify-between px-8 shrink-0 border-b border-[#2A2A2A]/40 bg-[#0F0F0F]">
-        <Link href="/admin" className="flex items-center gap-4 group w-full">
+      {/* Sidebar Header */}
+      <div className="h-[100px] sm:h-[120px] flex items-center justify-between px-6 sm:px-8 shrink-0 border-b border-[#2A2A2A]/40 bg-[#0F0F0F]">
+        <Link href="/admin" className="flex items-center gap-3 sm:gap-4 group w-full">
           {logo && !logoError ? (
-            <div className="flex items-center justify-start shrink-0 h-10 w-auto max-w-[120px] opacity-90 group-hover:opacity-100 transition-opacity duration-500">
-              <img 
-                src={logo} 
-                alt="Brand Logo" 
+            <div className="flex items-center justify-start shrink-0 h-9 sm:h-10 w-auto max-w-[100px] sm:max-w-[120px] opacity-90 group-hover:opacity-100 transition-opacity duration-500">
+              <img
+                src={logo}
+                alt="Brand Logo"
                 onError={() => setLogoError(true)}
-                className="max-h-full w-auto object-contain" 
+                className="max-h-full w-auto object-contain"
               />
             </div>
           ) : (
             <div className="w-8 h-8 border border-[#2A2A2A] flex items-center justify-center shrink-0">
-               <span className="text-[10px] text-[#D4AF37] font-bold font-display">V</span>
+              <span className="text-[10px] text-[#D4AF37] font-bold font-display">V</span>
             </div>
           )}
-          <div className="flex flex-col border-l border-[#2A2A2A] pl-4">
-            <span className="text-[12px] font-display font-bold text-white tracking-[0.2em] uppercase leading-tight">Vriddhi</span>
-            <span className="text-[8px] font-medium text-gray-500 tracking-[0.3em] uppercase mt-1">Platform</span>
+          <div className="flex flex-col border-l border-[#2A2A2A] pl-3 sm:pl-4">
+            <span className="text-[11px] sm:text-[12px] font-display font-bold text-white tracking-[0.2em] uppercase leading-tight">Vriddhi</span>
+            <span className="text-[7px] sm:text-[8px] font-medium text-gray-500 tracking-[0.3em] uppercase mt-1">Platform</span>
           </div>
         </Link>
-        <button 
+        <button
           onClick={onClose}
-          className="lg:hidden p-2 text-gray-500 hover:text-white transition-colors"
+          className="lg:hidden p-2 text-gray-500 hover:text-white transition-colors shrink-0"
         >
           <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="w-5 h-5"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto py-10 px-5 flex flex-col gap-2 custom-scrollbar">
-        <p className="px-4 text-[9px] font-bold text-gray-600 uppercase tracking-[0.3em] mb-4">Operations</p>
+      {/* Nav Items */}
+      <div className="flex-1 overflow-y-auto py-8 sm:py-10 px-4 sm:px-5 flex flex-col gap-1 sm:gap-2 custom-scrollbar">
+        <p className="px-4 text-[9px] font-bold text-gray-600 uppercase tracking-[0.3em] mb-3 sm:mb-4">Operations</p>
         {navItems.map((item) => {
           const active = isActive(item.path);
           return (
@@ -76,9 +77,9 @@ export default function AdminSidebar({ isOpen, onClose }) {
               href={item.path}
               onClick={() => { if (window.innerWidth < 1024) onClose(); }}
               className={`
-                relative flex items-center gap-4 px-4 py-3.5 text-[10px] font-bold tracking-widest uppercase transition-all duration-500 group
-                ${active 
-                  ? 'text-white bg-[#1A1A1A]' 
+                relative flex items-center gap-3 sm:gap-4 px-4 py-3 sm:py-3.5 text-[10px] font-bold tracking-widest uppercase transition-all duration-500 group
+                ${active
+                  ? 'text-white bg-[#1A1A1A]'
                   : 'text-gray-500 hover:text-white hover:bg-[#1A1A1A]/50'}
               `}
             >
@@ -94,7 +95,8 @@ export default function AdminSidebar({ isOpen, onClose }) {
         })}
       </div>
 
-      <div className="p-6 shrink-0 border-t border-[#2A2A2A]/40 bg-[#0F0F0F]">
+      {/* Footer Actions */}
+      <div className="p-4 sm:p-6 shrink-0 border-t border-[#2A2A2A]/40 bg-[#0F0F0F]">
         <Link
           href="/"
           target="_blank"

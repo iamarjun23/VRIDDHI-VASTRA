@@ -3,7 +3,7 @@
 
 /* Base colors */
 html {
-  font-size: clamp(14px, 1.1vw, 18px);
+  font-size: clamp(15px, 1vw + 0.5rem, 18px);
 }
 
 :root {
@@ -19,7 +19,7 @@ html {
   --font-serif: 'Noto Serif', 'Noto Serif Kannada', 'Marcellus', serif;
   --font-sans: 'Jost', sans-serif;
   --font-dm-sans: 'DM Sans', sans-serif;
-  --font-display: 'Noto Serif', 'Noto Serif Kannada', 'DM Serif Display', serif;
+  --font-display: 'DM Serif Display', 'Noto Serif', 'Noto Serif Kannada', serif;
   --font-kannada: 'Noto Serif Kannada', 'Noto Serif', serif;
 
   --color-brand-green: #103323;
@@ -28,114 +28,35 @@ html {
 
 /* Typography utilities */
 @layer utilities {
+  .fluid-text-h1 { font-size: clamp(2.5rem, 5vw + 1rem, 5rem); line-height: 1.1; letter-spacing: -0.02em; }
+  .fluid-text-h2 { font-size: clamp(2rem, 3vw + 1rem, 3.75rem); line-height: 1.2; letter-spacing: -0.01em; }
+  .fluid-text-h3 { font-size: clamp(1.5rem, 2vw + 1rem, 2.5rem); line-height: 1.3; }
+  
+  .dm-sans-h1 { font-family: var(--font-dm-sans); font-size: clamp(1.75rem, 4vw, 2.75rem); line-height: 1.1; font-weight: 500; }
+  .dm-sans-h2 { font-family: var(--font-dm-sans); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; font-weight: 500; }
+  .dm-sans-h3 { font-family: var(--font-dm-sans); font-size: clamp(1.25rem, 2.5vw, 1.5rem); line-height: 1.2; font-weight: 500; }
+  .dm-sans-h4 { font-family: var(--font-dm-sans); font-size: clamp(1rem, 1.5vw, 1.25rem); line-height: 1.6; }
+  
+  .display-h1 { font-family: var(--font-display); font-size: clamp(3rem, 10vw, 5.5rem); line-height: 1.1; font-weight: 400; }
+  .display-h2 { font-family: var(--font-display); font-size: clamp(2.25rem, 8vw, 3.75rem); line-height: 1.15; font-weight: 400; }
+  .display-h3 { font-family: var(--font-display); font-size: clamp(1.75rem, 5vw, 2.5rem); line-height: 1.2; font-weight: 400; }
 
-  /* DM Sans */
-  .dm-sans-h1 {
-    font-family: var(--font-dm-sans);
-    font-size: clamp(8px, 2.2vw, 40px);
-    line-height: 1.1;
-    font-weight: 500;
+  /* Mobile-first spacing and tracking */
+  .tracking-luxury { letter-spacing: 0.3em; }
+  @media (max-width: 640px) {
+    .tracking-luxury { letter-spacing: 0.15em; }
+    .leading-mobile-tight { line-height: 1.1; }
+    .leading-mobile-relaxed { line-height: 1.6; }
   }
 
-  .dm-sans-h2 {
-    font-family: var(--font-dm-sans);
-    font-size: clamp(10px, 3.5vw, 28px);
-    line-height: 1.5;
-    font-weight: 500;
-  }
-
-  .dm-sans-h3 {
-    font-family: var(--font-dm-sans);
-    font-size: clamp(14px, 3vw, 24px);
-    line-height: 1.2;
-    font-weight: 500;
-  }
-
-  .dm-sans-h4 {
-    font-family: var(--font-dm-sans);
-    font-size: clamp(6px, 1.8vw, 20px);
-    line-height: 1.8;
-  }
-
-  .dm-sans-h5 {
-    font-family: var(--font-dm-sans);
-    font-size: clamp(16px, 2vw, 20px);
-    line-height: 1.6;
-  }
-
-  .dm-sans-h6 {
-    font-family: var(--font-dm-sans);
-    font-size: clamp(14px, 1.8vw, 18px);
-    line-height: 1.5;
-    font-weight: 500;
-  }
-
-  /* Display (DM Serif Display) */
-
-  .display-h1 {
-    font-family: var(--font-display);
-    font-size: clamp(20px, 8vw, 80px);
-    line-height: 1.1;
-    font-weight: 400;
-  }
-
-  .display-h2 {
-    font-family: var(--font-display);
-    font-size: clamp(18px, 7vw, 60px);
-    line-height: 1.2;
-    font-weight: 400;
-  }
-
-  .display-h3 {
-    font-family: var(--font-display);
-    font-size: clamp(14px, 5vw, 40px);
-    line-height: 1.2;
-    font-weight: 400;
-  }
-
-  .display-h4 {
-    font-family: var(--font-display);
-    font-size: clamp(14px, 1.5vw, 16px);
-    line-height: 1.3;
-    font-weight: 400;
-  }
-
-  .display-h5 {
-    font-family: var(--font-display);
-    font-size: clamp(22px, 3vw, 28px);
-    line-height: 1.4;
-    font-weight: 400;
-  }
-
-  .display-h6 {
-    font-family: var(--font-display);
-    font-size: clamp(18px, 2.5vw, 24px);
-    line-height: normal;
-    letter-spacing: 0.35em;
-    text-transform: uppercase;
-  }
-
-  .dynamic-title-container {
-    container-type: inline-size;
+  .site-container {
     width: 100%;
+    max-width: 2000px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: clamp(1.25rem, 5vw, 5rem);
+    padding-right: clamp(1.25rem, 5vw, 5rem);
   }
-
-  .dynamic-title {
-    font-family: var(--font-dm-sans);
-    /* Further reduced for tiny mobile 4-column grids */
-    font-size: clamp(6px, 4cqi, 24px);
-    line-height: 1.2;
-    font-weight: 400;
-    white-space: nowrap;
-    text-align: center;
-    width: 100%;
-    display: block;
-  }
-
-  .font-kannada {
-    font-family: var(--font-kannada);
-  }
-
 }
 
 /* Global styles */
@@ -143,19 +64,20 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans);
-  font-size: clamp(14px, 1vw, 16px);
+  font-size: 1rem;
   line-height: 1.6;
+  overflow-x: hidden;
 }
 
-/* Helper classes */
-.bg-cream {
-  background-color: #fdfaf3;
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 2px; }
+
+/* Prevent horizontal overflow */
+*, *::before, *::after {
+  box-sizing: border-box;
+  min-width: 0;
 }
 
-.text-gold {
-  color: #c39b56;
-}
-
-.cubic-bezier-\[0\.22\,1\,0\.36\,1\] {
-  transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
-}
+img, video, svg { max-width: 100%; }

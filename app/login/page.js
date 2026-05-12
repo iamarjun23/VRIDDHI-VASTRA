@@ -7,17 +7,17 @@ import Image from "next/image"
 
 export default function LoginPage() {
   const router = useRouter()
-  
+
   // Views: 'login', 'forgot', 'reset'
   const [view, setView] = useState('login')
-  
+
   // Form state
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [otp, setOtp] = useState("")
   const [newPassword, setNewPassword] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
-  
+
   // UI state
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -25,6 +25,8 @@ export default function LoginPage() {
   const [message, setMessage] = useState("")
   const [mounted, setMounted] = useState(false)
   const [currentTime, setCurrentTime] = useState("")
+  const [logo, setLogo] = useState(null)
+  const [logoError, setLogoError] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -34,6 +36,16 @@ export default function LoginPage() {
     }
     updateTime()
     const interval = setInterval(updateTime, 1000)
+
+    fetch('/api/settings', { cache: 'no-store' })
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.logo) {
+          setLogo(data.logo);
+        }
+      })
+      .catch(err => console.error("Failed to load login logo", err));
+
     return () => clearInterval(interval)
   }, [])
 
@@ -129,19 +141,34 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#F5F5F0] font-sans selection:bg-[#c39b56]/30 selection:text-[#F5F5F0] overflow-hidden relative flex flex-col md:flex-row">
-      
+
       {/* Cinematic Background Elements */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(19,19,19,0)_0%,rgba(10,10,10,1)_100%)]"></div>
         <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Cfilter id='noiseFilter'%3%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3%3C/filter%3%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3%3C/svg%3")` }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#c39b56]/5 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[clamp(300px,80vw,800px)] h-[clamp(300px,80vw,800px)] bg-[#c39b56]/5 rounded-full blur-[120px] animate-pulse"></div>
       </div>
 
-      {/* Left Side: Brand Atmosphere */}
-      <div className="relative z-10 w-full md:w-1/2 lg:w-[60%] flex flex-col justify-between p-8 md:p-16 lg:p-24 overflow-hidden">
-        
+      {/* Mobile-Only Header */}
+      <div className="md:hidden relative z-20 flex flex-col items-center pt-12 pb-4 px-6">
+        <div className="relative w-16 h-16 mb-4">
+          <Image 
+            src={logo && !logoError ? logo : "/images/Lotus.png"} 
+            alt="Vriddhi Vastra" 
+            fill 
+            className="object-contain brightness-[1.2]" 
+            onError={() => setLogoError(true)}
+          />
+        </div>
+        <h1 className="text-xl font-display tracking-[0.3em] uppercase text-[#F5F5F0]">Vriddhi Vastra</h1>
+        <div className="w-12 h-[1px] bg-[#c39b56] mt-3 opacity-50"></div>
+      </div>
+
+      {/* Left Side: Brand Atmosphere (Desktop ONLY) */}
+      <div className="hidden md:flex relative z-10 w-full md:w-1/2 lg:w-[60%] flex-col justify-between p-8 md:p-16 lg:p-24 overflow-hidden">
+
         {/* Top: Logo & System Identity */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
@@ -149,11 +176,12 @@ export default function LoginPage() {
         >
           <div className="relative w-16 h-16 md:w-20 md:h-20 group">
             <div className="absolute inset-0 bg-[#c39b56]/20 rounded-full blur-2xl group-hover:bg-[#c39b56]/30 transition-all duration-1000"></div>
-            <Image 
-              src="/images/Lotus.png" 
-              alt="Vriddhi Vastra" 
+            <Image
+              src={logo && !logoError ? logo : "/images/Lotus.png"}
+              alt="Vriddhi Vastra"
               fill
               className="object-contain relative z-10 brightness-[1.2]"
+              onError={() => setLogoError(true)}
               priority
             />
           </div>
@@ -164,7 +192,7 @@ export default function LoginPage() {
         </motion.div>
 
         {/* Middle: Cinematic Statement */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 1.5, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
@@ -178,7 +206,7 @@ export default function LoginPage() {
         </motion.div>
 
         {/* Bottom: Operational Indicators */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -188,7 +216,7 @@ export default function LoginPage() {
             <span className="text-[9px] tracking-[0.2em] uppercase text-[#F5F5F0]/40">System Time</span>
             <span className="text-xs font-mono tracking-widest text-[#F5F5F0]/80">{currentTime}</span>
           </div>
-          
+
           <div className="flex gap-3">
             <StatusPill label="Secure Session" active />
             <StatusPill label="MongoDB" active />
@@ -198,9 +226,9 @@ export default function LoginPage() {
         </motion.div>
       </div>
 
-      {/* Right Side: Auth Panel */}
-      <div className="relative z-10 w-full md:w-1/2 lg:w-[40%] flex items-center justify-center p-6 md:p-12 lg:p-16">
-        <motion.div 
+      {/* Right Side: Auth Panel (Centered on Mobile) */}
+      <div className="relative z-10 w-full md:w-1/2 lg:w-[40%] flex-1 flex items-center justify-center p-6 md:p-12 lg:p-16">
+        <motion.div
           initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ duration: 1.2, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
@@ -208,25 +236,25 @@ export default function LoginPage() {
         >
           {/* Glass Card */}
           <div className="relative bg-[#1A1A1A]/60 backdrop-blur-3xl rounded-[32px] border border-[#F5F5F0]/10 p-8 md:p-12 shadow-[0_32px_64px_-16px_rgba(0,0,0,0.6)] overflow-hidden group">
-            
+
             {/* Subtle Gold Edge Lighting */}
             <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#c39b56]/40 to-transparent"></div>
             <div className="absolute bottom-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-[#c39b56]/20 to-transparent"></div>
 
             {/* Form Header */}
             <div className="mb-10">
-              <h3 className="text-2xl font-display tracking-tight text-[#F5F5F0]">Access Platform</h3>
-              <p className="text-xs text-[#F5F5F0]/50 mt-2 tracking-wide">
-                {view === 'login' && "Authentication required for secure infrastructure access."}
-                {view === 'forgot' && "Initiate administrative credential recovery."}
-                {view === 'reset' && "Verification complete. Define new security protocols."}
+              <h3 className="text-3xl font-display tracking-tight text-[#F5F5F0] leading-tight">Access Platform</h3>
+              <p className="text-[11px] text-[#F5F5F0]/50 mt-3 tracking-luxury uppercase">
+                {view === 'login' && "Authentication required for secure access"}
+                {view === 'forgot' && "Initiate administrative recovery"}
+                {view === 'reset' && "Verification complete. Define security"}
               </p>
             </div>
 
             {/* Error/Message Alerts */}
             <AnimatePresence mode="wait">
               {error && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
@@ -238,7 +266,7 @@ export default function LoginPage() {
                 </motion.div>
               )}
               {message && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
@@ -254,13 +282,13 @@ export default function LoginPage() {
             {/* Form Views */}
             <AnimatePresence mode="wait">
               {view === 'login' && (
-                <motion.form 
+                <motion.form
                   key="login-form"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.5 }}
-                  onSubmit={handleLogin} 
+                  onSubmit={handleLogin}
                   className="space-y-8"
                 >
                   <div className="relative group">
@@ -289,9 +317,9 @@ export default function LoginPage() {
                   </div>
 
                   <div className="flex justify-end">
-                    <button 
-                      type="button" 
-                      onClick={() => { setView('forgot'); setError(""); setMessage(""); }} 
+                    <button
+                      type="button"
+                      onClick={() => { setView('forgot'); setError(""); setMessage(""); }}
                       className="text-[9px] font-bold tracking-[0.2em] text-[#F5F5F0]/40 hover:text-[#c39b56] transition-colors uppercase"
                     >
                       Recovery Access
@@ -319,13 +347,13 @@ export default function LoginPage() {
               )}
 
               {view === 'forgot' && (
-                <motion.form 
+                <motion.form
                   key="forgot-form"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.5 }}
-                  onSubmit={handleForgotPassword} 
+                  onSubmit={handleForgotPassword}
                   className="space-y-8"
                 >
                   <div className="relative group">
@@ -351,9 +379,9 @@ export default function LoginPage() {
                   </button>
 
                   <div className="text-center">
-                    <button 
-                      type="button" 
-                      onClick={() => { setView('login'); setError(""); setMessage(""); }} 
+                    <button
+                      type="button"
+                      onClick={() => { setView('login'); setError(""); setMessage(""); }}
                       className="text-[9px] font-bold tracking-[0.2em] text-[#F5F5F0]/40 hover:text-[#F5F5F0] transition-colors uppercase"
                     >
                       Return to Console
@@ -363,13 +391,13 @@ export default function LoginPage() {
               )}
 
               {view === 'reset' && (
-                <motion.form 
+                <motion.form
                   key="reset-form"
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                   transition={{ duration: 0.5 }}
-                  onSubmit={handleResetPassword} 
+                  onSubmit={handleResetPassword}
                   className="space-y-6"
                 >
                   <div className="relative group">
@@ -424,9 +452,9 @@ export default function LoginPage() {
                   </button>
 
                   <div className="text-center">
-                    <button 
-                      type="button" 
-                      onClick={() => { setView('login'); setError(""); setMessage(""); }} 
+                    <button
+                      type="button"
+                      onClick={() => { setView('login'); setError(""); setMessage(""); }}
                       className="text-[9px] font-bold tracking-[0.2em] text-[#F5F5F0]/40 hover:text-[#F5F5F0] transition-colors uppercase"
                     >
                       Cancel
@@ -438,7 +466,7 @@ export default function LoginPage() {
           </div>
 
           {/* Environment Info */}
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.4 }}
             transition={{ delay: 1, duration: 1 }}
