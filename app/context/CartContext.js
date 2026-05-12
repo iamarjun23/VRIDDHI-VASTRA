@@ -5,21 +5,27 @@ import { createContext, useContext, useState, useEffect } from "react";
 const CartContext = createContext();
 
 export function CartProvider({ children }) {
-  // Load cart from localStorage synchronously on client side init
-  const [cartItems, setCartItems] = useState(() => {
-    if (typeof window !== "undefined") {
-      try {
-        const savedCart = localStorage.getItem("cart");
-        if (savedCart) return JSON.parse(savedCart);
-      } catch (e) {
-        console.error("Failed to parse cart from localStorage", e);
-      }
-    }
-    return [];
-  });
+  const [cartItems, setCartItems] = useState([]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [whatsappNumber, setWhatsappNumber] = useState("919000000000");
+
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const savedCart = localStorage.getItem("cart");
+        if (savedCart) {
+          setCartItems(JSON.parse(savedCart));
+        }
+      } catch (e) {
+        console.error("Failed to parse cart from localStorage", e);
+      } finally {
+        setIsInitialized(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     // Fetch WhatsApp number from settings
@@ -31,10 +37,12 @@ export function CartProvider({ children }) {
       .catch(err => console.error("Failed to fetch WhatsApp number", err));
   }, []);
 
-  // Save cart to localStorage whenever it changes
+  // Save cart to localStorage whenever it changes, but only after initial load
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (isInitialized) {
+      localStorage.setItem("cart", JSON.stringify(cartItems));
+    }
+  }, [cartItems, isInitialized]);
 
   const addToCart = (product, quantity = 1) => {
     setCartItems((prevItems) => {

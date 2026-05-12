@@ -10,7 +10,7 @@ export default function Footer({ backgroundImage, logo = "" }) {
   const getWhatsAppLink = (message) => `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
  
   return (
-    <footer className="relative w-full text-white overflow-hidden py-[clamp(3rem,8vw,5rem)] px-[clamp(1rem,4vw,30px)]">
+    <footer className="relative w-full text-white overflow-hidden pt-16 lg:pt-24 pb-4 px-[clamp(1rem,4vw,30px)] mt-auto">
       {/* Background Image & Overlay */}
       {finalBg && (
         <div
@@ -18,7 +18,7 @@ export default function Footer({ backgroundImage, logo = "" }) {
           style={{ backgroundImage: `url('${finalBg}')` }}
         />
       )}
-      <div className="absolute inset-0 bg-black/90 z-0" />
+      <div className="absolute inset-0 bg-black/70 z-0" />
  
       <div className="relative z-10 w-full max-w-[2000px] mx-auto px-[clamp(0.5rem,2vw,30px)]">
         <div className="flex flex-col lg:flex-row justify-between items-start gap-10 lg:gap-16">
@@ -27,24 +27,24 @@ export default function Footer({ backgroundImage, logo = "" }) {
           <div className="flex flex-row gap-6 md:gap-8 items-start max-w-2xl">
             {/* Logo Anchor */}
             <Link href="/" className="shrink-0 mt-2">
-              <div className="relative w-24 h-24 md:w-[200px] md:h-[200px] overflow-hidden">
+              <div className="relative w-24 h-24 md:w-[200px] md:h-[200px] overflow-hidden opacity-90 hover:opacity-100 transition-opacity">
                 <Image src={logo} alt="Vriddhi Vastra Logo" fill sizes="200px" className="object-contain" />
               </div>
             </Link>
  
             {/* Brand Content - Aligned vertically */}
             <div className="flex flex-col gap-8">
-              <h2 className="font-dm-serif text-[clamp(28px,4vw,48px)] leading-none tracking-wider text-white uppercase whitespace-nowrap">
+              <h2 className="font-dm-serif text-[clamp(28px,4vw,48px)] leading-none tracking-wider text-white/90 uppercase whitespace-nowrap">
                 VRIDDHI VASTRA
               </h2>
  
               <div className="flex flex-col gap-6">
-                <p className="font-dm-sans text-[19px] leading-[1.6] text-white/80 max-w-[450px]">
+                <p className="font-dm-sans text-[19px] leading-[1.6] text-white/60 max-w-[450px]">
                   Celebrating the art of Indian handloom sarees with contemporary designs. Each piece is a testament to our artisans' skill and dedication.
                 </p>
  
                 {/* Contact Details */}
-                <div className="flex flex-col gap-4 font-dm-sans text-[16px] text-white/80 tracking-wide">
+                <div className="flex flex-col gap-4 font-dm-sans text-[16px] text-white/60 tracking-wide">
                   <div className="flex items-center gap-3">
                     <svg fill="none" stroke="currentColor" strokeWidth="1.5" viewBox="0 0 24 24" className="w-5 h-5 shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" /><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" /></svg>
                     <span>Mansi Nagar, Mysore, Karnataka</span>
@@ -63,56 +63,56 @@ export default function Footer({ backgroundImage, logo = "" }) {
           </div>
  
           {/* Right Links Columns */}
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-12 lg:gap-x-16 gap-y-10 lg:pt-[80px]">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-12 lg:gap-x-16 gap-y-10 lg:pt-[40px]">
             {/* Shop Column */}
             <div className="flex flex-col gap-6">
-              <h4 className="font-dm-sans font-bold text-[19px] uppercase tracking-[0.2em] text-white border-b border-white/20 pb-3">
+              <h4 className="font-dm-sans font-bold text-[19px] uppercase tracking-[0.2em] text-white/90 border-b border-brand-gold/80 pb-3">
                 Shop
               </h4>
-              <ul className="flex flex-col gap-4 font-dm-sans text-[16px] text-white/80 tracking-wide">
-                <li><Link href="/tags" className="hover:opacity-70 transition-all duration-300">Categories</Link></li>
-                <li><Link href="/tags?category=NEW+ARRIVALS" className="hover:opacity-70 transition-all duration-300">New Arrivals</Link></li>
-                <li><Link href="/tags" className="hover:opacity-70 transition-all duration-300">Occasions</Link></li>
-                <li><Link href="/tags" className="hover:opacity-70 transition-all duration-300">Sort by price</Link></li>
+              <ul className="flex flex-col gap-4 font-dm-sans text-[16px] text-white/60 tracking-wide">
+                <li><Link href="/tags" className="hover:text-brand-gold transition-all duration-300">Categories</Link></li>
+                <li><Link href="/tags?category=NEW+ARRIVALS" className="hover:text-brand-gold transition-all duration-300">New Arrivals</Link></li>
+                <li><Link href="/tags" className="hover:text-brand-gold transition-all duration-300">Occasions</Link></li>
+                <li><Link href="/tags" className="hover:text-brand-gold transition-all duration-300">Sort by price</Link></li>
               </ul>
             </div>
  
             {/* Company Column */}
             <div className="flex flex-col gap-6">
-              <h4 className="font-dm-sans font-bold text-[19px] uppercase tracking-[0.2em] text-white border-b border-white/20 pb-3">
+              <h4 className="font-dm-sans font-bold text-[19px] uppercase tracking-[0.2em] text-white/90 border-b border-brand-gold/80 pb-3">
                 Company
               </h4>
-              <ul className="flex flex-col gap-4 font-dm-sans text-[16px] text-white/80 tracking-wide">
-                <li><a href={instagramLink} target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-all duration-300">About us</a></li>
-                <li><a href={instagramLink} target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-all duration-300">Our Story</a></li>
-                <li><a href={instagramLink} target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-all duration-300">Artisans</a></li>
-                <li><a href={instagramLink} target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-all duration-300">Contact</a></li>
+              <ul className="flex flex-col gap-4 font-dm-sans text-[16px] text-white/60 tracking-wide">
+                <li><a href={instagramLink} target="_blank" rel="noopener noreferrer" className="hover:text-brand-gold transition-all duration-300">About us</a></li>
+                <li><a href={instagramLink} target="_blank" rel="noopener noreferrer" className="hover:text-brand-gold transition-all duration-300">Our Story</a></li>
+                <li><a href={instagramLink} target="_blank" rel="noopener noreferrer" className="hover:text-brand-gold transition-all duration-300">Artisans</a></li>
+                <li><a href={instagramLink} target="_blank" rel="noopener noreferrer" className="hover:text-brand-gold transition-all duration-300">Contact</a></li>
               </ul>
             </div>
  
             {/* Support Column */}
             <div className="flex flex-col gap-6">
-              <h4 className="font-dm-sans font-bold text-[19px] uppercase tracking-[0.2em] text-white border-b border-white/20 pb-3">
+              <h4 className="font-dm-sans font-bold text-[19px] uppercase tracking-[0.2em] text-white/90 border-b border-brand-gold/80 pb-3">
                 Support
               </h4>
-              <ul className="flex flex-col gap-4 font-dm-sans text-[16px] text-white/80 tracking-wide">
-                <li><a href={getWhatsAppLink("Hello Vriddhi Vastra, I would like assistance regarding shipping information.")} target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-all duration-300">Shipping</a></li>
-                <li><a href={getWhatsAppLink("Hello Vriddhi Vastra, I would like to request a return for my order.")} target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-all duration-300">Returns</a></li>
-                <li><a href={getWhatsAppLink("Hello Vriddhi Vastra, I have a few questions regarding your products and services.")} target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-all duration-300">FAQs</a></li>
-                <li><a href={getWhatsAppLink("Hello Vriddhi Vastra, I would like to track my order status.")} target="_blank" rel="noopener noreferrer" className="hover:opacity-70 transition-all duration-300">Track Order</a></li>
+              <ul className="flex flex-col gap-4 font-dm-sans text-[16px] text-white/60 tracking-wide">
+                <li><a href={getWhatsAppLink("Hello Vriddhi Vastra, I would like assistance regarding shipping information.")} target="_blank" rel="noopener noreferrer" className="hover:text-brand-gold transition-all duration-300">Shipping</a></li>
+                <li><a href={getWhatsAppLink("Hello Vriddhi Vastra, I would like to request a return for my order.")} target="_blank" rel="noopener noreferrer" className="hover:text-brand-gold transition-all duration-300">Returns</a></li>
+                <li><a href={getWhatsAppLink("Hello Vriddhi Vastra, I have a few questions regarding your products and services.")} target="_blank" rel="noopener noreferrer" className="hover:text-brand-gold transition-all duration-300">FAQs</a></li>
+                <li><a href={getWhatsAppLink("Hello Vriddhi Vastra, I would like to track my order status.")} target="_blank" rel="noopener noreferrer" className="hover:text-brand-gold transition-all duration-300">Track Order</a></li>
               </ul>
             </div>
           </div>
         </div>
  
         {/* Bottom Bar */}
-        <div className="mt-12 pt-5 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="mt-6 pt-5 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4 opacity-30">
             <div className="w-10 h-10 relative grayscale brightness-150">
               <Image src={logo} alt="Vriddhi Vastra Icon" fill sizes="40px" className="object-contain" />
             </div>
           </div>
-          <div className="flex items-center gap-1 font-dm-sans text-[11px] text-white tracking-[0.3em] uppercase">
+          <div className="flex items-center gap-1 font-dm-sans text-[11px] text-white/40 tracking-[0.3em] uppercase">
             <span>&copy; 2026 All Rights Reserved by LYPTRON</span>
           </div>
         </div>

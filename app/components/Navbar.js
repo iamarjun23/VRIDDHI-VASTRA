@@ -28,7 +28,7 @@ export default function Navbar({ theme = "light", logo = "", bgColor = "" }) {
     <nav
       className={`
         absolute top-0 left-0 w-full z-50 transition-all duration-500 ease-in-out
-        py-[clamp(0.5rem,1vw,1rem)]
+        py-0
         ${bgColor ? 'backdrop-blur-[2px]' : 'bg-white/10 backdrop-blur-xl'} border-b border-white/10
         ${isLight ? 'text-brand-green' : 'text-white'}
       `}

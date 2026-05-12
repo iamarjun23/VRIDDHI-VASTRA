@@ -125,9 +125,11 @@ export default async function TagsPage({ searchParams }) {
                   <p className="text-gray-300 font-serif text-2xl italic uppercase tracking-widest">No pieces found in this archive.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-[clamp(15px,3vw,60px)] gap-y-[clamp(16px,4vw,64px)]">
+                <div className="flex flex-wrap gap-x-[clamp(15px,3vw,60px)] gap-y-[clamp(16px,4vw,64px)] justify-start">
                   {filteredProducts.map(product => (
-                    <ProductCard key={product.serial} product={product} bgWhite={true} />
+                    <div key={product.serial} className="w-[300px] h-[520px] flex-shrink-0">
+                      <ProductCard product={product} bgWhite={true} />
+                    </div>
                   ))}
                 </div>
               )}
@@ -148,9 +150,11 @@ export default async function TagsPage({ searchParams }) {
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)]">
+            <div className="flex flex-wrap gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(16px,4vw,64px)] justify-start">
               {displayTrending.map(product => (
-                <ProductCard key={`trending-tag-${product.serial}`} product={product} bgWhite={true} />
+                <div key={`trending-tag-${product.serial}`} className="w-[300px] h-[520px] flex-shrink-0">
+                  <ProductCard product={product} bgWhite={true} />
+                </div>
               ))}
             </div>
 
@@ -160,7 +164,6 @@ export default async function TagsPage({ searchParams }) {
               </Link>
             </div>
             </div>
-          </div>
         </section>
       </main>
 
