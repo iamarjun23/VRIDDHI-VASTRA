@@ -1,7 +1,52 @@
 import Providers from "./components/Providers"
 import CartSidebar from "./components/CartSidebar"
 import ToastProvider from "./components/ToastProvider"
+import dbConnect from "@/lib/mongodb"
+import SiteConfig from "@/models/SiteConfig"
 import "./globals.css"
+import { Marcellus, Jost, DM_Sans, DM_Serif_Display, Noto_Serif, Noto_Serif_Kannada } from 'next/font/google'
+
+const marcellus = Marcellus({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-marcellus',
+  display: 'swap',
+})
+
+const jost = Jost({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-jost',
+  display: 'swap',
+})
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700'],
+  variable: '--font-dm-sans',
+  display: 'swap',
+})
+
+const dmSerifDisplay = DM_Serif_Display({
+  subsets: ['latin'],
+  weight: '400',
+  variable: '--font-dm-serif',
+  display: 'swap',
+})
+
+const notoSerif = Noto_Serif({
+  subsets: ['latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-noto-serif',
+  display: 'swap',
+})
+
+const notoSerifKannada = Noto_Serif_Kannada({
+  subsets: ['kannada', 'latin'],
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'],
+  variable: '--font-noto-kannada',
+  display: 'swap',
+})
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.vriddhivastra.com'),
@@ -43,10 +88,21 @@ export const metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#103323",
+  themeColor: "#1A3D1C",
 }
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  let phone = "+919000000000";
+  try {
+    await dbConnect();
+    const config = await SiteConfig.findOne({ configId: "main" }).lean();
+    if (config?.whatsappNumber) {
+      phone = config.whatsappNumber.startsWith('+') ? config.whatsappNumber : `+${config.whatsappNumber}`;
+    }
+  } catch (err) {
+    console.error("Layout failed to fetch config:", err);
+  }
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
@@ -56,17 +112,17 @@ export default function RootLayout({ children }) {
     description: "Exquisite Silk Sarees from South India.",
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+919876543210', // Update with actual phone number if needed
+      telephone: phone,
       contactType: 'Customer Service'
     }
   };
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${marcellus.variable} ${jost.variable} ${dmSans.variable} ${dmSerifDisplay.variable} ${notoSerif.variable} ${notoSerifKannada.variable}`}>
       <body suppressHydrationWarning>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c').replace(/>/g, '\\u003e') }}
         />
         <Providers>
           <ToastProvider />

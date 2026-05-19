@@ -12,6 +12,9 @@ const InquirySchema = new mongoose.Schema(
 );
 
 InquirySchema.index({ createdAt: -1 });
+InquirySchema.index({ phoneNumber: 1 });
+InquirySchema.index({ productSerial: 1 });
+InquirySchema.index({ name: 'text', message: 'text' });
 
 // Collection explicitly pinned to "inquiries"
 // Model registered as "Inquiry" (replaces old "ContactSubmission")

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Image from "next/image"
 import Navbar from "../components/Navbar"
 import Footer from "../components/Footer"
 import ProductCard from "../components/ProductCard"
@@ -6,18 +7,31 @@ import PromoBanner from "../components/PromoBanner"
 import dbConnect from "../../lib/mongodb"
 import Product from "../../models/Product"
 import SiteConfig from "../../models/SiteConfig"
+import { sanitizeMongoose } from "../../lib/utils"
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata = {
-  title: "Collections",
-  description: "Browse our signature silk saree collections including Kanchipuram Luxury, Banarasi Silk, and more.",
+  title: "Collections | Vriddhi Vastra",
+  description: "Explore all our premium silk saree collections.",
+  alternates: {
+    canonical: "https://www.vriddhivastra.com/collections",
+  },
+  openGraph: {
+    title: "Collections | Vriddhi Vastra",
+    description: "Explore all our premium silk saree collections.",
+    url: "https://www.vriddhivastra.com/collections",
+    siteName: "Vriddhi Vastra",
+    images: [{ url: "/images/og-default.jpg", width: 1200, height: 630 }],
+    locale: "en_IN",
+    type: "website",
+  }
 }
 
 export default async function CollectionsPage() {
   await dbConnect();
   const productsData = await Product.find({}).sort({ createdAt: -1 }).lean();
-  const products = JSON.parse(JSON.stringify(productsData));
+  const products = sanitizeMongoose(productsData);
 
   let configData = await SiteConfig.findOne({ configId: "main" }).lean();
   if (!configData) {
@@ -28,7 +42,7 @@ export default async function CollectionsPage() {
       promoBanner: {}
     };
   }
-  const config = JSON.parse(JSON.stringify(configData));
+  const config = sanitizeMongoose(configData);
 
   const getProductsByCategory = (catName) => {
     return products.filter(p => {
@@ -52,7 +66,7 @@ export default async function CollectionsPage() {
       <main className="pt-0">
         {/* Header Section */}
         <section className="w-full bg-[#F1E8CD] pt-[clamp(80px,12vw,180px)] pb-[clamp(2.5rem,5vw,6rem)]">
-          <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5rem)]">
+          <div className="site-container">
             <div className="flex flex-col items-center text-center w-full mb-[clamp(2rem,5vw,4rem)] px-4">
               <p className="font-dm-sans text-[clamp(11px,1.2vw,16px)] tracking-[0.3em] text-brand-gold uppercase mb-4 sm:mb-6">
                 Shop By Categories
@@ -63,7 +77,7 @@ export default async function CollectionsPage() {
               <div className="w-24 h-[1px] bg-brand-gold/40 mt-4 sm:mt-6"></div>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(8px,3vw,80px)] gap-y-[clamp(2rem,4vw,4rem)] mx-auto mt-10 sm:mt-20">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-[clamp(1rem,3vw,4rem)] mx-auto mt-[clamp(2.5rem,6vw,5rem)]">
               {(config.featuredBlocks || []).slice(0, 4).map((block, i) => {
                 const categoryName = block.title || `Category ${i + 1}`;
                 const img = block.image || "";
@@ -72,9 +86,13 @@ export default async function CollectionsPage() {
                   <div key={i} className="flex flex-col items-center">
                     {/* Lotus image */}
                     <div className="mb-4 sm:mb-6 flex justify-center">
-                      <img
+                      <Image
                         src="/images/Lotus.png"
-                        alt="Lotus"
+                        alt=""
+                        role="presentation"
+                        width={128}
+                        height={128}
+                        loading="lazy"
                         className="w-auto h-[clamp(56px,8vw,128px)] object-contain"
                       />
                     </div>
@@ -82,7 +100,7 @@ export default async function CollectionsPage() {
                     <Link href={`/tags?category=${encodeURIComponent(categoryName)}#archive`} className="flex flex-col items-center group w-full dynamic-title-container">
                       <div className="overflow-hidden bg-[#e5e0d8] relative mb-2 shadow-md group-hover:shadow-xl transition-all duration-700 w-[75%] sm:w-[95%] mx-auto aspect-[3/6] rounded-t-full">
                         {img ? (
-                          <img src={img} alt={categoryName} className="w-full h-full object-cover transform transition-transform duration-1000 group-hover:scale-110" />
+                          <Image src={img} alt={categoryName} fill sizes="(max-width: 640px) 38vw, (max-width: 1024px) 20vw, 15vw" className="object-cover transform transition-transform duration-1000 group-hover:scale-110" />
                         ) : (
                           <div className="w-full h-full bg-brand-green/5 flex items-center justify-center text-brand-green/20 uppercase tracking-widest text-[clamp(7px,0.8vw,12px)]">{categoryName}</div>
                         )}
@@ -107,7 +125,7 @@ export default async function CollectionsPage() {
 
           return (
             <section key={idx} className={`w-full ${col.bgColor} py-[clamp(2.5rem,5vw,6rem)]`}>
-              <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5rem)]">
+              <div className="site-container">
                 <header className="flex flex-col sm:flex-row sm:justify-between sm:items-end mb-[clamp(2rem,4vw,4rem)] gap-4 w-full">
                   <div className="flex flex-col items-start text-left flex-1 min-w-0">
                     <p className="font-dm-sans text-[clamp(13px,1.6vw,23px)] tracking-[0.2em] text-brand-green uppercase mb-2 sm:mb-4">
@@ -126,7 +144,7 @@ export default async function CollectionsPage() {
                   </Link>
                 </header>
 
-                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-x-[clamp(8px,2vw,40px)] gap-y-[clamp(1.5rem,3vw,4rem)]">
+                <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[clamp(1rem,3vw,4rem)]">
                   {catProducts.map(product => (
                     <ProductCard key={product.serial} product={product} />
                   ))}

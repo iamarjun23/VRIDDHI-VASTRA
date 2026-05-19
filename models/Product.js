@@ -14,4 +14,8 @@ const ProductSchema = new mongoose.Schema({
   numReviews:    { type: Number, default: 0 },
 }, { timestamps: true });
 
+ProductSchema.index({ category: 1, createdAt: -1 });
+ProductSchema.index({ tags: 1, createdAt: -1 });
+ProductSchema.index({ name: 'text', description: 'text' });
+
 export default mongoose.models.Product || mongoose.model("Product", ProductSchema, "products");

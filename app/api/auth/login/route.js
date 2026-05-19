@@ -4,6 +4,7 @@ import Admin from '@/models/Admin';
 import bcrypt from 'bcryptjs';
 import rateLimit from '@/lib/rate-limit';
 import { logActivity } from '@/lib/activity';
+import { log, logError } from '@/lib/logger';
 
 // 5 login attempts per 15 minutes per IP
 const loginLimiter = rateLimit({
@@ -33,21 +34,12 @@ export async function POST(req) {
       return NextResponse.json({ error: 'Password is required.' }, { status: 400 });
     }
 
-    // Seed admin on first boot using env-controlled credentials only
     let admin = await Admin.findOne();
     if (!admin) {
-      const defaultEmail    = process.env.ADMIN_EMAIL            || 'admin@vriddhivastra.com';
-      const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || '';
-
-      if (!defaultPassword) {
-        return NextResponse.json(
-          { error: 'Admin not initialized. Set ADMIN_DEFAULT_PASSWORD in environment.' },
-          { status: 503 }
-        );
-      }
-
-      const hashed = await bcrypt.hash(defaultPassword, 12);
-      admin = await Admin.create({ email: defaultEmail, password: hashed });
+      return NextResponse.json(
+        { error: 'Admin account not found in database. Contact system administrator.' },
+        { status: 503 }
+      );
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
@@ -60,21 +52,21 @@ export async function POST(req) {
 
     // Sign the JWT
     const { signToken } = await import('@/lib/session');
-    const token = await signToken({ role: 'admin', ip });
+    const token = await signToken({ role: 'admin', ip, tokenVersion: admin.tokenVersion || 0, id: admin._id });
 
     const response = NextResponse.json({ success: true });
     response.cookies.set({
       name:     'admin_access',
       value:    token,
       httpOnly: true,
-      secure:   process.env.NODE_ENV === 'production',
+      secure:   true,
       sameSite: 'strict',
       path:     '/',
       maxAge:   60 * 60 * 24, // 24 hours
     });
     return response;
   } catch (error) {
-    console.error('Login error:', error.message);
+    logError('Login error:', error.message);
     return NextResponse.json({ error: 'Internal server error.' }, { status: 500 });
   }
 }

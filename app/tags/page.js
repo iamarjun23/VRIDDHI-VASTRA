@@ -7,11 +7,28 @@ import dbConnect from "../../lib/mongodb"
 import Product from "../../models/Product"
 import SiteConfig from "../../models/SiteConfig"
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
-export const metadata = {
-  title: "Search & Archive",
-  description: "Explore our complete saree archive. Filter by category, tags, or search for your favorite styles.",
+export async function generateMetadata({ searchParams }) {
+  const { category, search } = await searchParams;
+  let title = "Search & Archive | Vriddhi Vastra";
+  if (search) title = `Search Results for "${search}" | Vriddhi Vastra`;
+  else if (category) title = `${category} Collection | Vriddhi Vastra`;
+
+  return {
+    title,
+    description: "Explore our complete saree archive. Filter by category, tags, or search for your favorite styles.",
+    robots: { index: false },
+    openGraph: {
+      title,
+      description: "Explore our complete saree archive. Filter by category, tags, or search for your favorite styles.",
+      url: "https://www.vriddhivastra.com/tags",
+      siteName: "Vriddhi Vastra",
+      images: [{ url: "/images/og-default.jpg", width: 1200, height: 630 }],
+      locale: "en_IN",
+      type: "website",
+    }
+  };
 }
 
 export default async function TagsPage({ searchParams }) {
@@ -107,7 +124,7 @@ export default async function TagsPage({ searchParams }) {
 
           {/* Desktop Sidebar - Original Style */}
           <aside className="hidden md:block w-[clamp(200px,22vw,350px)] bg-[#FFFAEE] border-r border-black/5 flex-shrink-0">
-            <div className="sticky top-[100px] pl-[clamp(1.5rem,3vw,3rem)] pr-[clamp(1rem,2vw,2rem)] py-10 space-y-12">
+            <div className="sticky top-[88px] pl-[clamp(1.5rem,3vw,3rem)] pr-[clamp(1rem,2vw,2rem)] py-10 space-y-12">
               <div>
                 <h3 className="font-dm-sans text-[14px] font-bold tracking-[0.1em] text-brand-green/30 uppercase mb-10">Search by Tags</h3>
                 <ul className="flex flex-col gap-y-6">
@@ -139,11 +156,11 @@ export default async function TagsPage({ searchParams }) {
           </aside>
 
           {/* Content Area */}
-          <div className="flex-1 bg-[#F1E8CD] px-[clamp(1.25rem,4vw,5rem)] py-[clamp(2.5rem,6vw,8rem)]">
-            <div className="max-w-[2000px] mx-auto w-full">
+          <div className="flex-1 bg-[#F1E8CD] px-[clamp(1rem,4vw,5rem)] py-[clamp(2.5rem,6vw,8rem)]">
+            <div className="w-full">
               
               {/* Desktop Header - Original Style */}
-              <div className="hidden md:block mb-16">
+              <div className="hidden md:block mb-10">
                 <p className="font-dm-sans text-[clamp(18px,2vw,28px)] font-bold tracking-[0.1em] text-brand-green uppercase mb-6">
                   {searchQuery ? `Search Results` : (selectedCategory || "All Archive")}
                 </p>
@@ -155,7 +172,7 @@ export default async function TagsPage({ searchParams }) {
                   <p className="font-display text-2xl uppercase tracking-widest">No pieces found in the archive.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[clamp(10px,2vw,40px)] gap-y-[clamp(1.5rem,4vw,5rem)] animate-in fade-in slide-in-from-bottom-12 duration-1000">
+                <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[clamp(12px,2vw,40px)] gap-y-[clamp(1.5rem,4vw,5rem)] animate-in fade-in slide-in-from-bottom-12 duration-1000">
                   {filteredProducts.map(product => (
                     <ProductCard key={product.serial} product={product} bgWhite={true} />
                   ))}
@@ -167,7 +184,7 @@ export default async function TagsPage({ searchParams }) {
 
         {/* Trending Section */}
         <section className="w-full bg-[#FFFAEE] py-[clamp(4rem,6vw,10rem)] border-t border-black/5">
-          <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5rem)]">
+          <div className="site-container">
             <div className="flex flex-col items-center text-center mb-12 sm:mb-20 px-4">
               <p className="text-[clamp(10px,1.2vw,14px)] tracking-[0.4em] text-brand-gold uppercase mb-6 font-bold">Trending Collection</p>
               <h2 className="font-dm-sans text-[clamp(24px,3vw,48px)] text-brand-green leading-tight max-w-4xl font-normal">
@@ -175,7 +192,7 @@ export default async function TagsPage({ searchParams }) {
               </h2>
             </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[clamp(8px,2vw,40px)] gap-y-[clamp(1.5rem,3vw,4rem)]">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-[clamp(12px,2vw,40px)] gap-y-[clamp(1.5rem,3vw,4rem)]">
               {displayTrending.map(product => (
                 <ProductCard key={`trending-tag-${product.serial}`} product={product} bgWhite={true} />
               ))}

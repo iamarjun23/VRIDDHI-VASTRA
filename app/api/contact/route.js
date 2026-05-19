@@ -3,6 +3,8 @@ import dbConnect from "../../../lib/mongodb";
 import Inquiry from "../../../models/Inquiry";
 import rateLimit from "../../../lib/rate-limit";
 
+import { log, logError } from "@/lib/logger";
+
 const limiter = rateLimit({
   interval: 60 * 1000,
   uniqueTokenPerInterval: 500,
@@ -40,7 +42,7 @@ export async function POST(req) {
 
     return NextResponse.json({ success: true, id: inquiry._id });
   } catch (error) {
-    console.error("Contact submission error:", error.message);
+    logError("Contact submission error:", error.message);
     return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
   }
 }

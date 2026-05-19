@@ -2,11 +2,23 @@ import cloudinary from "@/lib/cloudinary";
 import { cookies } from "next/headers";
 import { logActivity } from "@/lib/activity";
 import { verifyToken } from "@/lib/session";
+import { fileTypeFromBuffer } from "file-type";
+
+import { log, logError } from "@/lib/logger";
 
 const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
-const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
 export async function POST(req) {
+  // Content-Length guard check before reading the body stream (DoS mitigation)
+  const contentLength = req.headers.get("content-length");
+  if (contentLength && parseInt(contentLength, 10) > MAX_FILE_SIZE_BYTES) {
+    return Response.json(
+      { error: "File too large. Maximum size is 5 MB." },
+      { status: 413 }
+    );
+  }
+
   // Auth check — only admin can upload
   const cookieStore = await cookies();
   const token = cookieStore.get("admin_access")?.value;
@@ -35,12 +47,22 @@ export async function POST(req) {
     const bytes = await file.arrayBuffer();
     if (bytes.byteLength > MAX_FILE_SIZE_BYTES) {
       return Response.json(
-        { error: "File too large. Maximum size is 10 MB." },
+        { error: "File too large. Maximum size is 5 MB." },
         { status: 413 }
       );
     }
 
     const buffer = Buffer.from(bytes);
+    
+    // Deep content validation
+    const typeInfo = await fileTypeFromBuffer(buffer);
+    if (!typeInfo || !ALLOWED_MIME_TYPES.has(typeInfo.mime)) {
+      return Response.json(
+        { error: "Invalid file content. Only JPEG, PNG, WebP, and GIF are allowed." },
+        { status: 415 }
+      );
+    }
+
     const ip     = req.headers.get("x-forwarded-for") || req.ip || "127.0.0.1";
 
     const result = await new Promise((resolve, reject) => {
@@ -57,7 +79,7 @@ export async function POST(req) {
 
     return Response.json({ url: result.secure_url });
   } catch (error) {
-    console.error("Upload error:", error.message);
+    logError("Upload error:", error.message);
     return Response.json({ error: "Upload failed. Please try again." }, { status: 500 });
   }
 }

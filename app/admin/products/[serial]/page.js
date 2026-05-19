@@ -18,18 +18,16 @@ function EditProductContent({ params }) {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const [productsRes, settingsRes] = await Promise.all([
-          fetch("/api/products"),
+        const [productRes, settingsRes] = await Promise.all([
+          fetch(`/api/products/${unwrappedParams.serial}`),
           fetch("/api/settings", { cache: "no-store" })
         ])
         
-        const products = await productsRes.json()
         const settings = await settingsRes.json()
-        
         setCategories(settings.collectionsCategories || [])
 
-        const product = products.find(p => p.serial === unwrappedParams.serial)
-        if (product) {
+        if (productRes.ok) {
+          const product = await productRes.json()
           setFormData({
             ...product,
             originalPrice: product.originalPrice || "",
@@ -46,7 +44,8 @@ function EditProductContent({ params }) {
       }
     }
     fetchProduct()
-  }, [unwrappedParams.serial, router])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unwrappedParams.serial])
 
   const handleChange = (e) => {
     const { name, value } = e.target

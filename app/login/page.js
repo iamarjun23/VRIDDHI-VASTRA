@@ -404,7 +404,7 @@ export default function LoginPage() {
                     <input
                       required
                       type="text"
-                      maxLength={6}
+                      maxLength={8}
                       value={otp}
                       onChange={(e) => setOtp(e.target.value)}
                       placeholder=" "
@@ -465,22 +465,6 @@ export default function LoginPage() {
             </AnimatePresence>
           </div>
 
-          {/* Environment Info */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.4 }}
-            transition={{ delay: 1, duration: 1 }}
-            className="mt-8 flex justify-between items-center px-4"
-          >
-            <div className="flex flex-col gap-1">
-              <span className="text-[8px] font-bold tracking-[0.3em] uppercase opacity-50">Session ID</span>
-              <span className="text-[10px] font-mono tracking-widest uppercase">{Math.random().toString(36).substring(2, 10)}</span>
-            </div>
-            <div className="text-right">
-              <span className="text-[8px] font-bold tracking-[0.3em] uppercase opacity-50 block">Encryption</span>
-              <span className="text-[10px] font-mono tracking-widest uppercase">AES-256-GCM</span>
-            </div>
-          </motion.div>
         </motion.div>
       </div>
 

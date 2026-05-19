@@ -85,9 +85,24 @@ function ProductsAdminContent() {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center p-24 h-[60vh]">
-        <div className="w-8 h-8 border-t-2 border-[#D4AF37] border-r-2 border-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-[11px] text-gray-500 font-bold uppercase tracking-[0.2em]">Loading Showroom</p>
+      <div className="space-y-6 pb-12 w-full mt-10">
+        <div className="flex justify-between border-b border-[#E5E0D8] pb-8 px-1">
+           <div className="h-12 w-64 bg-gray-200 animate-pulse rounded-none" />
+           <div className="h-12 w-32 bg-gray-200 animate-pulse rounded-none" />
+        </div>
+        <div className="flex gap-4 mb-8">
+           <div className="h-10 w-24 bg-gray-200 animate-pulse rounded-none" />
+           <div className="h-10 w-24 bg-gray-200 animate-pulse rounded-none" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+          {[...Array(10)].map((_, i) => (
+            <div key={i} className="flex flex-col gap-3">
+              <div className="w-full aspect-[4/5] bg-gray-200 animate-pulse border border-[#E5E0D8]" />
+              <div className="h-5 w-3/4 bg-gray-200 animate-pulse" />
+              <div className="h-4 w-1/2 bg-gray-200 animate-pulse" />
+            </div>
+          ))}
+        </div>
       </div>
     )
   }
@@ -229,9 +244,24 @@ function ProductsAdminContent() {
 export default function ProductsAdmin() {
   return (
     <Suspense fallback={
-      <div className="flex flex-col items-center justify-center p-24 h-[60vh]">
-        <div className="w-8 h-8 border-t-2 border-[#D4AF37] border-r-2 border-transparent rounded-full animate-spin mb-4"></div>
-        <p className="text-[11px] text-gray-500 font-bold uppercase tracking-[0.2em]">Loading Showroom</p>
+      <div className="space-y-6 pb-12 w-full mt-10">
+        <div className="flex justify-between border-b border-[#E5E0D8] pb-8 px-1">
+           <div className="h-12 w-64 bg-gray-200 animate-pulse rounded-none" />
+           <div className="h-12 w-32 bg-gray-200 animate-pulse rounded-none" />
+        </div>
+        <div className="flex gap-4 mb-8">
+           <div className="h-10 w-24 bg-gray-200 animate-pulse rounded-none" />
+           <div className="h-10 w-24 bg-gray-200 animate-pulse rounded-none" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">
+          {[...Array(10)].map((_, i) => (
+            <div key={i} className="flex flex-col gap-3">
+              <div className="w-full aspect-[4/5] bg-gray-200 animate-pulse border border-[#E5E0D8]" />
+              <div className="h-5 w-3/4 bg-gray-200 animate-pulse" />
+              <div className="h-4 w-1/2 bg-gray-200 animate-pulse" />
+            </div>
+          ))}
+        </div>
       </div>
     }>
       <ProductsAdminContent />

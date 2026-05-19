@@ -8,8 +8,14 @@ function AdminDashboardContent() {
   const searchParams = useSearchParams();
   const [stats, setStats] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [greeting, setGreeting] = useState("Good morning")
 
   useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour < 12) setGreeting("Good morning");
+    else if (hour < 18) setGreeting("Good afternoon");
+    else setGreeting("Good evening");
+
     async function fetchStats() {
       try {
         const res = await fetch('/api/analytics', { cache: 'no-store' });
@@ -36,9 +42,9 @@ function AdminDashboardContent() {
   }
 
   const statCards = [
-    { label: "Curated Collection", value: stats?.totalProducts || 0, icon: "cube", trend: "+12%", up: true },
-    { label: "Total Engagements", value: stats?.totalClicks || 0, icon: "eye", trend: "+24%", up: true },
-    { label: "Pending Inquiries", value: stats?.recentInquiries?.length || 0, icon: "inbox", trend: "-5%", up: false }
+    { label: "Curated Collection", value: stats?.totalProducts || 0, icon: "cube" },
+    { label: "Total Engagements", value: stats?.totalClicks || 0, icon: "eye" },
+    { label: "Pending Inquiries", value: stats?.recentInquiries?.length || 0, icon: "inbox" }
   ];
 
   return (
@@ -48,7 +54,7 @@ function AdminDashboardContent() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-8 border-b border-[#E5E0D8] pb-10">
         <div>
           <span className="text-[10px] font-bold text-[#D4AF37] uppercase tracking-luxury block mb-4">Workspace Overview</span>
-          <h1 className="text-[clamp(1.75rem,4vw,3rem)] font-bold font-display text-gray-900 leading-tight">Good morning, Vriddhi.</h1>
+          <h1 className="text-[clamp(1.75rem,4vw,3rem)] font-normal font-display text-gray-900 leading-tight">{greeting}, Vriddhi.</h1>
         </div>
         <Link
           href="/admin/products/create"
@@ -67,7 +73,6 @@ function AdminDashboardContent() {
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-luxury">{stat.label}</p>
                 <div className="mt-6 flex items-baseline gap-3">
                   <span className="text-3xl sm:text-4xl font-display font-bold text-gray-900">{stat.value.toLocaleString()}</span>
-                  <span className={`text-[12px] font-bold tracking-luxury ${stat.up ? 'text-emerald-700' : 'text-gray-400'}`}>{stat.trend}</span>
                 </div>
               </div>
               <div className="text-[#D4AF37]/40">

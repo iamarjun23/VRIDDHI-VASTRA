@@ -5,6 +5,8 @@ import { cookies } from "next/headers";
 import { logActivity } from "../../../lib/activity";
 import { verifyToken } from "../../../lib/session";
 
+import { log, logError } from "@/lib/logger";
+
 export const dynamic = "force-dynamic";
 
 export async function GET(req) {
@@ -20,23 +22,46 @@ export async function GET(req) {
     const { searchParams } = new URL(req.url);
     const search = searchParams.get("search") || "";
     const sort   = searchParams.get("sort") || "newest";
+    
+    // Pagination parameters
+    const page  = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
+    const limit = Math.max(1, parseInt(searchParams.get("limit") || "50", 10));
+    const skip  = (page - 1) * limit;
 
     let query = {};
     if (search) {
+      const safeSearch = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
       query = {
         $or: [
-          { name:        { $regex: search, $options: "i" } },
-          { phoneNumber: { $regex: search, $options: "i" } },
-          { message:     { $regex: search, $options: "i" } }
+          { name:        { $regex: safeSearch, $options: "i" } },
+          { phoneNumber: { $regex: safeSearch, $options: "i" } },
+          { message:     { $regex: safeSearch, $options: "i" } }
         ]
       };
     }
 
     const sortOption = sort === "oldest" ? { createdAt: 1 } : { createdAt: -1 };
-    const inquiries  = await Inquiry.find(query).sort(sortOption).lean();
-    return NextResponse.json({ inquiries });
+    
+    const [total, inquiries] = await Promise.all([
+      Inquiry.countDocuments(query),
+      Inquiry.find(query)
+        .sort(sortOption)
+        .skip(skip)
+        .limit(limit)
+        .lean()
+    ]);
+
+    return NextResponse.json({
+      inquiries,
+      pagination: {
+        total,
+        page,
+        limit,
+        totalPages: Math.ceil(total / limit)
+      }
+    });
   } catch (error) {
-    console.error("Failed to fetch inquiries:", error);
+    logError("Failed to fetch inquiries:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
@@ -72,7 +97,7 @@ export async function DELETE(req) {
 
     return NextResponse.json({ error: "No ID provided" }, { status: 400 });
   } catch (error) {
-    console.error("Inquiry delete error:", error);
+    logError("Inquiry delete error:", error);
     return NextResponse.json({ error: "Failed to delete inquiry" }, { status: 500 });
   }
 }

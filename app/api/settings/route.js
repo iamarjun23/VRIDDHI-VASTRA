@@ -5,6 +5,7 @@ import SiteConfig from "../../../models/SiteConfig";
 import { cookies } from "next/headers";
 import { logActivity } from "../../../lib/activity";
 import { verifyToken } from "../../../lib/session";
+import { log, logError } from "@/lib/logger";
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -23,7 +24,7 @@ export async function GET() {
 
     return NextResponse.json(config);
   } catch (error) {
-    console.error("Failed to fetch site config:", error);
+    logError("Failed to fetch site config:", error);
     return NextResponse.json({ error: "Failed to fetch settings" }, { status: 500 });
   }
 }
@@ -56,14 +57,22 @@ export async function PUT(req) {
       });
     }
 
-    // Guard rail: Basic sanitization to prevent top-level NoSQL injection
-    Object.keys(data).forEach(key => {
-      if (key.startsWith('$')) delete data[key];
-    });
+    const ALLOWED_KEYS = [
+      'logo', 'heroImage', 'featuredCategories', 'collectionsCategories', 
+      'featuredBlocks', 'lookbookBlocks', 'promoBanner', 
+      'whatsappNumber', 'footerImage', 'contactHeroImage'
+    ];
+
+    const safeData = {};
+    for (const key of ALLOWED_KEYS) {
+      if (key in data) {
+        safeData[key] = data[key];
+      }
+    }
 
     const config = await SiteConfig.findOneAndUpdate(
       { configId: "main" },
-      { $set: data },
+      { $set: safeData },
       { new: true, upsert: true }
     );
 
@@ -79,7 +88,7 @@ export async function PUT(req) {
 
     return NextResponse.json({ success: true, message: "Settings updated successfully", config }, { status: 200 });
   } catch (error) {
-    console.error("Failed to update site config:", error.message);
+    logError("Failed to update site config:", error.message);
     return NextResponse.json({ success: false, error: "Failed to update settings" }, { status: 500 });
   }
 }

@@ -2,6 +2,8 @@ import dbConnect from "@/lib/mongodb";
 import Product from "@/models/Product";
 import rateLimit from "@/lib/rate-limit";
 
+import { log, logError } from "@/lib/logger";
+
 const limiter = rateLimit({
   interval: 60 * 1000, // 1 minute
   uniqueTokenPerInterval: 500,
@@ -24,19 +26,33 @@ export async function POST(req, { params }) {
   }
 
   try {
-    const product = await Product.findOne({ serial });
+    const product = await Product.findOneAndUpdate(
+      { serial },
+      [
+        {
+          $set: {
+            rating: {
+              $cond: [
+                { $eq: [{ $ifNull: ["$numReviews", 0] }, 0] },
+                rating,
+                {
+                  $divide: [
+                    { $add: [{ $multiply: [{ $ifNull: ["$rating", 0] }, { $ifNull: ["$numReviews", 0] }] }, rating] },
+                    { $add: [{ $ifNull: ["$numReviews", 0] }, 1] }
+                  ]
+                }
+              ]
+            },
+            numReviews: { $add: [{ $ifNull: ["$numReviews", 0] }, 1] }
+          }
+        }
+      ],
+      { new: true }
+    );
+
     if (!product) {
       return Response.json({ success: false, error: "Product not found" }, { status: 404 });
     }
-
-    // Calculate new average rating
-    const currentTotalScore = (product.rating || 0) * (product.numReviews || 0);
-    const newNumReviews = (product.numReviews || 0) + 1;
-    const newRating = (currentTotalScore + rating) / newNumReviews;
-
-    product.rating = newRating;
-    product.numReviews = newNumReviews;
-    await product.save();
 
     return Response.json({ 
       success: true,
@@ -45,7 +61,7 @@ export async function POST(req, { params }) {
       numReviews: product.numReviews 
     });
   } catch (error) {
-    console.error("Rating submission error:", error.message);
+    logError("Rating submission error:", error.message);
     return Response.json({ success: false, error: "Submission failed" }, { status: 500 });
   }
 }

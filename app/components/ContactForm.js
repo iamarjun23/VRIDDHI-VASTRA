@@ -58,7 +58,7 @@ export default function ContactForm({ productName = "", productSerial = "" }) {
       ) : (
         <form onSubmit={handleSubmit} className="relative z-10 flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <label className="font-sans text-[10px] font-bold tracking-[0.2em] text-[#e6e2da] uppercase">Full Name</label>
+            <label className="font-sans text-xs font-bold tracking-[0.2em] text-[#e6e2da] uppercase">Full Name</label>
             <input 
               required
               type="text" 
@@ -70,7 +70,7 @@ export default function ContactForm({ productName = "", productSerial = "" }) {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="font-sans text-[10px] font-bold tracking-[0.2em] text-[#e6e2da] uppercase">Phone Number</label>
+            <label className="font-sans text-xs font-bold tracking-[0.2em] text-[#e6e2da] uppercase">Phone Number</label>
             <input 
               required
               type="tel" 
@@ -82,7 +82,7 @@ export default function ContactForm({ productName = "", productSerial = "" }) {
           </div>
 
           <div className="flex flex-col gap-2">
-            <label className="font-sans text-[10px] font-bold tracking-[0.2em] text-[#e6e2da] uppercase">Your Message</label>
+            <label className="font-sans text-xs font-bold tracking-[0.2em] text-[#e6e2da] uppercase">Your Message</label>
             <textarea 
               required
               placeholder="How can we assist you today?" 

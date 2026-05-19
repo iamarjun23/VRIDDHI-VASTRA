@@ -6,7 +6,7 @@ export async function POST() {
     name: 'admin_access',
     value: '',
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
+    secure: true,
     sameSite: 'strict',
     path: '/',
     maxAge: 0 // Expire immediately

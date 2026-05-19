@@ -1,12 +1,11 @@
 "use client";
 
 import { useCart } from "../context/CartContext";
-import { motion, AnimatePresence } from "framer-motion";
 import { useEffect } from "react";
 import { formatWhatsAppMessage, getWhatsAppUrl } from "../../lib/utils";
 
 export default function CartSidebar() {
-  const { cartItems, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, cartTotal, whatsappNumber } = useCart();
+  const { cartItems, isCartOpen, setIsCartOpen, removeFromCart, updateQuantity, updateCartPrices, cartTotal, whatsappNumber } = useCart();
 
   // Close sidebar on escape key
   useEffect(() => {
@@ -17,33 +16,55 @@ export default function CartSidebar() {
     return () => window.removeEventListener("keydown", handleEsc);
   }, [setIsCartOpen]);
 
-  const handleWhatsAppCheckout = () => {
-    const message = formatWhatsAppMessage(cartItems, cartTotal);
-    const url = getWhatsAppUrl(message, whatsappNumber);
-    window.open(url, "_blank");
+  const handleWhatsAppCheckout = async () => {
+    try {
+      const response = await fetch("/api/checkout/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: cartItems.map(item => ({
+            serial: item.serial,
+            price: item.price,
+            quantity: item.quantity
+          }))
+        })
+      });
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        alert("Failed to validate pricing. Please try again.");
+        return;
+      }
+
+      if (data.priceMismatch) {
+        alert("Outdated prices detected in your cart. Your cart has been updated with the current pricing. Please review and try checkout again.");
+        updateCartPrices(data.items);
+        return;
+      }
+
+      const message = formatWhatsAppMessage(cartItems, cartTotal);
+      const url = getWhatsAppUrl(message, whatsappNumber);
+      window.open(url, "_blank");
+    } catch (err) {
+      console.error("Checkout validation error:", err);
+      alert("An error occurred during checkout validation. Please try again.");
+    }
   };
 
-  return (
-    <AnimatePresence>
-      {isCartOpen && (
-        <>
-          {/* Overlay */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setIsCartOpen(false)}
-            className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]"
-          />
+  if (!isCartOpen) return null;
 
-          {/* Sidebar */}
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-[101] flex flex-col"
-          >
+  return (
+    <>
+      {/* Overlay */}
+      <div
+        onClick={() => setIsCartOpen(false)}
+        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100]"
+      />
+
+      {/* Sidebar */}
+      <div
+        className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-[101] flex flex-col transform transition-transform translate-x-0"
+      >
             {/* Header */}
             <div className="p-6 border-b border-gray-100 flex items-center justify-between">
               <div>
@@ -134,9 +155,7 @@ export default function CartSidebar() {
                 </div>
               </div>
             )}
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+          </div>
+    </>
   );
 }

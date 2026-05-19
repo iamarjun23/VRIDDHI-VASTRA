@@ -65,7 +65,7 @@ export default function ProductDetailClient({ product, whatsappNumber: serverWha
 
 
   return (
-    <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5rem)]">
+    <div className="site-container">
       {/* Breadcrumbs - Desktop feeling */}
       <div className="flex items-center gap-2 text-[clamp(10px,1vw,14px)] text-brand-green/60 uppercase tracking-widest pt-4 sm:pt-8 mb-4">
         <Link href="/" className="hover:text-brand-gold transition-colors">Home</Link>
@@ -125,7 +125,7 @@ export default function ProductDetailClient({ product, whatsappNumber: serverWha
             {/* External Zoom Preview Box */}
             {isZooming && activeImage && (
               <div
-                className="absolute left-[102%] top-0 w-[120%] h-full bg-white shadow-[0_30px_70px_rgba(0,0,0,0.2)] z-[100] border border-gray-100 overflow-hidden hidden lg:block rounded-[24px] pointer-events-none"
+                className="absolute left-[102%] top-0 w-[120%] max-w-[45vw] h-full max-h-[85vh] bg-white shadow-[0_30px_70px_rgba(0,0,0,0.2)] z-[100] border border-gray-100 overflow-hidden hidden lg:block rounded-[24px] pointer-events-none"
                 style={{
                   backgroundImage: `url(${activeImage})`,
                   backgroundPosition: `${zoomPos.x}% ${zoomPos.y}%`,
@@ -201,7 +201,7 @@ export default function ProductDetailClient({ product, whatsappNumber: serverWha
               >
                 -
               </button>
-              <span className="w-12 text-center text-base font-medium text-gray-900">{quantity}</span>
+              <span className="min-w-[3rem] px-2 text-center text-base font-medium text-gray-900">{quantity}</span>
               <button
                 onClick={() => setQuantity(quantity + 1)}
                 className="w-12 h-12 flex items-center justify-center text-gray-600 hover:bg-gray-50 transition-colors border-l border-gray-200 text-lg"

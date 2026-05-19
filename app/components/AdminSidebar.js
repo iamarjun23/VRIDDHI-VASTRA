@@ -31,7 +31,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
 
   return (
     <aside className={`
-      fixed inset-y-0 left-0 z-50 w-[280px] sm:w-[260px] flex flex-col shrink-0
+      fixed inset-y-0 left-0 z-50 w-[clamp(240px,20vw,320px)] sm:w-[260px] flex flex-col shrink-0
       bg-[#121212] border-r border-[#2A2A2A]
       transition-transform duration-500 lg:translate-x-0 lg:static lg:h-screen
       ${isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full lg:shadow-none'}
@@ -50,7 +50,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
             </div>
           ) : (
             <div className="w-8 h-8 border border-[#2A2A2A] flex items-center justify-center shrink-0">
-              <span className="text-[10px] text-[#D4AF37] font-bold font-display">V</span>
+              <span className="text-[10px] text-brand-gold font-bold font-display">V</span>
             </div>
           )}
           <div className="flex flex-col border-l border-[#2A2A2A] pl-3 sm:pl-4">
@@ -84,9 +84,9 @@ export default function AdminSidebar({ isOpen, onClose }) {
               `}
             >
               {active && (
-                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#D4AF37]" />
+                <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-brand-gold" />
               )}
-              <div className={`transition-colors duration-500 ${active ? 'text-[#D4AF37]' : 'text-gray-600 group-hover:text-gray-400'}`}>
+              <div className={`transition-colors duration-500 ${active ? 'text-brand-gold' : 'text-gray-600 group-hover:text-gray-400'}`}>
                 {item.icon}
               </div>
               <span className="mt-0.5">{item.name}</span>

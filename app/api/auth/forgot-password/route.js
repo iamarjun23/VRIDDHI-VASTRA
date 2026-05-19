@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import dbConnect from '@/lib/mongodb';
 import Admin from '@/models/Admin';
 import nodemailer from 'nodemailer';
+import crypto from 'crypto';
+import bcrypt from 'bcryptjs';
+
+import { log, logError } from "@/lib/logger";
 
 export async function POST(req) {
   try {
@@ -14,15 +18,23 @@ export async function POST(req) {
     }
 
     if (admin.email !== email) {
-      return NextResponse.json({ error: 'Email does not match admin records.' }, { status: 400 });
+      return NextResponse.json({ success: true, message: 'If this email is registered, an OTP has been sent.' });
     }
 
-    // Generate a 6 digit OTP
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    if (admin.otpLockUntil && admin.otpLockUntil > new Date()) {
+      return NextResponse.json({ success: true, message: 'If this email is registered, an OTP has been sent.' });
+    }
+
+    // Generate an 8 digit OTP securely
+    const otp = crypto.randomInt(10000000, 100000000).toString();
     const otpExpiry = new Date(Date.now() + 15 * 60 * 1000); // 15 minutes
 
-    admin.otp = otp;
+    const hashedOtp = await bcrypt.hash(otp, 10);
+
+    admin.otp = hashedOtp;
     admin.otpExpiry = otpExpiry;
+    admin.otpAttempts = 0;
+    admin.otpLockUntil = null;
     await admin.save();
 
     // Send email via nodemailer
@@ -30,12 +42,11 @@ export async function POST(req) {
     const smtpPassword = process.env.SMTP_PASSWORD;
 
     if (!smtpEmail || !smtpPassword) {
-      // Removed dev mode log
       return NextResponse.json({ success: true, message: 'OTP generated' });
     }
 
     const transporter = nodemailer.createTransport({
-      service: 'gmail', // You can change this or use host/port if not gmail
+      service: 'gmail',
       auth: {
         user: smtpEmail,
         pass: smtpPassword,
@@ -63,7 +74,7 @@ export async function POST(req) {
 
     return NextResponse.json({ success: true, message: 'OTP sent to email.' });
   } catch (error) {
-    console.error('Forgot password error:', error.message);
+    logError('Forgot password error:', error.message);
     return NextResponse.json({ error: 'Failed to process request.' }, { status: 500 });
   }
 }

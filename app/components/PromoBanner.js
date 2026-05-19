@@ -16,7 +16,7 @@ export default function PromoBanner({ image, heading, subtext, logo }) {
       <div className="absolute inset-0 bg-black/50 z-0" />
 
       {/* Content */}
-      <div className="relative z-10 max-w-[2000px] mx-auto w-full px-[clamp(1rem,5vw,5rem)] flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-10">
+      <div className="relative z-10 site-container flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-10">
 
         {/* Left Text */}
         <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
@@ -32,7 +32,7 @@ export default function PromoBanner({ image, heading, subtext, logo }) {
           )}
           <Link
             href="/collections"
-            className="mt-6 sm:mt-8 inline-flex items-center gap-3 px-[clamp(1.5rem,4vw,3rem)] py-[clamp(0.6rem,1.5vw,1rem)] border border-white/60 text-white text-[clamp(10px,1.1vw,14px)] font-bold tracking-[0.25em] uppercase hover:bg-white hover:text-black transition-all duration-500 rounded-sm backdrop-blur-sm bg-white/10"
+            className="mt-6 sm:mt-8 inline-flex items-center gap-3 px-[clamp(1.5rem,4vw,3rem)] py-[clamp(0.6rem,1.5vw,1rem)] border border-white/60 text-white text-[clamp(10px,1.1vw,14px)] font-bold tracking-[0.25em] uppercase hover:bg-white hover:text-black transition-all duration-500 rounded-full backdrop-blur-sm bg-white/10"
           >
             Explore Collections
           </Link>

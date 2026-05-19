@@ -4,18 +4,23 @@ import ProductCard from "../components/ProductCard"
 import dbConnect from "../../lib/mongodb"
 import Product from "../../models/Product"
 import SiteConfig from "../../models/SiteConfig"
+import { sanitizeMongoose } from "../../lib/utils"
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
-export const metadata = {
-  title: "Search Results",
-  description: "Search for your favorite silk sarees and fashion accessories at Vriddhi Vastra.",
+export async function generateMetadata({ searchParams }) {
+  const { q } = await searchParams;
+  return {
+    title: q ? `Results for "${q}" | Vriddhi Vastra` : "Search | Vriddhi Vastra",
+    description: "Search for premium silk sarees across our curated collections.",
+    robots: { index: false },
+  };
 }
 
 export default async function SearchPage({ searchParams }) {
   await dbConnect();
   const productsData = await Product.find({}).sort({ createdAt: -1 }).lean();
-  const products = JSON.parse(JSON.stringify(productsData));
+  const products = sanitizeMongoose(productsData);
 
   let rawQ = (await searchParams).q || ""
   if (Array.isArray(rawQ)) rawQ = rawQ[0];
@@ -28,7 +33,7 @@ export default async function SearchPage({ searchParams }) {
   // Fetch site configuration
   let configData = await SiteConfig.findOne({ configId: "main" }).lean();
   if (!configData) configData = {};
-  const config = JSON.parse(JSON.stringify(configData));
+  const config = sanitizeMongoose(configData);
 
   const filteredProducts = products.filter(product => {
     // Check if the query matches the name, description or any of the tags
@@ -53,7 +58,7 @@ export default async function SearchPage({ searchParams }) {
         </div>
 
         {filteredProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-14 gap-y-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[clamp(1rem,3vw,3.5rem)] gap-y-[clamp(2rem,5vw,6rem)]">
              {filteredProducts.map((product) => (
                <ProductCard key={product.serial} product={product} />
              ))}

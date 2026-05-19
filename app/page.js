@@ -7,20 +7,36 @@ import Footer from "./components/Footer"
 import dbConnect from "../lib/mongodb"
 import Product from "../models/Product"
 import SiteConfig from "../models/SiteConfig"
+import { sanitizeMongoose } from "../lib/utils"
 
-export const dynamic = 'force-dynamic';
-export const revalidate = 0;
+export const revalidate = 3600;
 
 export const metadata = {
-  title: "Home",
-  description: "Vriddhi Vastra Home Page - Explore our curated collections of premium silk sarees.",
+  title: "Vriddhi Vastra | Premium Silk Sarees",
+  description: "Explore our curated collections of premium silk sarees. Handwoven Kanchipuram, Banarasi, and Mysore silk.",
+  openGraph: {
+    title: "Vriddhi Vastra | Premium Silk Sarees",
+    description: "Explore our curated collections of premium silk sarees. Handwoven Kanchipuram, Banarasi, and Mysore silk.",
+    url: "https://www.vriddhivastra.com",
+    siteName: "Vriddhi Vastra",
+    images: [{ url: "/images/og-default.jpg", width: 1200, height: 630 }],
+    locale: "en_IN",
+    type: "website",
+  }
 }
 
 export default async function Home() {
   await dbConnect();
 
-  const productsData = await Product.find({}).sort({ createdAt: -1 }).lean();
-  const products = JSON.parse(JSON.stringify(productsData));
+  const [newArrivalsData, exhibitionData, trendingRawData] = await Promise.all([
+    Product.find({}).sort({ createdAt: -1 }).limit(4).lean(),
+    Product.find({ tags: { $regex: /^EXHIBITION CATEGORIES$/i } }).sort({ createdAt: -1 }).limit(4).lean(),
+    Product.find({ tags: { $regex: /^trending(?: deals)?$/i } }).sort({ createdAt: -1 }).limit(4).lean(),
+  ]);
+
+  const newArrivals = sanitizeMongoose(newArrivalsData);
+  const exhibitionProducts = sanitizeMongoose(exhibitionData);
+  const trendingRaw = sanitizeMongoose(trendingRawData);
 
   let configData = await SiteConfig.findOne({ configId: "main" }).lean();
   if (!configData) {
@@ -32,20 +48,19 @@ export default async function Home() {
       logo: ""
     }
   }
-  const config = JSON.parse(JSON.stringify(configData));
+  const config = sanitizeMongoose(configData);
 
   config.footerImage = config.footerImage || "";
   config.collectionsCategories = config.collectionsCategories || [];
 
-  const trendingProducts = products.filter(p => p.tags && p.tags.some(t => t.toLowerCase() === 'trending' || t.toLowerCase() === 'trending deals'));
-  const displayTrending = trendingProducts.length > 0 ? trendingProducts : products;
+  const displayTrending = trendingRaw.length > 0 ? trendingRaw : newArrivals;
 
   return (
     <main className="bg-[#fafafa] min-h-screen selection:bg-black selection:text-white flex flex-col">
       <div className="flex-grow">
 
         {/* Hero Section */}
-        <section className="relative w-full h-[50vh] sm:h-[70vh] lg:h-screen items-center justify-center overflow-hidden flex">
+        <section className="relative w-full h-[50vh] sm:h-[70vh] lg:h-screen items-center justify-center overflow-hidden flex pt-[clamp(80px,12vw,140px)]">
           <div
             className={`absolute inset-0 bg-cover bg-center bg-no-repeat z-0 transition-colors duration-[2000ms] ease-out ${!config.heroImage ? 'bg-[#1c1410]' : ''}`}
             style={config.heroImage ? { backgroundImage: `url('${config.heroImage}')` } : {}}
@@ -57,13 +72,13 @@ export default async function Home() {
 
         {/* Shop By Categories */}
         <section className="w-full bg-[#F1E8CD] py-[clamp(3.5rem,8vw,7rem)] relative">
-          <div className="max-w-[2000px] mx-auto w-full px-[clamp(1.25rem,5vw,5rem)]">
+          <div className="site-container">
             <header className="flex flex-col items-center mb-[clamp(3rem,8vw,5rem)] gap-4 text-center relative w-full">
               <div className="flex flex-col items-center text-center">
                 <p className="font-dm-sans text-[clamp(11px,1.2vw,16px)] tracking-[0.3em] text-brand-gold uppercase mb-6 sm:mb-8">
                   Shop By Categories
                 </p>
-                <h2 className="font-dm-sans text-[clamp(22px,3vw,32px)] text-brand-black leading-tight max-w-3xl">
+                <h2 className="font-dm-sans text-[clamp(28px,4vw,42px)] text-brand-black leading-tight max-w-3xl">
                   Discover Our Signature Categories and Collection
                 </h2>
                 <p className="font-dm-sans text-[clamp(14px,1.6vw,20px)] text-brand-green mt-6 sm:mt-8 max-w-2xl mx-auto font-medium leading-relaxed">
@@ -73,7 +88,7 @@ export default async function Home() {
               </div>
             </header>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(8px,3vw,80px)] gap-y-[clamp(1.5rem,4vw,4rem)]">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-[clamp(1rem,3vw,4rem)]">
               {(config.featuredBlocks || []).map((block, i) => {
                 const categoryName = block.title || `Category ${i + 1}`;
                 const img = block.image || "";
@@ -84,9 +99,11 @@ export default async function Home() {
                     <div className="mb-4 sm:mb-6 flex justify-center">
                       <Image
                         src="/images/Lotus.png"
-                        alt="Lotus"
+                        alt=""
+                        role="presentation"
                         width={128}
                         height={128}
+                        loading="lazy"
                         className="w-auto h-[clamp(56px,8vw,128px)] object-contain"
                       />
                     </div>
@@ -134,38 +151,42 @@ export default async function Home() {
 
         {/* New Arrivals */}
         <section className="w-full bg-[#FFFAEE] py-[clamp(3.5rem,8vw,7rem)] relative">
-          <div className="max-w-[2000px] mx-auto w-full px-[clamp(1.25rem,5vw,5rem)]">
-            <header className="relative flex flex-col items-center text-center mb-[clamp(3rem,8vw,5rem)] w-full">
-              <div className="flex flex-col items-center pb-12 md:pb-0">
-                <p className="font-dm-sans text-[clamp(11px,1.2vw,16px)] tracking-[0.2em] text-brand-gold uppercase font-medium mb-6 sm:mb-8">
-                  New Arrivals - Fresh From The Loom
+          <div className="site-container">
+            <header className="flex flex-col md:flex-row md:justify-between md:items-end mb-[clamp(3rem,8vw,5rem)] gap-4 w-full">
+              <div className="flex flex-col items-start max-w-[700px]">
+                <p className="font-dm-sans text-[clamp(11px,1.2vw,16px)] tracking-[0.2em] text-brand-gold uppercase font-medium mb-4">
+                  New Arrivals — Fresh From The Loom
                 </p>
-                <h3 className="font-dm-sans text-[clamp(20px,2.5vw,32px)] text-brand-green leading-tight max-w-[900px]">
+                <h3 className="font-dm-sans text-[clamp(20px,2.5vw,32px)] text-brand-green leading-tight">
                   Unveil Our Newest Collection of Sarees, blending Tradition with Modern Elegance
                 </h3>
               </div>
-              <div className="absolute right-0 bottom-0">
-                <Link href="/tags?category=NEW+ARRIVALS#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300">
-                  <span className="text-[clamp(11px,1.3vw,19px)] font-dm-sans tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
-                  <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.2vw,16px)] h-[clamp(10px,1.2vw,16px)] transition-transform group-hover:translate-y-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
-                </Link>
-              </div>
+              <Link href="/tags?category=NEW+ARRIVALS#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300 shrink-0">
+                <span className="text-[clamp(11px,1.3vw,15px)] font-dm-sans tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
+                <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.2vw,14px)] h-[clamp(10px,1.2vw,14px)] transition-transform group-hover:translate-x-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
+              </Link>
             </header>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(8px,2vw,40px)] gap-y-[clamp(1.5rem,4vw,4rem)]">
-              {products.slice(0, 4).map((product, index) => (
-                <ProductCard
-                  key={product.serial || index}
-                  product={product}
-                />
-              ))}
-            </div>
+            {newArrivals.length === 0 ? (
+              <div className="py-20 text-center opacity-40">
+                <p className="font-display text-2xl uppercase tracking-widest">No new arrivals presently.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-[clamp(1rem,3vw,4rem)]">
+                {newArrivals.map((product, index) => (
+                  <ProductCard
+                    key={product.serial || index}
+                    product={product}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
         {/* Shop By Occasion - Lookbook */}
         <section className="w-full bg-[#F1E8CD] py-[clamp(2.5rem,5vw,6rem)] relative">
-          <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5rem)]">
+          <div className="site-container">
             <div className="flex flex-col items-center text-center w-full mb-[clamp(2rem,5vw,4rem)] px-4">
               <p className="font-dm-sans text-[clamp(11px,1.2vw,16px)] tracking-[0.3em] text-brand-gold uppercase mb-4 sm:mb-6">
                 The Style Look book: SHOP BY OCCASION
@@ -176,7 +197,7 @@ export default async function Home() {
               <div className="w-24 h-[1px] bg-brand-gold/40 mt-4"></div>
             </div>
 
-            <div className="grid grid-cols-2 gap-x-[clamp(8px,2.5vw,48px)] gap-y-[clamp(1rem,3vw,2.5rem)] w-full">
+            <div className="grid grid-cols-2 gap-[clamp(1rem,2.5vw,3rem)] w-full">
               {/* Left Column */}
               <div className="flex flex-col gap-[clamp(0.5rem,2vw,2.5rem)]">
                 <Link href={`/tags?category=${encodeURIComponent(config.lookbookBlocks?.[0]?.title || '')}`} className="relative h-[clamp(100px,22vw,280px)] rounded-[clamp(12px,2vw,32px)] overflow-hidden group cursor-pointer bg-gray-200">
@@ -242,70 +263,68 @@ export default async function Home() {
         </section>
 
         {/* Exhibition Collection */}
-        {products.some(p => p.tags && p.tags.some(t => t.toUpperCase() === 'EXHIBITION CATEGORIES')) && (
+        {exhibitionProducts.length > 0 && (
           <section className="w-full bg-[#FFFAEE] py-[clamp(2.5rem,5vw,6rem)] border-t border-brand-gold/10 relative">
-            <div className="max-w-[2000px] mx-auto w-full px-[clamp(1rem,4vw,5rem)]">
-              <header className="relative flex flex-col items-center text-center mb-[clamp(2rem,5vw,4rem)] w-full">
-                <div className="flex flex-col items-center pb-8 md:pb-0">
-                  <p className="dm-sans-h2 tracking-[0.2em] text-brand-green uppercase font-medium mb-4 sm:mb-6">
+            <div className="site-container">
+              <header className="flex flex-col md:flex-row md:justify-between md:items-end mb-[clamp(2rem,5vw,4rem)] gap-4 w-full">
+                <div className="flex flex-col items-start">
+                  <p className="font-dm-sans text-[clamp(11px,1.2vw,16px)] tracking-[0.2em] text-brand-green uppercase font-medium mb-3">
                     Signature Series
                   </p>
-                  <h3 className="dm-sans-h1 text-brand-black leading-tight">
+                  <h3 className="font-dm-sans text-[clamp(20px,2.5vw,32px)] text-brand-black leading-tight">
                     The Exhibition Collection
                   </h3>
                 </div>
-                <div className="absolute right-0 bottom-2">
-                  <Link href="/tags?category=EXHIBITION+CATEGORIES#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300">
-                    <span className="text-[clamp(11px,1.3vw,19px)] font-dm-sans tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
-                    <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.2vw,16px)] h-[clamp(10px,1.2vw,16px)] transition-transform group-hover:translate-y-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
-                  </Link>
-                </div>
+                <Link href="/tags?category=EXHIBITION+CATEGORIES#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300 shrink-0">
+                  <span className="text-[clamp(11px,1.3vw,15px)] font-dm-sans tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
+                  <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.2vw,14px)] h-[clamp(10px,1.2vw,14px)] transition-transform group-hover:translate-x-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
+                </Link>
               </header>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(8px,2vw,40px)] gap-y-[clamp(1.5rem,4vw,4rem)]">
-                {products
-                  .filter(p => p.tags && p.tags.some(t => t.toUpperCase() === 'EXHIBITION CATEGORIES'))
-                  .slice(0, 4)
-                  .map((product, index) => (
-                    <ProductCard
-                      key={`exhibition-${product.serial || index}`}
-                      product={product}
-                    />
-                  ))
-                }
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-[clamp(1rem,3vw,4rem)]">
+                {exhibitionProducts.map((product, index) => (
+                  <ProductCard
+                    key={`exhibition-${product.serial || index}`}
+                    product={product}
+                  />
+                ))}
               </div>
             </div>
           </section>
         )}
 
         {/* Trending Deals */}
-        <section className="w-full bg-[#FFFAEE] py-[clamp(2.5rem,5vw,6rem)] px-[clamp(1rem,4vw,5rem)] relative">
-          <header className="relative flex flex-col items-center text-center mb-[clamp(2rem,5vw,4rem)] w-full">
-            <div className="flex flex-col items-center pb-8 md:pb-0">
-              <p className="font-dm-sans text-[clamp(11px,1.2vw,16px)] tracking-[0.2em] text-brand-gold uppercase font-medium mb-4 sm:mb-6">
-                Trending Deals Deal Of The Day
-              </p>
-              <h3 className="font-dm-sans text-[clamp(18px,2.2vw,28px)] text-brand-green leading-tight">
-                VRIDDHI VASTRA&apos;s Irresistible deals
-              </h3>
-            </div>
-            <div className="absolute right-0 bottom-2">
-              <Link href="/tags?category=TRENDING+DEALS#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300">
-                <span className="text-[clamp(11px,1.3vw,19px)] font-dm-sans tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
-                <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.2vw,16px)] h-[clamp(10px,1.2vw,16px)] transition-transform group-hover:translate-y-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
+        <section className="w-full bg-[#F1E8CD] py-[clamp(2.5rem,5vw,6rem)] border-t border-brand-gold/15 relative">
+          <div className="site-container">
+            <header className="flex flex-col md:flex-row md:justify-between md:items-end mb-[clamp(2rem,5vw,4rem)] gap-4 w-full">
+              <div className="flex flex-col items-start">
+                <p className="font-dm-sans text-[clamp(11px,1.2vw,16px)] tracking-[0.2em] text-brand-gold uppercase font-medium mb-3">
+                  Trending Deals — Deal Of The Day
+                </p>
+                <h3 className="font-dm-sans text-[clamp(18px,2.2vw,28px)] text-brand-green leading-tight">
+                  VRIDDHI VASTRA&apos;s Irresistible Deals
+                </h3>
+              </div>
+              <Link href="/tags?category=TRENDING+DEALS#archive" className="flex items-center gap-1.5 text-brand-green group transition-all duration-300 shrink-0">
+                <span className="text-[clamp(11px,1.3vw,15px)] font-dm-sans tracking-[0.15em] uppercase border-b border-brand-green/30 group-hover:border-brand-green pb-0.5 whitespace-nowrap">View More</span>
+                <svg fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24" className="w-[clamp(10px,1.2vw,14px)] h-[clamp(10px,1.2vw,14px)] transition-transform group-hover:translate-x-0.5"><path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
               </Link>
-            </div>
-          </header>
+            </header>
 
-          <div className="max-w-[2000px] mx-auto w-full">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-[clamp(8px,2vw,40px)] gap-y-[clamp(1.5rem,4vw,4rem)]">
-              {displayTrending.slice(0, 4).map((product, index) => (
-                <ProductCard
-                  key={`trending-${product.serial || index}`}
-                  product={product}
-                />
-              ))}
-            </div>
+            {displayTrending.length === 0 ? (
+              <div className="py-20 text-center opacity-40">
+                <p className="font-display text-2xl uppercase tracking-widest">No trending deals presently.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-[clamp(1rem,3vw,4rem)]">
+                {displayTrending.slice(0, 4).map((product, index) => (
+                  <ProductCard
+                    key={`trending-${product.serial || index}`}
+                    product={product}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </section>
 

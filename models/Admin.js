@@ -19,6 +19,18 @@ const adminSchema = new mongoose.Schema({
   otpExpiry: {
     type: Date,
     default: null,
+  },
+  otpAttempts: {
+    type: Number,
+    default: 0,
+  },
+  otpLockUntil: {
+    type: Date,
+    default: null,
+  },
+  tokenVersion: {
+    type: Number,
+    default: 0,
   }
 }, { timestamps: true });
 

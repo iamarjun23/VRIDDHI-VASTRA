@@ -4,12 +4,22 @@ import Footer from "../components/Footer"
 import ContactForm from "../components/ContactForm"
 import dbConnect from "../../lib/mongodb"
 import SiteConfig from "../../models/SiteConfig"
+import { sanitizeMongoose } from "../../lib/utils"
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export const metadata = {
-  title: "Contact Us",
-  description: "Get in touch with Vriddhi Vastra for bespoke styling, inquiries, or assistance.",
+  title: "Contact Us | Vriddhi Vastra",
+  description: "Get in touch with Vriddhi Vastra for inquiries about our premium silk sarees.",
+  openGraph: {
+    title: "Contact Us | Vriddhi Vastra",
+    description: "Get in touch with Vriddhi Vastra for inquiries about our premium silk sarees.",
+    url: "https://www.vriddhivastra.com/contact",
+    siteName: "Vriddhi Vastra",
+    images: [{ url: "/images/og-default.jpg", width: 1200, height: 630 }],
+    locale: "en_IN",
+    type: "website",
+  }
 }
 
 export default async function Contact() {
@@ -17,12 +27,30 @@ export default async function Contact() {
 
   let configData = await SiteConfig.findOne({ configId: "main" }).lean();
   if (!configData) configData = {};
-  const config = JSON.parse(JSON.stringify(configData));
+  const config = sanitizeMongoose(configData);
 
   const contactBg = config.contactHeroImage || 'https://images.unsplash.com/photo-1583391733958-6488d5e16ec?q=80&w=2574&auto=format&fit=crop';
 
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ContactPage',
+    name: 'Contact Us | Vriddhi Vastra',
+    description: 'Get in touch with Vriddhi Vastra for inquiries about our premium silk sarees.',
+    mainEntity: {
+      '@type': 'LocalBusiness',
+      name: 'Vriddhi Vastra',
+      telephone: config.whatsappNumber || '+91-9876543210',
+      email: 'Vriddhivastrasarees@gmail.com',
+      url: 'https://www.vriddhivastra.com'
+    }
+  };
+
   return (
     <main className="bg-[#f3efe6] min-h-screen selection:bg-brand-green selection:text-white flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
 
       {/* Navbar */}
       <div className="relative z-50">
@@ -38,7 +66,7 @@ export default async function Contact() {
 
         <div className="absolute inset-0 bg-[#3a403d]/10 backdrop-blur-[2px] z-0"></div>
 
-        <div className="relative z-10 w-full max-w-[2000px] mx-auto px-[clamp(1.25rem,5vw,5rem)] flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16">
+        <div className="relative z-10 site-container flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-16">
 
           {/* Left Text Content */}
           <div className="flex flex-col w-full lg:w-1/2 text-white">

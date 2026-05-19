@@ -12,12 +12,18 @@ module.exports = {
       },
     ],
   },
-  // Default transformation function
   transform: async (config, path) => {
+    let priority = config.priority;
+    if (path === '/') priority = 1.0;
+    else if (path === '/collections' || path === '/tags') priority = 0.8;
+    else if (path.startsWith('/product/')) priority = 0.9;
+    else if (path.startsWith('/category/')) priority = 0.8;
+    else priority = 0.6;
+
     return {
-      loc: path, // => this will be exported as http(s)://<config.siteUrl>/<path>
+      loc: path,
       changefreq: config.changefreq,
-      priority: config.priority,
+      priority: priority,
       lastmod: config.autoLastmod ? new Date().toISOString() : undefined,
       alternateRefs: config.alternateRefs ?? [],
     }

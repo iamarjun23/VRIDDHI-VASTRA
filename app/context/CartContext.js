@@ -11,6 +11,8 @@ export function CartProvider({ children }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [whatsappNumber, setWhatsappNumber] = useState("919000000000");
 
+  const isDev = typeof window !== "undefined" && window.location.hostname === "localhost";
+
   // Load cart from localStorage on mount
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -20,22 +22,29 @@ export function CartProvider({ children }) {
           setCartItems(JSON.parse(savedCart));
         }
       } catch (e) {
-        console.error("Failed to parse cart from localStorage", e);
+        if (isDev) console.error("Failed to parse cart from localStorage", e);
       } finally {
         setIsInitialized(true);
       }
     }
-  }, []);
+  }, [isDev]);
 
   useEffect(() => {
+    let isMounted = true;
     // Fetch WhatsApp number from settings
     fetch("/api/settings", { cache: 'no-store' })
       .then(res => res.json())
       .then(data => {
-        if (data.whatsappNumber) setWhatsappNumber(data.whatsappNumber);
+        if (isMounted && data.whatsappNumber) setWhatsappNumber(data.whatsappNumber);
       })
-      .catch(err => console.error("Failed to fetch WhatsApp number", err));
-  }, []);
+      .catch(err => {
+        if (isDev) console.error("Failed to fetch WhatsApp number", err);
+      });
+      
+    return () => {
+      isMounted = false;
+    };
+  }, [isDev]);
 
   // Save cart to localStorage whenever it changes, but only after initial load
   useEffect(() => {
@@ -46,13 +55,17 @@ export function CartProvider({ children }) {
 
   // Refresh settings when cart opens to ensure latest WhatsApp number
   useEffect(() => {
+    let isMounted = true;
+    
     const fetchSettings = () => {
       fetch("/api/settings", { cache: 'no-store' })
         .then(res => res.json())
         .then(data => {
-          if (data.whatsappNumber) setWhatsappNumber(data.whatsappNumber);
+          if (isMounted && data.whatsappNumber) setWhatsappNumber(data.whatsappNumber);
         })
-        .catch(err => console.error("Failed to refresh WhatsApp number", err));
+        .catch(err => {
+          if (isDev) console.error("Failed to refresh WhatsApp number", err);
+        });
     };
 
     if (isCartOpen) {
@@ -61,8 +74,11 @@ export function CartProvider({ children }) {
 
     // Also refresh on window focus to sync across tabs (Admin -> Storefront)
     window.addEventListener('focus', fetchSettings);
-    return () => window.removeEventListener('focus', fetchSettings);
-  }, [isCartOpen]);
+    return () => {
+      isMounted = false;
+      window.removeEventListener('focus', fetchSettings);
+    };
+  }, [isCartOpen, isDev]);
 
   const addToCart = (product, quantity = 1) => {
     setCartItems((prevItems) => {
@@ -96,6 +112,24 @@ export function CartProvider({ children }) {
     setCartItems([]);
   };
 
+  const updateCartPrices = (validatedItems) => {
+    setCartItems((prevItems) => {
+      return prevItems.map((item) => {
+        const match = validatedItems.find((vi) => vi.serial === item.serial);
+        if (match) {
+          return {
+            ...item,
+            price: match.price,
+            name: match.name,
+            originalPrice: match.originalPrice,
+            image1: match.image1
+          };
+        }
+        return item;
+      });
+    });
+  };
+
   const cartTotal = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
@@ -113,6 +147,7 @@ export function CartProvider({ children }) {
         removeFromCart,
         updateQuantity,
         clearCart,
+        updateCartPrices,
         cartTotal,
         cartCount,
         whatsappNumber,

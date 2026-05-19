@@ -3,22 +3,40 @@ import dbConnect from "../../../lib/mongodb";
 import ProductClick from "../../../models/ProductClick";
 import Inquiry from "../../../models/Inquiry";
 import Product from "../../../models/Product";
+import { cookies } from "next/headers";
+import { verifyToken } from "../../../lib/session";
+
+import { log, logError } from "@/lib/logger";
 
 export const dynamic    = "force-dynamic";
 export const fetchCache = "force-no-store";
 
-export async function GET() {
+export async function GET(req) {
   try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("admin_access")?.value;
+    const session = token ? await verifyToken(token) : null;
+    if (!session || session.role !== 'admin') {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     await dbConnect();
+
+    // Pagination parameters
+    const { searchParams } = new URL(req.url);
+    const page  = Math.max(1, parseInt(searchParams.get("page") || "1", 10));
+    const limit = Math.max(1, parseInt(searchParams.get("limit") || "50", 10));
+    const skip  = (page - 1) * limit;
 
     const [totalProducts, totalClicks, recentInquiries, topProductsAgg] = await Promise.all([
       Product.countDocuments(),
       ProductClick.countDocuments(),
-      Inquiry.find().sort({ createdAt: -1 }).limit(5).lean(),
+      Inquiry.find().sort({ createdAt: -1 }).skip(skip).limit(limit).lean(),
       ProductClick.aggregate([
         { $group: { _id: "$productSerial", clicks: { $sum: 1 } } },
         { $sort:  { clicks: -1 } },
-        { $limit: 5 }
+        { $skip:  skip },
+        { $limit: limit }
       ])
     ]);
 
@@ -42,9 +60,18 @@ export async function GET() {
         .filter(Boolean);
     }
 
-    return NextResponse.json({ totalProducts, totalClicks, recentInquiries, trendingProducts });
+    return NextResponse.json({
+      totalProducts,
+      totalClicks,
+      recentInquiries,
+      trendingProducts,
+      pagination: {
+        page,
+        limit
+      }
+    });
   } catch (error) {
-    console.error("Analytics error:", error);
+    logError("Analytics error:", error);
     return NextResponse.json({ error: "Failed to fetch analytics" }, { status: 500 });
   }
 }

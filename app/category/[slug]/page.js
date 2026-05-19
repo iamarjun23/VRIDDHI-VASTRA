@@ -6,8 +6,9 @@ import PromoBanner from "../../components/PromoBanner"
 import dbConnect from "../../../lib/mongodb"
 import Product from "../../../models/Product"
 import SiteConfig from "../../../models/SiteConfig"
+import { sanitizeMongoose } from "../../../lib/utils"
 
-export const dynamic = 'force-dynamic';
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -21,12 +22,12 @@ export async function generateMetadata({ params }) {
 export default async function CategoryPage({ params }) {
   await dbConnect();
   const productsData = await Product.find({}).sort({ createdAt: -1 }).lean();
-  const products = JSON.parse(JSON.stringify(productsData));
+  const products = sanitizeMongoose(productsData);
 
   // Fetch site configuration for the promo banner
   let configData = await SiteConfig.findOne({ configId: "main" }).lean();
   if (!configData) configData = {};
-  const config = JSON.parse(JSON.stringify(configData));
+  const config = sanitizeMongoose(configData);
 
   // Unwrap params
   const { slug } = await params;
@@ -66,8 +67,24 @@ export default async function CategoryPage({ params }) {
     });
   }
 
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.vriddhivastra.com';
+  
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: categoryName,
+    description: `Shop our ${categoryName} collection at Vriddhi Vastra. High quality luxury silk sarees.`,
+    url: `${siteUrl}/category/${slug}`,
+    hasPart: catProducts.slice(0, 50).map((p) => ({
+      '@type': 'Product',
+      name: p.name,
+      url: `${siteUrl}/product/${p.serial}`
+    }))
+  };
+
   return (
     <main className="bg-[#F1E8CD] min-h-screen selection:bg-black selection:text-white flex flex-col">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <Navbar logo={config.logo} />
 
       <div className="pt-20">
@@ -143,7 +160,7 @@ export default async function CategoryPage({ params }) {
                 <p className="text-[14px] text-gray-300">Kindly explore other categories or return shortly for new arrivals.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-14 gap-y-24 mb-32">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-[clamp(1rem,3vw,3.5rem)] gap-y-[clamp(2rem,5vw,6rem)] mb-32">
                 {catProducts.map(product => (
                   <ProductCard key={product.serial} product={product} bgWhite={true} />
                 ))}
@@ -157,11 +174,11 @@ export default async function CategoryPage({ params }) {
                   TRENDING COLLECTION
                 </p>
                 <h2 className="font-dm-sans C1 text-[28px] md:text-[42px] text-brand-green mb-4 leading-tight">
-                  Want to look through our Trending Collections 🔥
+                  Want to look through our Trending Collections
                 </h2>
                 <div className="w-24 h-[1px] bg-brand-gold/40 mt-6"></div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-14 gap-y-24">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-[clamp(1rem,3vw,3.5rem)] gap-y-[clamp(2rem,5vw,6rem)]">
                 {displayTrending.slice(0, 4).map(product => (
                   <ProductCard key={`trend-${product.serial}`} product={product} bgWhite={true} />
                 ))}
