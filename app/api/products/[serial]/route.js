@@ -1,13 +1,10 @@
 import dbConnect from "@/lib/mongodb";
 import Product from "@/models/Product";
-import { cookies } from "next/headers";
-import { verifyToken } from "@/lib/session";
+import { requireAdmin } from "@/lib/auth";
 
 export async function GET(req, { params }) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_access")?.value;
-  const session = token ? await verifyToken(token) : null;
-  if (!session || session.role !== 'admin') {
+  const session = await requireAdmin();
+  if (!session) {
     return Response.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 

@@ -7,6 +7,16 @@
   --font-dm-serif: var(--font-dm-serif), serif;
   --font-noto-serif: var(--font-noto-serif), serif;
   --font-noto-kannada: var(--font-noto-kannada), serif;
+  --color-brand-green: #1A3D1C;
+  --color-brand-gold: #D2A156;
+  --color-gold: #D2A156;
+  --color-brand-black: #1A1A1A;
+  --color-admin-bg: #0F0F0F;
+  --color-admin-border: #E8E2D9;
+  --color-admin-hover: #F7F4EF;
+  --color-admin-surface: #FFFAEE;
+  --color-section-warm: #F1E8CD;
+  --color-section-cream: #FFFAEE;
 }
 
 :root {
@@ -41,13 +51,15 @@ body {
   font-size: 1rem;
   line-height: 1.6;
   overflow-x: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 /* Custom scrollbar */
-.custom-scrollbar { scrollbar-width: thin; scrollbar-color: #D4AF37 transparent; }
+.custom-scrollbar { scrollbar-width: thin; scrollbar-color: #D2A156 transparent; }
 .custom-scrollbar::-webkit-scrollbar { width: 4px; }
 .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-.custom-scrollbar::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 2px; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #D2A156; border-radius: 2px; }
 
 /* Prevent horizontal overflow */
 *, *::before, *::after {
@@ -56,3 +68,14 @@ body {
 }
 
 img, video, svg { max-width: 100%; }
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.custom-scrollbar, .no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar { display: none; }

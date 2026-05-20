@@ -13,11 +13,7 @@ export async function POST(req) {
     const { email } = await req.json();
 
     const admin = await Admin.findOne();
-    if (!admin) {
-      return NextResponse.json({ error: 'No admin found. Please login first to initialize.' }, { status: 404 });
-    }
-
-    if (admin.email !== email) {
+    if (!admin || admin.email !== email) {
       return NextResponse.json({ success: true, message: 'If this email is registered, an OTP has been sent.' });
     }
 
@@ -72,7 +68,7 @@ export async function POST(req) {
 
     await transporter.sendMail(mailOptions);
 
-    return NextResponse.json({ success: true, message: 'OTP sent to email.' });
+    return NextResponse.json({ success: true, message: 'If this email is registered, an OTP has been sent.' });
   } catch (error) {
     logError('Forgot password error:', error.message);
     return NextResponse.json({ error: 'Failed to process request.' }, { status: 500 });

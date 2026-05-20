@@ -2,9 +2,8 @@ import { NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 import dbConnect from "../../../lib/mongodb";
 import SiteConfig from "../../../models/SiteConfig";
-import { cookies } from "next/headers";
 import { logActivity } from "../../../lib/activity";
-import { verifyToken } from "../../../lib/session";
+import { requireAdmin } from "@/lib/auth";
 import { log, logError } from "@/lib/logger";
 
 export const dynamic = 'force-dynamic';
@@ -31,10 +30,8 @@ export async function GET() {
 
 // PUT to update global site settings
 export async function PUT(req) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_access")?.value;
-  const session = token ? await verifyToken(token) : null;
-  if (!session || session.role !== 'admin') {
+  const session = await requireAdmin();
+  if (!session) {
     return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 

@@ -3,48 +3,19 @@
 import Link from "next/link"
 import Image from "next/image"
 import { useCart } from "../context/CartContext"
-import { formatWhatsAppMessage, getWhatsAppUrl } from "../../lib/utils"
+import { formatWhatsAppMessage, getWhatsAppUrl, trackProductClick } from "../../lib/utils"
 import StarRating from "./StarRating"
-import { useState } from "react"
+import { useProductRating } from "../hooks/useProductRating"
 
 
 export default function ProductCard({ product, bgWhite = false }) {
   const { addToCart, whatsappNumber } = useCart();
-
-  const [currentRating, setCurrentRating] = useState(product.rating || 0);
-  const [numReviews, setNumReviews] = useState(product.numReviews || 0);
-
-  const handleRate = async (rating) => {
-    try {
-      const res = await fetch(`/api/products/${product.serial}/rate`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ rating })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setCurrentRating(data.rating);
-        setNumReviews(data.numReviews);
-      }
-    } catch (error) {
-      console.error("Rating error:", error);
-    }
-  };
+  const { currentRating, numReviews, handleRate } = useProductRating(product.serial, product.rating, product.numReviews);
 
   const handleWhatsAppBuyNow = (e) => {
     e.preventDefault();
     e.stopPropagation();
-
-    fetch("/api/analytics/click", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        productSerial: product.serial,
-        productName: product.name,
-        source: "buy_now_button"
-      })
-    }).catch(err => console.error("Analytics error:", err));
-
+    trackProductClick(product.serial, product.name);
     const message = formatWhatsAppMessage([{ ...product, quantity: 1 }]);
     const url = getWhatsAppUrl(message, whatsappNumber);
     window.open(url, "_blank");
@@ -95,7 +66,7 @@ export default function ProductCard({ product, bgWhite = false }) {
           </button>
           <button
             onClick={handleWhatsAppBuyNow}
-            className="w-full py-2.5 bg-brand-green text-white rounded-full font-sans text-[11px] font-bold tracking-[0.1em] uppercase hover:bg-opacity-90 transition-all shadow-lg active:scale-95 flex items-center justify-center gap-1.5"
+            className="w-full py-2.5 bg-brand-green text-white rounded-full font-dm-sans text-[11px] font-bold tracking-[0.1em] uppercase hover:bg-brand-gold transition-all duration-300 shadow-md shadow-brand-green/10 hover:shadow-brand-gold/20 active:scale-95 flex items-center justify-center gap-1.5"
           >
             <svg className="w-3.5 h-3.5 shrink-0" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.411 0 .01 5.403.007 12.04c0 2.123.554 4.197 1.606 6.04L0 24l6.117-1.605a11.787 11.787 0 005.925 1.585h.005c6.64 0 12.042-5.402 12.045-12.043a11.794 11.794 0 00-3.418-8.525z" /></svg>
             Buy Now
@@ -109,7 +80,7 @@ export default function ProductCard({ product, bgWhite = false }) {
         </h2>
 
         <div className="flex justify-center items-baseline gap-2 sm:gap-3 font-dm-sans mb-3">
-          <p className="text-[clamp(14px,1.6vw,21px)] font-bold text-brand-gold">
+          <p className="font-dm-sans text-[clamp(12px,1.2vw,16px)] font-bold text-brand-gold">
             ₹{product.price.toLocaleString()}
           </p>
           {(product.originalPrice && product.originalPrice > product.price) && (
@@ -131,10 +102,10 @@ export default function ProductCard({ product, bgWhite = false }) {
 
           <Link
             href={`/product/${product.serial}`}
-            className="flex items-center gap-1 text-[11px] font-medium tracking-[0.08em] text-gray-700 hover:text-brand-green transition-all uppercase underline whitespace-nowrap ml-auto"
+            className="flex flex-row flex-nowrap items-center gap-1 text-[11px] font-medium tracking-[0.08em] text-gray-700 hover:text-brand-green transition-all uppercase underline whitespace-nowrap ml-auto shrink-0"
           >
-            <span>Details</span>
-            <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-3 h-3"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
+            <span className="shrink-0">Details</span>
+            <svg fill="none" stroke="currentColor" strokeWidth="3" viewBox="0 0 24 24" className="w-3 h-3 shrink-0"><path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" /></svg>
           </Link>
         </div>
 
@@ -146,7 +117,7 @@ export default function ProductCard({ product, bgWhite = false }) {
               e.stopPropagation();
               addToCart(product);
             }}
-            className="w-full py-2.5 bg-brand-green/10 text-brand-green rounded-full font-sans text-[11px] font-bold tracking-[0.1em] uppercase hover:bg-brand-green hover:text-white transition-all active:scale-95 border border-brand-green/20"
+            className="w-full py-2.5 bg-brand-green/10 text-brand-green rounded-full font-dm-sans text-[11px] font-bold tracking-[0.1em] uppercase hover:bg-brand-green hover:text-white transition-all active:scale-95 border border-brand-green/20"
           >
             Add to Cart
           </button>

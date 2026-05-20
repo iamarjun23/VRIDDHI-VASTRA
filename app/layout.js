@@ -120,6 +120,9 @@ export default async function RootLayout({ children }) {
   return (
     <html lang="en" className={`${marcellus.variable} ${jost.variable} ${dmSans.variable} ${dmSerifDisplay.variable} ${notoSerif.variable} ${notoSerifKannada.variable}`}>
       <body suppressHydrationWarning>
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:z-[9999] focus:top-4 focus:left-4 focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:rounded-lg focus:shadow-lg focus:text-sm focus:font-semibold">
+          Skip to content
+        </a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c').replace(/>/g, '\\u003e') }}

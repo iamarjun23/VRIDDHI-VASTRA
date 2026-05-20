@@ -3,8 +3,7 @@ import dbConnect from "../../../lib/mongodb";
 import ProductClick from "../../../models/ProductClick";
 import Inquiry from "../../../models/Inquiry";
 import Product from "../../../models/Product";
-import { cookies } from "next/headers";
-import { verifyToken } from "../../../lib/session";
+import { requireAdmin } from "@/lib/auth";
 
 import { log, logError } from "@/lib/logger";
 
@@ -13,10 +12,8 @@ export const fetchCache = "force-no-store";
 
 export async function GET(req) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("admin_access")?.value;
-    const session = token ? await verifyToken(token) : null;
-    if (!session || session.role !== 'admin') {
+    const session = await requireAdmin();
+    if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

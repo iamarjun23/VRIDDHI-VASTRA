@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import dbConnect from "../../../lib/mongodb";
 import Inquiry from "../../../models/Inquiry";
-import { cookies } from "next/headers";
 import { logActivity } from "../../../lib/activity";
-import { verifyToken } from "../../../lib/session";
+import { requireAdmin } from "@/lib/auth";
 
 import { log, logError } from "@/lib/logger";
 
@@ -11,10 +10,8 @@ export const dynamic = "force-dynamic";
 
 export async function GET(req) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("admin_access")?.value;
-    const session = token ? await verifyToken(token) : null;
-    if (!session || session.role !== 'admin') {
+    const session = await requireAdmin();
+    if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
@@ -68,10 +65,8 @@ export async function GET(req) {
 
 export async function DELETE(req) {
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get("admin_access")?.value;
-    const session = token ? await verifyToken(token) : null;
-    if (!session || session.role !== 'admin') {
+    const session = await requireAdmin();
+    if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 

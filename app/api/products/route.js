@@ -2,19 +2,12 @@ import dbConnect from "../../../lib/mongodb";
 import Product from "../../../models/Product";
 import ProductClick from "../../../models/ProductClick";
 import Inquiry from "../../../models/Inquiry";
-import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { v2 as cloudinary } from "cloudinary";
+import cloudinary from "@/lib/cloudinary";
 import { logActivity } from "../../../lib/activity";
-import { verifyToken } from "../../../lib/session";
+import { requireAdmin } from "@/lib/auth";
 
 import { log, logError } from "@/lib/logger";
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key:    process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
 
 export const dynamic    = 'force-dynamic';
 export const revalidate = 0;
@@ -86,10 +79,8 @@ export async function GET(req) {
 }
 
 export async function POST(req) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_access")?.value;
-  const session = token ? await verifyToken(token) : null;
-  if (!session || session.role !== 'admin') {
+  const session = await requireAdmin();
+  if (!session) {
     return Response.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 
@@ -134,10 +125,8 @@ export async function POST(req) {
 }
 
 export async function PUT(req) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_access")?.value;
-  const session = token ? await verifyToken(token) : null;
-  if (!session || session.role !== 'admin') {
+  const session = await requireAdmin();
+  if (!session) {
     return Response.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 
@@ -168,10 +157,8 @@ export async function PUT(req) {
 }
 
 export async function DELETE(req) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_access")?.value;
-  const session = token ? await verifyToken(token) : null;
-  if (!session || session.role !== 'admin') {
+  const session = await requireAdmin();
+  if (!session) {
     return Response.json({ success: false, error: "Unauthorized" }, { status: 401 });
   }
 

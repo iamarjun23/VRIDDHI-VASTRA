@@ -69,39 +69,39 @@ function NavbarContent({ theme = "light", logo = "", bgColor = "" }) {
       `}
       style={bgColor ? { backgroundColor: bgColor } : {}}
     >
-      <div className="site-container w-full flex justify-between lg:grid lg:grid-cols-[auto_1fr_auto] items-center py-3 lg:py-4">
+      <div className="w-full flex justify-between lg:grid lg:grid-cols-[auto_1fr_auto] items-center py-[5px] pl-3.5 pr-2.5 md:pl-[20px] md:pr-[16px]">
 
         {/* ── LEFT: Logo + Brand Name ── */}
         <div className="flex items-center shrink-0">
-          <Link href="/" className="flex items-center gap-3 group">
+          <Link href="/" className="flex items-center gap-[10px] md:gap-[25px] group">
             {logo ? (
-              <div className="relative rounded-full overflow-hidden border border-brand-gold/30 shadow-lg group-hover:scale-105 transition-all duration-500 w-10 h-10 lg:w-[50px] lg:h-[50px] shrink-0">
+              <div className="relative rounded-full overflow-hidden border border-brand-gold/30 shadow-lg group-hover:scale-105 transition-all duration-500 w-[45px] h-[45px] md:w-[60px] md:h-[60px] lg:w-[75px] lg:h-[75px] shrink-0">
                 <Image
                   src={logo}
                   alt="Vriddhi Vastra Logo"
                   fill
-                  sizes="(max-width: 640px) 40px, 50px"
+                  sizes="(max-width: 768px) 45px, (max-width: 1024px) 60px, 75px"
                   className="object-cover"
                   priority
                 />
               </div>
             ) : (
-              <div className="rounded-xl border border-brand-gold/40 bg-brand-green flex flex-col items-center justify-center shadow-xl relative shrink-0 overflow-hidden transform group-hover:rotate-3 transition-all duration-500 w-10 h-10 lg:w-[50px] lg:h-[50px]">
+              <div className="rounded-xl border border-brand-gold/40 bg-brand-green flex flex-col items-center justify-center shadow-xl relative shrink-0 overflow-hidden transform group-hover:rotate-3 transition-all duration-500 w-[45px] h-[45px] md:w-[60px] md:h-[60px] lg:w-[75px] lg:h-[75px]">
                 <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent" />
-                <span className="text-[5px] lg:text-[7px] font-display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10 mb-0.5">
+                <span className="text-[6px] md:text-[8px] lg:text-[10px] font-display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10 mb-0.5">
                   VRIDDHI
                 </span>
                 <div className="w-[40%] h-[1px] bg-brand-gold/30 relative z-10 mb-0.5" />
-                <span className="text-[5px] lg:text-[7px] font-display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10">
+                <span className="text-[6px] md:text-[8px] lg:text-[10px] font-display leading-none text-center text-brand-gold tracking-[0.3em] uppercase relative z-10">
                   VASTRA
                 </span>
               </div>
             )}
 
             <span className={`
-              font-marcellus tracking-[0.25em] leading-none
+              font-dm-serif tracking-[0.05em] sm:tracking-[0.2em] md:tracking-[0.25em] leading-none
               transition-all duration-500 whitespace-nowrap
-              text-[15px] sm:text-[18px] lg:text-[26px] xl:text-[36px] 2xl:text-[50px]
+              text-[16px] sm:text-[22px] md:text-[32px] lg:text-[40px] xl:text-[50px]
               ${isLight ? 'text-brand-green' : 'text-white'}
             `}>
               VRIDDHI VASTRA
@@ -112,38 +112,39 @@ function NavbarContent({ theme = "light", logo = "", bgColor = "" }) {
         {/* ── CENTER: Nav Links (Desktop >= 1024px lg only) ── */}
         <div className={`
           hidden lg:flex items-center justify-center
-          gap-6 lg:gap-8 xl:gap-10
-          tracking-[0.15em] uppercase font-medium font-jost
-          text-[13px] lg:text-[14px]
-          transition-opacity duration-300
+          gap-4 xl:gap-8 2xl:gap-10
+          tracking-wider xl:tracking-[0.15em] uppercase font-medium font-dm-sans
+          text-[14px] xl:text-[19px]
+          transition-all duration-500 ease-in-out
+          ${isSearchOpen ? 'opacity-0 pointer-events-none scale-95' : 'opacity-100 scale-100'}
           ${isLight ? 'text-brand-green/80' : 'text-white/80'}
         `}>
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className={`relative py-1 hover:text-brand-gold transition-colors duration-300 whitespace-nowrap group/link ${isHomeActive ? 'text-brand-gold font-semibold' : ''}`}
             aria-current={isHomeActive ? "page" : undefined}
           >
             Home
             <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-brand-gold transition-all duration-300 group-hover/link:w-full"></span>
           </Link>
-          <Link 
-            href="/tags?category=HOT+OFFERS#archive" 
+          <Link
+            href="/tags?category=HOT+OFFERS#archive"
             className={`relative py-1 hover:text-brand-gold transition-colors duration-300 whitespace-nowrap group/link ${isHotOffersActive ? 'text-brand-gold font-semibold' : ''}`}
             aria-current={isHotOffersActive ? "page" : undefined}
           >
             Hot Offers
             <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-brand-gold transition-all duration-300 group-hover/link:w-full"></span>
           </Link>
-          <Link 
-            href="/tags?category=BEST+SELLER#archive" 
+          <Link
+            href="/tags?category=BEST+SELLER#archive"
             className={`relative py-1 hover:text-brand-gold transition-colors duration-300 whitespace-nowrap group/link ${isBestSellerActive ? 'text-brand-gold font-semibold' : ''}`}
             aria-current={isBestSellerActive ? "page" : undefined}
           >
             Best Seller
             <span className="absolute bottom-0 left-0 w-0 h-[1.5px] bg-brand-gold transition-all duration-300 group-hover/link:w-full"></span>
           </Link>
-          <Link 
-            href="/contact" 
+          <Link
+            href="/contact"
             className={`relative py-1 hover:text-brand-gold transition-colors duration-300 whitespace-nowrap group/link ${isContactActive ? 'text-brand-gold font-semibold' : ''}`}
             aria-current={isContactActive ? "page" : undefined}
           >
@@ -153,35 +154,49 @@ function NavbarContent({ theme = "light", logo = "", bgColor = "" }) {
         </div>
 
         {/* ── RIGHT: Search Pill + Cart + Mobile Toggle ── */}
-        <div className="flex items-center gap-4 lg:gap-6 justify-end shrink-0">
+        <div className="flex items-center gap-2 md:gap-4 lg:gap-6 justify-end shrink-0">
 
-          {/* Desktop Search: Static Pill (Always visible on >= 1024px lg) */}
+          {/* Desktop Search: Expanded Input Box when isSearchOpen is true */}
           <div className={`
-            hidden lg:flex items-center rounded-full border h-[36px] w-[180px] xl:w-[220px] transition-all px-3.5 relative
-            ${isLight 
-              ? 'border-brand-green/25 bg-brand-green/5 text-brand-green focus-within:border-brand-gold/60 focus-within:bg-white' 
+            hidden lg:flex items-center rounded-full border transition-all duration-500 ease-in-out relative
+            ${isSearchOpen 
+              ? 'w-[320px] xl:w-[420px] h-[45px] opacity-100 scale-100 px-4' 
+              : 'w-0 h-[45px] opacity-0 scale-95 pointer-events-none border-transparent overflow-hidden px-0'}
+            ${isLight
+              ? 'border-brand-green/25 bg-brand-green/5 text-brand-green focus-within:border-brand-gold/60 focus-within:bg-white'
               : 'border-white/25 bg-white/10 text-white focus-within:border-brand-gold/60 focus-within:bg-black/40'}
           `}>
-            <svg fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="w-[15px] h-[15px] shrink-0 opacity-70">
+            <svg fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="w-[18px] h-[18px] shrink-0 opacity-70">
               <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
             <input
               type="text"
               placeholder="Search our archive..."
-              className="bg-transparent text-[13px] tracking-wide focus:outline-none placeholder:text-current placeholder:opacity-50 font-dm-sans w-full pl-2"
+              className="bg-transparent text-[14px] tracking-wide focus:outline-none placeholder:text-current placeholder:opacity-50 font-dm-sans w-full pl-3 pr-8"
+              autoFocus={isSearchOpen}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') handleSearchSubmit(e.currentTarget.value);
               }}
             />
+            {/* Close Button inside input box */}
+            <button
+              onClick={() => setIsSearchOpen(false)}
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-current/50 hover:text-brand-gold transition-colors p-1"
+              aria-label="Close search"
+            >
+              <svg fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" className="w-4 h-4">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
 
-          {/* Mobile Search Icon (< 1024px lg) */}
+          {/* Unified Search Icon (always visible on mobile, visible on desktop only when search is closed) */}
           <button
-            className="lg:hidden hover:text-brand-gold transition-colors p-1"
+            className={`hover:text-brand-gold transition-colors p-1 ${isSearchOpen ? 'lg:hidden' : 'block'}`}
             onClick={() => { setIsSearchOpen(!isSearchOpen); if (!isSearchOpen) setIsMobileMenuOpen(false); }}
             aria-label="Search"
           >
-            <svg fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="w-[20px] h-[20px]">
+            <svg fill="none" stroke="currentColor" strokeWidth="1.8" viewBox="0 0 24 24" className="w-[20px] h-[20px] lg:w-[24px] lg:h-[24px]">
               <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
           </button>
@@ -223,8 +238,8 @@ function NavbarContent({ theme = "light", logo = "", bgColor = "" }) {
       {/* Mobile Search Bar Dropdown (< 1024px lg) */}
       <div className={`
         absolute top-full left-0 w-full border-t transition-all duration-300 ease-in-out lg:hidden overflow-hidden z-40
-        ${isLight 
-          ? 'bg-white/95 backdrop-blur-xl border-brand-green/10 text-brand-green shadow-xl' 
+        ${isLight
+          ? 'bg-white/95 backdrop-blur-xl border-brand-green/10 text-brand-green shadow-xl'
           : 'bg-neutral-950/95 backdrop-blur-xl border-white/10 text-white shadow-xl'}
         ${isSearchOpen ? 'max-h-[80px] opacity-100 py-4' : 'max-h-0 opacity-0 py-0 border-t-0'}
       `}>
@@ -234,8 +249,8 @@ function NavbarContent({ theme = "light", logo = "", bgColor = "" }) {
               type="text"
               placeholder="Search our archive..."
               className={`w-full border rounded-full py-2.5 px-5 pr-11 text-sm focus:outline-none focus:border-brand-gold/50 transition-all font-dm-sans
-                ${isLight 
-                  ? 'bg-brand-green/5 border-brand-green/10 text-brand-green placeholder:text-brand-green/45' 
+                ${isLight
+                  ? 'bg-brand-green/5 border-brand-green/10 text-brand-green placeholder:text-brand-green/45'
                   : 'bg-white/5 border-white/10 text-white placeholder:text-white/45'}`}
               onKeyDown={(e) => {
                 if (e.key === 'Enter') handleSearchSubmit(e.currentTarget.value);
@@ -261,68 +276,68 @@ function NavbarContent({ theme = "light", logo = "", bgColor = "" }) {
       {/* Mobile/Tablet Dropdown Hamburger Menu (< 1024px lg) */}
       <div className={`
         absolute top-full left-0 w-full border-t transition-all duration-300 ease-in-out lg:hidden origin-top z-40 overflow-hidden
-        ${isLight 
-          ? 'bg-white/95 backdrop-blur-xl border-brand-green/10 text-brand-green shadow-2xl' 
+        ${isLight
+          ? 'bg-white/95 backdrop-blur-xl border-brand-green/10 text-brand-green shadow-2xl'
           : 'bg-neutral-950/95 backdrop-blur-xl border-white/10 text-white shadow-2xl'}
         ${isMobileMenuOpen ? 'max-h-[460px] opacity-100 py-6' : 'max-h-0 opacity-0 py-0 border-t-0'}
       `}>
-        <div className="site-container flex flex-col gap-6 font-jost text-[15px] tracking-wider font-medium">
-          <Link 
-            href="/" 
-            className={`hover:text-brand-gold transition-colors duration-300 border-b border-current/10 pb-3 ${isHomeActive ? 'text-brand-gold font-semibold' : ''}`} 
+        <div className="site-container flex flex-col gap-6 font-dm-sans text-[19px] tracking-wider font-medium">
+          <Link
+            href="/"
+            className={`hover:text-brand-gold transition-colors duration-300 border-b border-current/10 pb-3 ${isHomeActive ? 'text-brand-gold font-semibold' : ''}`}
             aria-current={isHomeActive ? "page" : undefined}
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Home
           </Link>
-          <Link 
-            href="/tags?category=HOT+OFFERS#archive" 
-            className={`hover:text-brand-gold transition-colors duration-300 border-b border-current/10 pb-3 ${isHotOffersActive ? 'text-brand-gold font-semibold' : ''}`} 
+          <Link
+            href="/tags?category=HOT+OFFERS#archive"
+            className={`hover:text-brand-gold transition-colors duration-300 border-b border-current/10 pb-3 ${isHotOffersActive ? 'text-brand-gold font-semibold' : ''}`}
             aria-current={isHotOffersActive ? "page" : undefined}
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Hot Offers
           </Link>
-          <Link 
-            href="/tags?category=BEST+SELLER#archive" 
-            className={`hover:text-brand-gold transition-colors duration-300 border-b border-current/10 pb-3 ${isBestSellerActive ? 'text-brand-gold font-semibold' : ''}`} 
+          <Link
+            href="/tags?category=BEST+SELLER#archive"
+            className={`hover:text-brand-gold transition-colors duration-300 border-b border-current/10 pb-3 ${isBestSellerActive ? 'text-brand-gold font-semibold' : ''}`}
             aria-current={isBestSellerActive ? "page" : undefined}
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Best Seller
           </Link>
-          <Link 
-            href="/contact" 
-            className={`hover:text-brand-gold transition-colors duration-300 border-b border-current/10 pb-3 ${isContactActive ? 'text-brand-gold font-semibold' : ''}`} 
+          <Link
+            href="/contact"
+            className={`hover:text-brand-gold transition-colors duration-300 border-b border-current/10 pb-3 ${isContactActive ? 'text-brand-gold font-semibold' : ''}`}
             aria-current={isContactActive ? "page" : undefined}
             onClick={() => setIsMobileMenuOpen(false)}
           >
             Contact Us
           </Link>
-          
+
           {/* Social and Contact Links at the bottom of Mobile Menu */}
           <div className="flex flex-row items-center justify-between pt-2">
             <Link href="/admin" className="hover:text-brand-gold transition-colors duration-300 text-current/50 text-[12px] uppercase tracking-widest font-sans" onClick={() => setIsMobileMenuOpen(false)}>
               Admin Console
             </Link>
-            
+
             <div className="flex items-center gap-4">
-              <a 
-                href={instagramUrl} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="hover:text-[#E1306C] transition-colors p-1" 
+              <a
+                href={instagramUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#E1306C] transition-colors p-1"
                 aria-label="Instagram"
               >
                 <svg fill="currentColor" viewBox="0 0 24 24" className="w-[20px] h-[20px]">
                   <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
                 </svg>
               </a>
-              <a 
-                href={whatsappUrl} 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="hover:text-[#25D366] transition-colors p-1" 
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-[#25D366] transition-colors p-1"
                 aria-label="WhatsApp"
               >
                 <svg fill="currentColor" viewBox="0 0 24 24" className="w-[20px] h-[20px]">

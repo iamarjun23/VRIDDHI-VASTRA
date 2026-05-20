@@ -1,7 +1,6 @@
 import cloudinary from "@/lib/cloudinary";
-import { cookies } from "next/headers";
 import { logActivity } from "@/lib/activity";
-import { verifyToken } from "@/lib/session";
+import { requireAdmin } from "@/lib/auth";
 import { fileTypeFromBuffer } from "file-type";
 
 import { log, logError } from "@/lib/logger";
@@ -19,11 +18,8 @@ export async function POST(req) {
     );
   }
 
-  // Auth check — only admin can upload
-  const cookieStore = await cookies();
-  const token = cookieStore.get("admin_access")?.value;
-  const session = token ? await verifyToken(token) : null;
-  if (!session || session.role !== 'admin') {
+  const session = await requireAdmin();
+  if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 

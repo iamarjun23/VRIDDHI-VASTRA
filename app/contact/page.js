@@ -2,9 +2,7 @@ import Navbar from "../components/Navbar"
 import PromoBanner from "../components/PromoBanner"
 import Footer from "../components/Footer"
 import ContactForm from "../components/ContactForm"
-import dbConnect from "../../lib/mongodb"
-import SiteConfig from "../../models/SiteConfig"
-import { sanitizeMongoose } from "../../lib/utils"
+import { getSiteConfig } from "../../lib/fetchSettings"
 
 export const revalidate = 3600;
 
@@ -23,11 +21,7 @@ export const metadata = {
 }
 
 export default async function Contact() {
-  await dbConnect();
-
-  let configData = await SiteConfig.findOne({ configId: "main" }).lean();
-  if (!configData) configData = {};
-  const config = sanitizeMongoose(configData);
+  const config = await getSiteConfig();
 
   const contactBg = config.contactHeroImage || 'https://images.unsplash.com/photo-1583391733958-6488d5e16ec?q=80&w=2574&auto=format&fit=crop';
 
@@ -49,7 +43,7 @@ export default async function Contact() {
     <main className="bg-[#f3efe6] min-h-screen selection:bg-brand-green selection:text-white flex flex-col">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c').replace(/>/g, '\\u003e') }}
       />
 
       {/* Navbar */}
@@ -72,7 +66,7 @@ export default async function Contact() {
           <div className="flex flex-col w-full lg:w-1/2 text-white">
             <div className="flex items-center gap-4 mb-4 sm:mb-6">
               <span className="w-12 h-[1px] bg-brand-gold"></span>
-              <h4 className="font-sans text-[clamp(9px,1vw,11px)] font-bold tracking-[0.3em] uppercase text-brand-gold">
+              <h4 className="font-dm-sans text-[clamp(12px,1.2vw,16px)] font-bold tracking-[0.3em] uppercase text-brand-gold">
                 CONNECT WITH US
               </h4>
             </div>

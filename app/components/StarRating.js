@@ -22,6 +22,7 @@ export default function StarRating({
               key={star}
               type="button"
               disabled={!interactive}
+              aria-label={`Rate ${star} out of 5 stars`}
               className={`transition-all duration-200 ${interactive
                 ? "cursor-pointer hover:scale-110 active:scale-95"
                 : "cursor-default"
